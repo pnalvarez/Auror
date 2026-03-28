@@ -5,7 +5,10 @@ import 'package:auror/layers/presentation/routes/app_router.gr.dart';
 class AppRouter extends RootStackRouter {
   @override
   List<AutoRoute> get routes => [
-    AutoRoute(page: DsMenuSampleRoute.page, initial: true),
+    AutoRoute(page: MainLaunchRoute.page, initial: true),
+    AutoRoute(page: OnboardingLearningLoopRoute.page),
+    AutoRoute(page: OnboardingLearningSectionRoute.page),
+    AutoRoute(page: DsMenuSampleRoute.page),
     AutoRoute(page: DSComponentRoute.page),
   ];
 }

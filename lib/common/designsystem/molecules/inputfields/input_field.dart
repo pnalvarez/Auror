@@ -4,8 +4,6 @@ import 'package:auror/common/designsystem/atoms/spacing/spacings.dart';
 import 'package:auror/common/designsystem/atoms/typography/typography.dart';
 import 'package:flutter/material.dart';
 
-/// Outlined text field with label, matching mibook [InputField] behavior:
-/// label, placeholder, prefix/suffix, error helper, enabled/disabled, focus ring.
 class InputField extends StatelessWidget {
   const InputField({
     super.key,
@@ -30,35 +28,33 @@ class InputField extends StatelessWidget {
   final TextInputType? keyboardType;
   final ValueChanged<String> onChanged;
 
-  bool get _hasError =>
-      errorMessage != null && errorMessage!.trim().isNotEmpty;
+  bool get _hasError => errorMessage != null && errorMessage!.trim().isNotEmpty;
+
+  OutlineInputBorder border(Color color, {double width = 1}) {
+    return OutlineInputBorder(
+      borderRadius: BorderRadius.circular(AppRadius.m),
+      borderSide: BorderSide(color: color, width: width),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     final labelStyle = body4Light.copyWith(
-      color: _hasError
-          ? AppColors.Error.error
-          : AppColors.Text.Body.primary,
+      color: _hasError ? AppColors.Error.error : AppColors.Text.Body.primary,
     );
 
-    final borderRadius = BorderRadius.circular(AppRadius.m);
-
-    OutlineInputBorder border(Color color, {double width = 1}) {
-      return OutlineInputBorder(
-        borderRadius: borderRadius,
-        borderSide: BorderSide(color: color, width: width),
-      );
-    }
-
     final hintColor = AppColors.Surface.onSurfaceVariant;
-    final inputColor =
-        isEnabled ? AppColors.Text.Body.primary : AppColors.Text.Body.disabled;
+    final inputColor = isEnabled
+        ? AppColors.Text.Body.primary
+        : AppColors.Text.Body.disabled;
+
+    final errorStyle = body4Light.copyWith(color: AppColors.Error.error);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (label.isNotEmpty) ...[
-          Text(label, style: body4Light),
+          Text(label, style: labelStyle),
           const SizedBox(height: AppSpacings.xs2),
         ],
         TextField(
@@ -79,21 +75,25 @@ class InputField extends StatelessWidget {
             prefixText: prefixText,
             suffixStyle: body4Light.copyWith(color: hintColor),
             prefixStyle: body4Light.copyWith(color: hintColor),
-            errorText: _hasError ? errorMessage : null,
-            errorStyle: body3Medium.copyWith(color: AppColors.Error.error),
             contentPadding: const EdgeInsets.symmetric(
               vertical: AppSpacings.l,
               horizontal: AppSpacings.l,
             ),
             border: border(AppColors.Outline.outline),
-            enabledBorder: border(AppColors.Outline.outline),
-            focusedBorder: border(AppColors.Primary.primary, width: 2),
+            enabledBorder: _hasError
+                ? border(AppColors.Error.error)
+                : border(AppColors.Outline.outline),
+            focusedBorder: _hasError
+                ? border(AppColors.Error.error, width: 2)
+                : border(AppColors.Primary.primary, width: 2),
             disabledBorder: border(AppColors.Outline.outlineVariant),
-            errorBorder: border(AppColors.Error.error),
-            focusedErrorBorder: border(AppColors.Error.error, width: 2),
           ),
           onChanged: onChanged,
         ),
+        if (_hasError) ...[
+          const SizedBox(height: AppSpacings.xs2),
+          Text(errorMessage!.trim(), style: errorStyle),
+        ],
       ],
     );
   }

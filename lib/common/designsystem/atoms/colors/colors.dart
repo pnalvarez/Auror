@@ -30,6 +30,9 @@ abstract final class AppColors {
   static const Warning = _WarningPalette();
   static const Text = _TextPalette();
 
+  /// Dark navy surfaces with muted gold accents (screens, cards, icon wells).
+  static const DarkContent = _DarkContentPalette();
+
   /// Full Material 3 [ColorScheme] for light [ThemeData], mapped from DS tokens.
   static ColorScheme get lightColorScheme => ColorScheme(
     brightness: Brightness.light,
@@ -105,32 +108,44 @@ class _PrimaryPalette {
 class _SecondaryPalette {
   const _SecondaryPalette();
 
-  /// Muted steel blue: trust, structure, secondary actions (courses, schedules, nav).
-  final Color secondary = const Color(0xFF456B8C);
+  /// Desaturated slate blue: structure without competing with long-form text.
+  final Color secondary = const Color(0xFF5C7384);
   final Color onSecondary = const Color(0xFFFFFFFF);
-  final Color secondaryContainer = const Color(0xFFD4E4F2);
-  final Color onSecondaryContainer = const Color(0xFF0C2A3F);
+  final Color secondaryContainer = const Color(0xFFE2E9EE);
+  final Color onSecondaryContainer = const Color(0xFF0F2433);
 
-  final Color secondaryFixed = const Color(0xFFD4E4F2);
-  final Color onSecondaryFixed = const Color(0xFF0C2A3F);
-  final Color secondaryFixedDim = const Color(0xFFB9D0E5);
-  final Color onSecondaryFixedVariant = const Color(0xFF2B4D68);
+  final Color secondaryFixed = const Color(0xFFE2E9EE);
+  final Color onSecondaryFixed = const Color(0xFF0F2433);
+  final Color secondaryFixedDim = const Color(0xFFC8D4DE);
+  final Color onSecondaryFixedVariant = const Color(0xFF3A5568);
 }
 
 @immutable
 class _TertiaryPalette {
   const _TertiaryPalette();
 
-  /// Warm amber: micro-wins, streaks, highlights (complements teal + blue without noise).
-  final Color tertiary = const Color(0xFFC87A00);
+  /// Soft amber: rewards and highlights with less visual punch for long sessions.
+  final Color tertiary = const Color(0xFFB0782E);
   final Color onTertiary = const Color(0xFFFFFFFF);
-  final Color tertiaryContainer = const Color(0xFFFFE7CC);
-  final Color onTertiaryContainer = const Color(0xFF4D2E00);
+  final Color tertiaryContainer = const Color(0xFFF5E6D4);
+  final Color onTertiaryContainer = const Color(0xFF3D2608);
 
-  final Color tertiaryFixed = const Color(0xFFFFE7CC);
-  final Color onTertiaryFixed = const Color(0xFF4D2E00);
-  final Color tertiaryFixedDim = const Color(0xFFFFD6A8);
-  final Color onTertiaryFixedVariant = const Color(0xFF8A5A00);
+  final Color tertiaryFixed = const Color(0xFFF5E6D4);
+  final Color onTertiaryFixed = const Color(0xFF3D2608);
+  final Color tertiaryFixedDim = const Color(0xFFE8D0B3);
+  final Color onTertiaryFixedVariant = const Color(0xFF7A5A28);
+}
+
+// --- Dark content (navy + gold) ---------------------------------------------
+
+@immutable
+class _DarkContentPalette {
+  const _DarkContentPalette();
+
+  final Color background = const Color(0xFF0B0E14);
+  final Color surface = const Color(0xFF161B22);
+  final Color accent = const Color(0xFFB89352);
+  final Color iconWell = const Color(0xFF0D1117);
 }
 
 // --- Surfaces & structure ---------------------------------------------------

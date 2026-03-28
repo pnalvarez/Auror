@@ -1,6 +1,10 @@
 import 'package:auror/common/designsystem/sample/demos/circular_loader_demo.dart';
+import 'package:auror/common/designsystem/sample/demos/disclaimer_card_demo.dart';
+import 'package:auror/common/designsystem/sample/demos/feedback_tile_demo.dart';
 import 'package:auror/common/designsystem/sample/demos/ds_action_buttons_demo.dart';
 import 'package:auror/common/designsystem/sample/demos/input_field_demo.dart';
+import 'package:auror/common/designsystem/sample/demos/recall_card_demo.dart';
+import 'package:auror/common/designsystem/sample/demos/status_chip_demo.dart';
 import 'package:flutter/material.dart';
 
 /// Registry for design-system demo screens: maps a [demoId] to a title and
@@ -24,9 +28,25 @@ abstract final class DsDemoCatalog {
           title: 'Circular loader',
           demo: CircularLoaderDemo(),
         ),
+      'disclaimer_card' => const DsDemoEntry(
+          title: 'Disclaimer card',
+          demo: DisclaimerCardDemo(),
+        ),
+      'feedback_tile' => const DsDemoEntry(
+          title: 'Feedback tile',
+          demo: FeedbackTileDemo(),
+        ),
       'input_field' => const DsDemoEntry(
           title: 'Input field',
           demo: InputFieldDemo(),
+        ),
+      'recall_card' => const DsDemoEntry(
+          title: 'Recall card',
+          demo: RecallCardDemo(),
+        ),
+      'status_chip' => const DsDemoEntry(
+          title: 'Status chip',
+          demo: StatusChipDemo(),
         ),
       _ => null,
     };

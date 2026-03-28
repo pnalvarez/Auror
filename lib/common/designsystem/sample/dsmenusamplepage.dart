@@ -33,10 +33,42 @@ class DsMenuSamplePage extends StatelessWidget {
           ),
           const SizedBox(height: AppSpacings.m),
           PrimaryButton(
+            label: 'Disclaimer card',
+            brand: ButtonBrand.primary,
+            action: () => context.router.push(
+              DSComponentRoute(demoId: 'disclaimer_card'),
+            ),
+          ),
+          const SizedBox(height: AppSpacings.m),
+          PrimaryButton(
+            label: 'Feedback tile',
+            brand: ButtonBrand.primary,
+            action: () => context.router.push(
+              DSComponentRoute(demoId: 'feedback_tile'),
+            ),
+          ),
+          const SizedBox(height: AppSpacings.m),
+          PrimaryButton(
             label: 'Input field',
             brand: ButtonBrand.primary,
             action: () => context.router.push(
               DSComponentRoute(demoId: 'input_field'),
+            ),
+          ),
+          const SizedBox(height: AppSpacings.m),
+          PrimaryButton(
+            label: 'Recall card',
+            brand: ButtonBrand.primary,
+            action: () => context.router.push(
+              DSComponentRoute(demoId: 'recall_card'),
+            ),
+          ),
+          const SizedBox(height: AppSpacings.m),
+          PrimaryButton(
+            label: 'Status chip',
+            brand: ButtonBrand.primary,
+            action: () => context.router.push(
+              DSComponentRoute(demoId: 'status_chip'),
             ),
           ),
         ],
