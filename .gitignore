@@ -25,6 +25,7 @@ migrate_working_dir/
 
 # Generated (build_runner / auto_route)
 *.gr.dart
+*.freezed.dart
 
 # Flutter/Dart/Pub related
 **/doc/api/

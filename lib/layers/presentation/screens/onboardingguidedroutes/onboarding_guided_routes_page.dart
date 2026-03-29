@@ -88,7 +88,7 @@ class _OnboardingGuidedRoutesContent extends StatelessWidget {
                       itemTitle: routeComunicacaoTitle,
                       itemDescription: routeComunicacaoDescription,
                     ),
-                    const SizedBox(height: AppSpacings.l),
+                    const SizedBox(height: AppSpacings.xl2),
                     ContentCard.listTileCustom(
                       tileIcon: const Icon(Icons.explore_outlined),
                       body: Text.rich(
@@ -126,9 +126,7 @@ class _OnboardingGuidedRoutesContent extends StatelessWidget {
               child: PrimaryButton(
                 label: ctaEnterApp,
                 brand: ButtonBrand.primary,
-                action: () => context.router.push(
-                  const OnboardingLearningSectionRoute(),
-                ),
+                action: () {},
               ),
             ),
           ],
