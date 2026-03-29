@@ -7,8 +7,10 @@ class AppRouter extends RootStackRouter {
   List<AutoRoute> get routes => [
     AutoRoute(page: MainLaunchRoute.page, initial: true),
     AutoRoute(page: OnboardingLearningLoopRoute.page),
+    AutoRoute(page: OnboardingRealExampleRoute.page),
     AutoRoute(page: OnboardingLearningSectionRoute.page),
     AutoRoute(page: DsMenuSampleRoute.page),
     AutoRoute(page: DSComponentRoute.page),
+    AutoRoute(page: OnboardingGuidedRoutesRoute.page),
   ];
 }

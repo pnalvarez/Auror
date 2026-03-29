@@ -8,11 +8,7 @@ import 'package:auror/common/designsystem/molecules/chips/status_chip.dart';
 import 'package:flutter/material.dart';
 
 /// User self-rating after revealing the expected answer.
-enum RecallFeedbackKind {
-  didNotRemember,
-  partial,
-  remembered,
-}
+enum RecallFeedbackKind { didNotRemember, partial, remembered }
 
 /// Flashcard-style recall: topic pill, question copy, then [expectedAnswer] after
 /// "Ver resposta". Fixed labels for the answer block and feedback row; tiles match
@@ -25,6 +21,9 @@ class RecallCard extends StatefulWidget {
     required this.description,
     required this.expectedAnswer,
     this.onFeedback,
+    this.onReveal,
+    this.initialRevealed = false,
+    this.topicChipState = StatusChipState.neutral,
   });
 
   final String topic;
@@ -34,6 +33,13 @@ class RecallCard extends StatefulWidget {
 
   /// Called when the user taps one of the three fixed feedback tiles.
   final void Function(RecallFeedbackKind kind)? onFeedback;
+  final void Function()? onReveal;
+
+  /// When true, the expected answer and feedback row show immediately (e.g. onboarding demo).
+  final bool initialRevealed;
+
+  /// Visual accent for the topic pill (default neutral).
+  final StatusChipState topicChipState;
 
   /// Fixed UI copy (Portuguese).
   static const String expectedAnswerTitle = 'Resposta esperada';
@@ -47,7 +53,18 @@ class RecallCard extends StatefulWidget {
 class _RecallCardState extends State<RecallCard> {
   bool _revealed = false;
 
-  void _onReveal() => setState(() => _revealed = true);
+  @override
+  void initState() {
+    super.initState();
+    _revealed = widget.initialRevealed;
+  }
+
+  void _onReveal() {
+    setState(() {
+      _revealed = true;
+      widget.onReveal?.call();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +97,7 @@ class _RecallCardState extends State<RecallCard> {
               alignment: Alignment.centerLeft,
               child: StatusChip(
                 label: widget.topic,
-                state: StatusChipState.neutral,
+                state: widget.topicChipState,
                 hasDot: false,
               ),
             ),
@@ -152,8 +169,7 @@ class _RecallCardState extends State<RecallCard> {
                                 subtitle: subtitle,
                                 width: tileW,
                                 height: h,
-                                onTap: () =>
-                                    widget.onFeedback?.call(kind),
+                                onTap: () => widget.onFeedback?.call(kind),
                               ),
                             );
                           }

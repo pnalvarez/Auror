@@ -8,3 +8,5 @@ library;
 export 'strings/main_launch_strings.dart';
 export 'strings/onboarding_learning_loop_strings.dart';
 export 'strings/onboarding_learning_section_strings.dart';
+export 'strings/onboarding_real_example_strings.dart';
+export 'strings/guided_routes_strings.dart';

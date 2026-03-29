@@ -1,34 +1,46 @@
+import 'package:auror/common/strings.dart';
+import 'package:auror/layers/presentation/screens/onboardingrealexample/onboarding_real_example_event.dart';
+import 'package:auror/layers/presentation/screens/onboardingrealexample/onboarding_real_example_state.dart';
+import 'package:auror/layers/presentation/screens/onboardingrealexample/onboarding_real_example_view_model.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:auror/common/designsystem/atoms/spacing/spacings.dart';
 import 'package:auror/common/designsystem/atoms/typography/typography.dart';
 import 'package:auror/common/designsystem/molecules/buttons/action_buttons.dart';
 import 'package:auror/common/designsystem/molecules/buttons/button_brand.dart';
-import 'package:auror/common/designsystem/molecules/cards/disclaimer_card.dart';
+import 'package:auror/common/designsystem/molecules/cards/recall_card.dart';
+import 'package:auror/common/designsystem/molecules/chips/status_chip.dart';
 import 'package:auror/common/designsystem/theme/main_launch_dark_theme.dart';
-import 'package:auror/common/strings/onboarding_learning_loop_strings.dart';
-import 'package:auror/common/strings/onboarding_learning_section_strings.dart';
-import 'package:flutter/material.dart';
 import 'package:auror/layers/presentation/routes/app_router.gr.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+typedef _BlocBuilder =
+    BlocBuilder<OnboardingRealExampleViewModel, OnboardingRealExampleState>;
 
 @RoutePage()
-class OnboardingLearningSectionPage extends StatelessWidget {
-  const OnboardingLearningSectionPage({super.key});
+class OnboardingRealExamplePage extends StatelessWidget {
+  const OnboardingRealExamplePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Theme(
-      data: mainLaunchDarkTheme(),
-      child: const _OnboardingLearningSectionView(),
+    return BlocProvider(
+      create: (_) =>
+          OnboardingRealExampleViewModel()..add(OnboardingRealExampleStarted()),
+      child: Theme(
+        data: mainLaunchDarkTheme(),
+        child: const _OnboardingRealExampleContent(),
+      ),
     );
   }
 }
 
-class _OnboardingLearningSectionView extends StatelessWidget {
-  const _OnboardingLearningSectionView();
+class _OnboardingRealExampleContent extends StatelessWidget {
+  const _OnboardingRealExampleContent();
 
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
+    final viewModel = context.read<OnboardingRealExampleViewModel>();
 
     return Scaffold(
       backgroundColor: scheme.surface,
@@ -48,7 +60,7 @@ class _OnboardingLearningSectionView extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Text(
-                      onboardingSectionTitle,
+                      onboardingRealExampleTitle,
                       style: headlineS.copyWith(
                         color: scheme.onSurface,
                         height: 1.28,
@@ -57,40 +69,24 @@ class _OnboardingLearningSectionView extends StatelessWidget {
                     ),
                     const SizedBox(height: AppSpacings.m),
                     Text(
-                      onboardingSectionSubtitle,
+                      onboardingRealExampleSubtitle,
                       style: body2Light.copyWith(
                         color: scheme.onSurfaceVariant,
                         height: 1.4,
                       ),
                       textAlign: TextAlign.center,
                     ),
-                    const SizedBox(height: AppSpacings.xl3),
-                    const DisclaimerCard(
-                      step: 1,
-                      title: disclaimerStep1Title,
-                      description: disclaimerStep1Description,
-                    ),
                     const SizedBox(height: AppSpacings.xl2),
-                    const DisclaimerCard(
-                      step: 2,
-                      title: disclaimerStep2Title,
-                      description: disclaimerStep2Description,
-                    ),
-                    const SizedBox(height: AppSpacings.xl2),
-                    const DisclaimerCard(
-                      step: 3,
-                      title: disclaimerStep3Title,
-                      description: disclaimerStep3Description,
-                    ),
-                    const SizedBox(height: AppSpacings.xl3),
-                    Text(
-                      onboardingSectionQuote,
-                      style: body2Light.copyWith(
-                        color: scheme.onSurfaceVariant,
-                        height: 1.45,
-                        fontStyle: FontStyle.italic,
+                    RecallCard(
+                      topic: recallTopicCard,
+                      title: recallQuestionActiveRecall,
+                      description: recallInstructionMental,
+                      expectedAnswer: recallExpectedAnswerBody,
+                      initialRevealed: false,
+                      topicChipState: StatusChipState.primary,
+                      onReveal: () => viewModel.add(
+                        OnboardingRealExampleEvent.recallCardRevealed(),
                       ),
-                      textAlign: TextAlign.center,
                     ),
                   ],
                 ),
@@ -103,10 +99,17 @@ class _OnboardingLearningSectionView extends StatelessWidget {
                 AppSpacings.xl,
                 AppSpacings.xl,
               ),
-              child: PrimaryButton(
-                label: ctaNext,
-                brand: ButtonBrand.primary,
-                action: () => context.router.push(OnboardingRealExampleRoute()),
+              child: _BlocBuilder(
+                builder: (_, state) {
+                  return PrimaryButton(
+                    label: ctaNext,
+                    enabled: state.recallCardRevealed,
+                    brand: ButtonBrand.primary,
+                    action: () => context.router.push(
+                      const OnboardingGuidedRoutesRoute(),
+                    ),
+                  );
+                },
               ),
             ),
           ],
