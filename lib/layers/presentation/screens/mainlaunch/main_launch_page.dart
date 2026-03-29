@@ -11,6 +11,7 @@ import 'package:auror/common/designsystem/molecules/buttons/action_buttons.dart'
 import 'package:auror/common/designsystem/molecules/buttons/button_brand.dart';
 import 'package:auror/common/designsystem/molecules/chips/status_chip.dart';
 import 'package:auror/common/designsystem/molecules/feedback/circular_loader.dart';
+import 'package:auror/layers/presentation/screens/login/login_context.dart';
 import 'package:auror/layers/presentation/screens/mainlaunch/main_launch_event.dart';
 import 'package:auror/layers/presentation/screens/mainlaunch/main_launch_state.dart';
 import 'package:auror/layers/presentation/screens/mainlaunch/main_launch_view_model.dart';
@@ -143,9 +144,16 @@ class _LaunchContentBody extends StatelessWidget {
                   child: PrimaryButton(
                     label: hasActiveSession ? ctaContinueStudying : ctaEnterApp,
                     brand: ButtonBrand.primary,
-                    action: () => context.read<MainLaunchViewModel>().add(
-                      const MainLaunchEvent.enterAppTapped(),
-                    ),
+                    action: () {
+                      context.read<MainLaunchViewModel>().add(
+                        const MainLaunchEvent.enterAppTapped(),
+                      );
+                      if (!hasActiveSession) {
+                        context.router.push(
+                          LoginRoute(loginContext: LoginContext.signIn),
+                        );
+                      }
+                    },
                   ),
                 ),
                 const SizedBox(height: AppSpacings.m),
