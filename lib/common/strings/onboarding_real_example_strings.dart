@@ -16,3 +16,7 @@ const String recallExpectedAnswerBody =
     'Active recall é tentar trazer uma informação da memória (sem olhar o '
     'material) em vez de só reler. Isso fortalece a retenção e é mais eficaz '
     'do que revisar passivamente.';
+
+const String errorFeedback = 'Você não lembrou';
+const String warningFeedback = 'Você lembrou parcialmente';
+const String successFeedback = 'Você lembrou completamente';

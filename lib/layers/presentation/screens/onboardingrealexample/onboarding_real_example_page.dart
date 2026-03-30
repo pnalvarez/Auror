@@ -1,3 +1,4 @@
+import 'package:auror/common/designsystem/molecules/feedback/ds_snackbar.dart';
 import 'package:auror/common/strings.dart';
 import 'package:auror/layers/presentation/screens/onboardingrealexample/onboarding_real_example_event.dart';
 import 'package:auror/layers/presentation/screens/onboardingrealexample/onboarding_real_example_state.dart';
@@ -86,6 +87,24 @@ class _OnboardingRealExampleContent extends StatelessWidget {
                       topicChipState: StatusChipState.primary,
                       onReveal: () => viewModel.add(
                         OnboardingRealExampleEvent.recallCardRevealed(),
+                      ),
+                      onTapError: () => showSnackbar(
+                        context,
+                        message: errorFeedback,
+                        state: .error,
+                        hasCloseButton: true,
+                      ),
+                      onTapWarning: () => showSnackbar(
+                        context,
+                        message: warningFeedback,
+                        state: .warning,
+                        hasCloseButton: true,
+                      ),
+                      onTapSuccess: () => showSnackbar(
+                        context,
+                        message: successFeedback,
+                        state: .success,
+                        hasCloseButton: true,
                       ),
                     ),
                   ],

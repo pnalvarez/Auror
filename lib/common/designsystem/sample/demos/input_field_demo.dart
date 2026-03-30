@@ -18,6 +18,7 @@ class _InputFieldDemoState extends State<InputFieldDemo> {
   late final TextEditingController _prefixController;
   late final TextEditingController _disabledController;
   late final TextEditingController _noLabelController;
+  late final TextEditingController _infoLabelController;
   bool _showError = true;
 
   @override
@@ -29,6 +30,7 @@ class _InputFieldDemoState extends State<InputFieldDemo> {
     _prefixController = TextEditingController(text: '42');
     _disabledController = TextEditingController(text: 'Cannot edit');
     _noLabelController = TextEditingController();
+    _infoLabelController = TextEditingController();
   }
 
   @override
@@ -39,6 +41,7 @@ class _InputFieldDemoState extends State<InputFieldDemo> {
     _prefixController.dispose();
     _disabledController.dispose();
     _noLabelController.dispose();
+    _infoLabelController.dispose();
     super.dispose();
   }
 
@@ -48,7 +51,7 @@ class _InputFieldDemoState extends State<InputFieldDemo> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Text(
-          'Outlined fields with label, focus, error, and disabled states.',
+          'Outlined fields with label, optional label info control, focus, error, and disabled states.',
           style: body2Medium.copyWith(
             color: Theme.of(context).colorScheme.onSurfaceVariant,
           ),
@@ -109,6 +112,21 @@ class _InputFieldDemoState extends State<InputFieldDemo> {
           prefixText: '\$ ',
           suffixText: ' kg',
           keyboardType: TextInputType.number,
+          onChanged: (_) => setState(() {}),
+        ),
+        const SizedBox(height: AppSpacings.xl2),
+        Text('Label with info', style: headlineS),
+        const SizedBox(height: AppSpacings.m),
+        InputField(
+          label: 'API key',
+          controller: _infoLabelController,
+          placeholder: 'sk-…',
+          infoIcon: true,
+          onInfoTap: () {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Info action (e.g. open docs).')),
+            );
+          },
           onChanged: (_) => setState(() {}),
         ),
         const SizedBox(height: AppSpacings.xl2),

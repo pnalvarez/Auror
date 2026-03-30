@@ -2,6 +2,7 @@ import 'package:auror/common/designsystem/sample/demos/circular_loader_demo.dart
 import 'package:auror/common/designsystem/sample/demos/disclaimer_card_demo.dart';
 import 'package:auror/common/designsystem/sample/demos/feedback_tile_demo.dart';
 import 'package:auror/common/designsystem/sample/demos/ds_action_buttons_demo.dart';
+import 'package:auror/common/designsystem/sample/demos/ds_snackbar_demo.dart';
 import 'package:auror/common/designsystem/sample/demos/input_field_demo.dart';
 import 'package:auror/common/designsystem/sample/demos/recall_card_demo.dart';
 import 'package:auror/common/designsystem/sample/demos/status_chip_demo.dart';
@@ -21,33 +22,34 @@ abstract final class DsDemoCatalog {
   static DsDemoEntry? lookup(String demoId) {
     return switch (demoId) {
       'action_buttons' => const DsDemoEntry(
-          title: 'Action buttons',
-          demo: ActionButtonsDemo(),
-        ),
+        title: 'Action buttons',
+        demo: ActionButtonsDemo(),
+      ),
       'circular_loader' => const DsDemoEntry(
-          title: 'Circular loader',
-          demo: CircularLoaderDemo(),
-        ),
+        title: 'Circular loader',
+        demo: CircularLoaderDemo(),
+      ),
       'disclaimer_card' => const DsDemoEntry(
-          title: 'Disclaimer card',
-          demo: DisclaimerCardDemo(),
-        ),
+        title: 'Disclaimer card',
+        demo: DisclaimerCardDemo(),
+      ),
       'feedback_tile' => const DsDemoEntry(
-          title: 'Feedback tile',
-          demo: FeedbackTileDemo(),
-        ),
+        title: 'Feedback tile',
+        demo: FeedbackTileDemo(),
+      ),
       'input_field' => const DsDemoEntry(
-          title: 'Input field',
-          demo: InputFieldDemo(),
-        ),
+        title: 'Input field',
+        demo: InputFieldDemo(),
+      ),
       'recall_card' => const DsDemoEntry(
-          title: 'Recall card',
-          demo: RecallCardDemo(),
-        ),
+        title: 'Recall card',
+        demo: RecallCardDemo(),
+      ),
       'status_chip' => const DsDemoEntry(
-          title: 'Status chip',
-          demo: StatusChipDemo(),
-        ),
+        title: 'Status chip',
+        demo: StatusChipDemo(),
+      ),
+      'snackbar' => const DsDemoEntry(title: 'Snackbar', demo: SnackbarDemo()),
       _ => null,
     };
   }

@@ -37,5 +37,16 @@ const String loginErrorPasswordRequirements =
 const String loginErrorPasswordMismatch = 'As senhas não conferem.';
 
 /// Sign-in: password has characters but no non-whitespace content.
-const String loginErrorPasswordWhitespace =
-    'A senha não pode ser só espaços.';
+const String loginErrorPasswordWhitespace = 'A senha não pode ser só espaços.';
+
+/// Modal: password rules (aligned with [meetsSignUpPasswordRules]).
+const String loginPasswordRequirementsTitle = 'Requisitos de senha';
+
+const String loginPasswordRequirementMinLength = 'Pelo menos 8 caracteres';
+const String loginPasswordRequirementUppercase =
+    'Pelo menos uma letra maiúscula (A–Z)';
+const String loginPasswordRequirementDigit = 'Pelo menos um número (0–9)';
+const String loginPasswordRequirementSpecial =
+    'Pelo menos um caractere especial (e.g. ! @ # \$ % & * …)';
+
+const String loginPasswordRequirementsClose = 'OK';

@@ -53,6 +53,58 @@ class _LoginScaffoldState extends State<_LoginScaffold> {
     if (mounted) setState(() {});
   }
 
+  void _showPasswordRequirementsDialog(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    showDialog<void>(
+      context: context,
+      builder: (ctx) {
+        return AlertDialog(
+          backgroundColor: scheme.surfaceContainerHigh,
+          surfaceTintColor: Colors.transparent,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(AppRadius.l),
+            side: BorderSide(color: scheme.outline.withValues(alpha: 0.35)),
+          ),
+          title: Text(
+            loginPasswordRequirementsTitle,
+            style: headlineS.copyWith(color: scheme.onSurface),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _PasswordReqBullet(
+                scheme: scheme,
+                text: loginPasswordRequirementMinLength,
+              ),
+              _PasswordReqBullet(
+                scheme: scheme,
+                text: loginPasswordRequirementUppercase,
+              ),
+              _PasswordReqBullet(
+                scheme: scheme,
+                text: loginPasswordRequirementDigit,
+              ),
+              _PasswordReqBullet(
+                scheme: scheme,
+                text: loginPasswordRequirementSpecial,
+              ),
+            ],
+          ),
+          actions: [
+            Center(
+              child: PrimaryButton(
+                label: loginPasswordRequirementsClose,
+                action: Navigator.of(ctx).pop,
+                isExpanded: true,
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   /// Hides inline errors while the field is focused.
   String? _shownError(FocusNode focus, String? message) {
     if (focus.hasFocus) return null;
@@ -116,7 +168,7 @@ class _LoginScaffoldState extends State<_LoginScaffold> {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: IconButton(
-                    onPressed: () => context.router.maybePop(),
+                    onPressed: () => context.router.popUntilRoot(),
                     icon: Icon(
                       Icons.arrow_back_rounded,
                       color: scheme.onSurfaceVariant,
@@ -228,6 +280,9 @@ class _LoginScaffoldState extends State<_LoginScaffold> {
                               placeholder: loginPlaceholderPassword,
                               obscureText: obscurePassword,
                               appearance: InputFieldAppearance.theme,
+                              infoIcon: true,
+                              onInfoTap: () =>
+                                  _showPasswordRequirementsDialog(context),
                               errorMessage: _shownError(
                                 _passwordFocus,
                                 loginPasswordError(
@@ -279,6 +334,11 @@ class _LoginScaffoldState extends State<_LoginScaffold> {
                                       placeholder: loginPlaceholderPassword,
                                       obscureText: obscureConfirm,
                                       appearance: InputFieldAppearance.theme,
+                                      infoIcon: true,
+                                      onInfoTap: () =>
+                                          _showPasswordRequirementsDialog(
+                                            context,
+                                          ),
                                       errorMessage: _shownError(
                                         _confirmFocus,
                                         loginConfirmPasswordError(
@@ -342,7 +402,7 @@ class _LoginScaffoldState extends State<_LoginScaffold> {
                         children: [
                           Text(
                             footerPrefix,
-                            style: body2Light.copyWith(
+                            style: body4Light.copyWith(
                               color: scheme.onSurfaceVariant,
                             ),
                           ),
@@ -355,7 +415,7 @@ class _LoginScaffoldState extends State<_LoginScaffold> {
                             },
                             child: Text(
                               footerLink,
-                              style: body2Light.copyWith(
+                              style: body4Light.copyWith(
                                 color: accent,
                                 fontWeight: FontWeight.w600,
                               ),
@@ -371,6 +431,32 @@ class _LoginScaffoldState extends State<_LoginScaffold> {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _PasswordReqBullet extends StatelessWidget {
+  const _PasswordReqBullet({required this.scheme, required this.text});
+
+  final ColorScheme scheme;
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: AppSpacings.s),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('• ', style: body3Light.copyWith(color: scheme.onSurface)),
+          Expanded(
+            child: Text(
+              text,
+              style: body3Light.copyWith(color: scheme.onSurfaceVariant),
+            ),
+          ),
+        ],
       ),
     );
   }

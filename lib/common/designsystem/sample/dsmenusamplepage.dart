@@ -71,6 +71,14 @@ class DsMenuSamplePage extends StatelessWidget {
               DSComponentRoute(demoId: 'status_chip'),
             ),
           ),
+          const SizedBox(height: AppSpacings.m),
+          PrimaryButton(
+            label: 'Snackbar',
+            brand: ButtonBrand.primary,
+            action: () => context.router.push(
+              DSComponentRoute(demoId: 'snackbar'),
+            ),
+          ),
         ],
       ),
     );

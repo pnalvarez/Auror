@@ -126,7 +126,8 @@ class _OnboardingGuidedRoutesContent extends StatelessWidget {
               child: PrimaryButton(
                 label: ctaEnterApp,
                 brand: ButtonBrand.primary,
-                action: () {},
+                action: () =>
+                    context.router.push(LoginRoute(loginContext: .signIn)),
               ),
             ),
           ],

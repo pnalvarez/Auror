@@ -22,6 +22,9 @@ class RecallCard extends StatefulWidget {
     required this.expectedAnswer,
     this.onFeedback,
     this.onReveal,
+    this.onTapError,
+    this.onTapWarning,
+    this.onTapSuccess,
     this.initialRevealed = false,
     this.topicChipState = StatusChipState.neutral,
   });
@@ -34,6 +37,9 @@ class RecallCard extends StatefulWidget {
   /// Called when the user taps one of the three fixed feedback tiles.
   final void Function(RecallFeedbackKind kind)? onFeedback;
   final void Function()? onReveal;
+  final void Function()? onTapError;
+  final void Function()? onTapWarning;
+  final void Function()? onTapSuccess;
 
   /// When true, the expected answer and feedback row show immediately (e.g. onboarding demo).
   final bool initialRevealed;
@@ -161,6 +167,7 @@ class _RecallCardState extends State<RecallCard> {
                             required String title,
                             required String subtitle,
                             required RecallFeedbackKind kind,
+                            required void Function()? onTap,
                           }) {
                             return Expanded(
                               child: FeedbackTile(
@@ -169,7 +176,9 @@ class _RecallCardState extends State<RecallCard> {
                                 subtitle: subtitle,
                                 width: tileW,
                                 height: h,
-                                onTap: () => widget.onFeedback?.call(kind),
+                                onTap: () {
+                                  onTap?.call();
+                                },
                               ),
                             );
                           }
@@ -182,6 +191,7 @@ class _RecallCardState extends State<RecallCard> {
                                 title: 'Não lembrei',
                                 subtitle: 'D+1',
                                 kind: RecallFeedbackKind.didNotRemember,
+                                onTap: widget.onTapError,
                               ),
                               const SizedBox(width: gap),
                               tile(
@@ -189,6 +199,7 @@ class _RecallCardState extends State<RecallCard> {
                                 title: 'Parcial',
                                 subtitle: 'D+3',
                                 kind: RecallFeedbackKind.partial,
+                                onTap: widget.onTapWarning,
                               ),
                               const SizedBox(width: gap),
                               tile(
@@ -196,6 +207,7 @@ class _RecallCardState extends State<RecallCard> {
                                 title: 'Lembrei!',
                                 subtitle: 'D+7',
                                 kind: RecallFeedbackKind.remembered,
+                                onTap: widget.onTapSuccess,
                               ),
                             ],
                           );

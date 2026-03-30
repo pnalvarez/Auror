@@ -26,6 +26,8 @@ class InputField extends StatelessWidget {
     this.suffixIcon,
     this.appearance = InputFieldAppearance.light,
     this.focusNode,
+    this.infoIcon = false,
+    this.onInfoTap,
     required this.onChanged,
   });
 
@@ -41,6 +43,8 @@ class InputField extends StatelessWidget {
   final bool obscureText;
   final Widget? suffixIcon;
   final InputFieldAppearance appearance;
+  final bool infoIcon;
+  final VoidCallback? onInfoTap;
   final ValueChanged<String> onChanged;
 
   bool get _hasError => errorMessage != null && errorMessage!.trim().isNotEmpty;
@@ -118,7 +122,27 @@ class InputField extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (label.isNotEmpty) ...[
-          Text(label, style: body4Light.copyWith(color: labelColor)),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(label, style: body4Light.copyWith(color: labelColor)),
+              if (infoIcon)
+                Transform.translate(
+                  offset: const Offset(-AppSpacings.s, 0),
+                  child: IconButton(
+                    onPressed: onInfoTap,
+                    tooltip: 'More info',
+                    style: IconButton.styleFrom(
+                      foregroundColor: labelColor,
+                      minimumSize: const Size(16, 16),
+                      padding: EdgeInsets.zero,
+                      visualDensity: VisualDensity.compact,
+                    ),
+                    icon: const Icon(Icons.info_outline, size: 16),
+                  ),
+                ),
+            ],
+          ),
           const SizedBox(height: AppSpacings.xs2),
         ],
         TextField(

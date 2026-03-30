@@ -18,6 +18,7 @@ class PrimaryButton extends StatelessWidget {
     this.brand = ButtonBrand.primary,
     this.enabled = true,
     this.loading = false,
+    this.isExpanded = false,
   });
 
   final String label;
@@ -25,6 +26,7 @@ class PrimaryButton extends StatelessWidget {
   final ButtonBrand brand;
   final bool enabled;
   final bool loading;
+  final bool isExpanded;
 
   static const double _radius = AppRadius.l;
 
@@ -63,10 +65,14 @@ class PrimaryButton extends StatelessWidget {
       ),
     );
 
+    Widget result = button;
     if (!enabled && !loading) {
-      return Opacity(opacity: _kButtonDisabledOpacity, child: button);
+      result = Opacity(opacity: _kButtonDisabledOpacity, child: button);
     }
-    return button;
+    if (isExpanded) {
+      return SizedBox(width: double.infinity, child: result);
+    }
+    return result;
   }
 }
 
@@ -79,6 +85,7 @@ class SecondaryButton extends StatelessWidget {
     this.brand = ButtonBrand.primary,
     this.enabled = true,
     this.loading = false,
+    this.isExpanded = false,
   });
 
   final String label;
@@ -86,6 +93,7 @@ class SecondaryButton extends StatelessWidget {
   final ButtonBrand brand;
   final bool enabled;
   final bool loading;
+  final bool isExpanded;
 
   static const double _radius = AppRadius.l;
 
@@ -128,10 +136,14 @@ class SecondaryButton extends StatelessWidget {
       ),
     );
 
+    Widget result = button;
     if (!enabled && !loading) {
-      return Opacity(opacity: _kButtonDisabledOpacity, child: button);
+      result = Opacity(opacity: _kButtonDisabledOpacity, child: button);
     }
-    return button;
+    if (isExpanded) {
+      return SizedBox(width: double.infinity, child: result);
+    }
+    return result;
   }
 }
 
@@ -144,6 +156,7 @@ class TertiaryButton extends StatelessWidget {
     this.brand = ButtonBrand.primary,
     this.enabled = true,
     this.loading = false,
+    this.isExpanded = false,
   });
 
   final String label;
@@ -151,6 +164,7 @@ class TertiaryButton extends StatelessWidget {
   final ButtonBrand brand;
   final bool enabled;
   final bool loading;
+  final bool isExpanded;
 
   @override
   Widget build(BuildContext context) {
@@ -184,9 +198,13 @@ class TertiaryButton extends StatelessWidget {
       ),
     );
 
+    Widget result = button;
     if (!enabled && !loading) {
-      return Opacity(opacity: _kButtonDisabledOpacity, child: button);
+      result = Opacity(opacity: _kButtonDisabledOpacity, child: button);
     }
-    return button;
+    if (isExpanded) {
+      return SizedBox(width: double.infinity, child: result);
+    }
+    return result;
   }
 }
