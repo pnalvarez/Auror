@@ -47,10 +47,15 @@ class DSComponentPage extends StatelessWidget {
               elevation: 0,
               title: Text(entry.title),
             ),
-            body: SingleChildScrollView(
-              padding: const EdgeInsets.all(AppSpacings.xl2),
-              child: entry.demo,
-            ),
+            body: demoId == 'navigation_bar'
+                ? Padding(
+                    padding: const EdgeInsets.all(AppSpacings.xl2),
+                    child: SizedBox.expand(child: entry.demo),
+                  )
+                : SingleChildScrollView(
+                    padding: const EdgeInsets.all(AppSpacings.xl2),
+                    child: entry.demo,
+                  ),
           );
         },
       ),

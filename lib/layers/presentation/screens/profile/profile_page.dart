@@ -38,140 +38,143 @@ class _ProfileScaffold extends StatelessWidget {
     final scheme = Theme.of(context).colorScheme;
     final accent = AppColors.DarkContent.accent;
 
-    return BlocBuilder<ProfileViewModel, ProfileState>(
-      builder: (context, state) {
-        if (state.isLoading && state.profile == null) {
-          return Center(
-            child: CircularProgressIndicator(color: scheme.primary),
-          );
-        }
-        if (state.errorMessage != null) {
-          return Center(
-            child: Padding(
-              padding: const EdgeInsets.all(AppSpacings.xl2),
-              child: Text(
-                profileLoadErrorMessage,
-                textAlign: TextAlign.center,
-                style: body2Medium.copyWith(color: scheme.onSurfaceVariant),
-              ),
-            ),
-          );
-        }
-
-        final profile = state.profile;
-        if (profile == null) {
-          return const SizedBox.shrink();
-        }
-
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.fromLTRB(
-                  AppSpacings.xl2,
-                  AppSpacings.m,
-                  AppSpacings.xl2,
-                  AppSpacings.m,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    ProfileHeader(
-                      imageUrl: profile.profileImageUrl,
-                      name: profile.username,
-                      email: profile.email,
-                      avatarRingColor: accent,
-                      emailIconColor: accent,
-                    ),
-                    const SizedBox(height: AppSpacings.xl2),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: ScoreTile(
-                            icon: Icons.menu_book_outlined,
-                            score: profile.learnedCards,
-                            label: profileStatLearnedCards,
-                            iconColor: accent,
-                          ),
-                        ),
-                        const SizedBox(width: AppSpacings.m),
-                        Expanded(
-                          child: ScoreTile(
-                            icon: Icons.psychology_outlined,
-                            score: profile.revisionsDone,
-                            label: profileStatRevisionsDone,
-                            iconColor: accent,
-                          ),
-                        ),
-                        const SizedBox(width: AppSpacings.m),
-                        Expanded(
-                          child: ScoreTile(
-                            icon: Icons.local_fire_department_outlined,
-                            score: profile.followedDays,
-                            label: profileStatFollowedDays,
-                            iconColor: accent,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: AppSpacings.xl2),
-                    _SectionLabel(text: profileSectionPlan),
-                    const SizedBox(height: AppSpacings.m),
-                    ListItem(
-                      isExpanded: true,
-                      input: IconTitleDescriptionInput(
-                        leadingIcon: Icons.workspace_premium_outlined,
-                        title: profile.isSubscribed
-                            ? profilePlanSubscribedTitle
-                            : profilePlanFreeTitle,
-                        description: profile.isSubscribed
-                            ? profilePlanSubscribedDescription
-                            : profilePlanFreeDescription,
-                      ),
-                      onTap: () {},
-                    ),
-                    const SizedBox(height: AppSpacings.xl2),
-                    _SectionLabel(text: profileSectionNavigation),
-                    const SizedBox(height: AppSpacings.m),
-                    ListItem(
-                      isExpanded: true,
-                      input: IconDescriptionInput(
-                        leadingIcon: Icons.route_outlined,
-                        title: profileNavMyRoutes,
-                      ),
-                      onTap: () {
-                        context.tabsRouter.setActiveIndex(2);
-                      },
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            SafeArea(
-              top: false,
-              bottom: false,
+    return SafeArea(
+      bottom: false,
+      child: BlocBuilder<ProfileViewModel, ProfileState>(
+        builder: (context, state) {
+          if (state.isLoading && state.profile == null) {
+            return Center(
+              child: CircularProgressIndicator(color: scheme.primary),
+            );
+          }
+          if (state.errorMessage != null) {
+            return Center(
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(
-                  AppSpacings.xl2,
-                  AppSpacings.xl2,
-                  AppSpacings.xl2,
-                  AppSpacings.m,
-                ),
-                child: SecondaryButton(
-                  label: profileLogoutLabel,
-                  brand: ButtonBrand.error,
-                  leadingIcon: Icons.logout_rounded,
-                  isExpanded: true,
-                  action: () {
-                    context.router.replace(MainLaunchRoute());
-                  },
+                padding: const EdgeInsets.all(AppSpacings.xl2),
+                child: Text(
+                  profileLoadErrorMessage,
+                  textAlign: TextAlign.center,
+                  style: body2Medium.copyWith(color: scheme.onSurfaceVariant),
                 ),
               ),
-            ),
-          ],
-        );
-      },
+            );
+          }
+
+          final profile = state.profile;
+          if (profile == null) {
+            return const SizedBox.shrink();
+          }
+
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Expanded(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.fromLTRB(
+                    AppSpacings.xl2,
+                    AppSpacings.m,
+                    AppSpacings.xl2,
+                    AppSpacings.m,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      ProfileHeader(
+                        imageUrl: profile.profileImageUrl,
+                        name: profile.username,
+                        email: profile.email,
+                        avatarRingColor: accent,
+                        emailIconColor: accent,
+                      ),
+                      const SizedBox(height: AppSpacings.xl2),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: ScoreTile(
+                              icon: Icons.menu_book_outlined,
+                              score: profile.learnedCards,
+                              label: profileStatLearnedCards,
+                              iconColor: accent,
+                            ),
+                          ),
+                          const SizedBox(width: AppSpacings.m),
+                          Expanded(
+                            child: ScoreTile(
+                              icon: Icons.psychology_outlined,
+                              score: profile.revisionsDone,
+                              label: profileStatRevisionsDone,
+                              iconColor: accent,
+                            ),
+                          ),
+                          const SizedBox(width: AppSpacings.m),
+                          Expanded(
+                            child: ScoreTile(
+                              icon: Icons.local_fire_department_outlined,
+                              score: profile.followedDays,
+                              label: profileStatFollowedDays,
+                              iconColor: accent,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: AppSpacings.xl2),
+                      _SectionLabel(text: profileSectionPlan),
+                      const SizedBox(height: AppSpacings.m),
+                      ListItem(
+                        isExpanded: true,
+                        input: IconTitleDescriptionInput(
+                          leadingIcon: Icons.workspace_premium_outlined,
+                          title: profile.isSubscribed
+                              ? profilePlanSubscribedTitle
+                              : profilePlanFreeTitle,
+                          description: profile.isSubscribed
+                              ? profilePlanSubscribedDescription
+                              : profilePlanFreeDescription,
+                        ),
+                        onTap: () {},
+                      ),
+                      const SizedBox(height: AppSpacings.xl2),
+                      _SectionLabel(text: profileSectionNavigation),
+                      const SizedBox(height: AppSpacings.m),
+                      ListItem(
+                        isExpanded: true,
+                        input: IconDescriptionInput(
+                          leadingIcon: Icons.route_outlined,
+                          title: profileNavMyRoutes,
+                        ),
+                        onTap: () {
+                          context.tabsRouter.setActiveIndex(2);
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              SafeArea(
+                top: false,
+                bottom: false,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(
+                    AppSpacings.xl2,
+                    AppSpacings.xl2,
+                    AppSpacings.xl2,
+                    AppSpacings.m,
+                  ),
+                  child: SecondaryButton(
+                    label: profileLogoutLabel,
+                    brand: ButtonBrand.error,
+                    leadingIcon: Icons.logout_rounded,
+                    isExpanded: true,
+                    action: () {
+                      context.router.replace(MainLaunchRoute());
+                    },
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
+      ),
     );
   }
 }

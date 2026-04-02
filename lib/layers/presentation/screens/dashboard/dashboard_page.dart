@@ -1,7 +1,5 @@
 import 'package:auror/common/designsystem/atoms/colors/colors.dart';
 import 'package:auror/common/designsystem/atoms/typography/typography.dart';
-import 'package:auror/common/designsystem/molecules/buttons/action_buttons.dart';
-import 'package:auror/common/designsystem/organisms/dialog/show_custom_dialog.dart';
 import 'package:auror/common/designsystem/theme/main_launch_dark_theme.dart';
 import 'package:auror/common/strings/dashboard_strings.dart';
 import 'package:auror/layers/presentation/routes/app_router.gr.dart';
@@ -37,43 +35,6 @@ class DashboardPage extends StatelessWidget {
           final scheme = Theme.of(context).colorScheme;
           return Scaffold(
             backgroundColor: scheme.surface,
-            appBar: AppBar(
-              backgroundColor: scheme.surface,
-              surfaceTintColor: Colors.transparent,
-              elevation: 0,
-              automaticallyImplyLeading: false,
-              actions: [
-                Tooltip(
-                  message: 'Sair',
-                  child: IconButton(
-                    icon: Icon(
-                      Icons.logout_rounded,
-                      color: scheme.onSurfaceVariant,
-                    ),
-                    onPressed: () {
-                      showCustomDialog(
-                        context,
-                        signOutTitle,
-                        Text(signOutContent),
-                        [
-                          PrimaryButton(
-                            label: signOutCancel,
-                            action: context.router.pop,
-                          ),
-                          SecondaryButton(
-                            label: signOutConfirm,
-                            action: () {
-                              context.router.pop();
-                              context.router.replace(MainLaunchRoute());
-                            },
-                          ),
-                        ],
-                      );
-                    },
-                  ),
-                ),
-              ],
-            ),
             body: Column(
               children: [
                 Expanded(child: child),

@@ -1,4 +1,4 @@
-import 'package:auror/layers/domain/usecases/models/profile_domain.dart';
+import 'package:auror/layers/domain/models/profile_domain.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'profile_ui.freezed.dart';

@@ -1,3 +1,4 @@
+import 'package:auror/common/designsystem/sample/demos/badge_demo.dart';
 import 'package:auror/common/designsystem/sample/demos/circular_loader_demo.dart';
 import 'package:auror/common/designsystem/sample/demos/disclaimer_card_demo.dart';
 import 'package:auror/common/designsystem/sample/demos/feedback_tile_demo.dart';
@@ -5,6 +6,7 @@ import 'package:auror/common/designsystem/sample/demos/ds_action_buttons_demo.da
 import 'package:auror/common/designsystem/sample/demos/ds_snackbar_demo.dart';
 import 'package:auror/common/designsystem/sample/demos/input_field_demo.dart';
 import 'package:auror/common/designsystem/sample/demos/list_item_demo.dart';
+import 'package:auror/common/designsystem/sample/demos/navigation_bar_demo.dart';
 import 'package:auror/common/designsystem/sample/demos/profile_header_demo.dart';
 import 'package:auror/common/designsystem/sample/demos/recall_card_demo.dart';
 import 'package:auror/common/designsystem/sample/demos/score_tile_demo.dart';
@@ -28,6 +30,10 @@ abstract final class DsDemoCatalog {
         title: 'Action buttons',
         demo: ActionButtonsDemo(),
       ),
+      'badge' => const DsDemoEntry(
+        title: 'Badge',
+        demo: BadgeDemo(),
+      ),
       'circular_loader' => const DsDemoEntry(
         title: 'Circular loader',
         demo: CircularLoaderDemo(),
@@ -47,6 +53,10 @@ abstract final class DsDemoCatalog {
       'list_item' => const DsDemoEntry(
         title: 'List item',
         demo: ListItemDemo(),
+      ),
+      'navigation_bar' => const DsDemoEntry(
+        title: 'Navigation bar',
+        demo: NavigationBarDemo(),
       ),
       'profile_header' => const DsDemoEntry(
         title: 'Profile header',

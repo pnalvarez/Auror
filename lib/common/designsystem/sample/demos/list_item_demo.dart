@@ -20,6 +20,23 @@ class ListItemDemo extends StatelessWidget {
           ),
         ),
         const SizedBox(height: AppSpacings.xl2),
+        Text('Card com badges', style: headlineS),
+        const SizedBox(height: AppSpacings.m),
+        ListItem(
+          input: BadgesTitleDescriptionInput(
+            topMainBadgeText: 'Desenvolvimento Pessoal',
+            topSecondBadgeText: 'Premium',
+            title: 'Autoliderança',
+            description:
+                'Desenvolva a capacidade de gerenciar a si mesmo, suas emoções '
+                'e seu tempo para alcançar metas pessoais e profissionais.',
+            trailingIcon: Icons.lock_outline_rounded,
+          ),
+          padding: const EdgeInsets.all(AppSpacings.xl2),
+          isExpanded: true,
+          onTap: () {},
+        ),
+        const SizedBox(height: AppSpacings.xl2),
         Text('Plano / upgrade', style: headlineS),
         const SizedBox(height: AppSpacings.m),
         ListItem(

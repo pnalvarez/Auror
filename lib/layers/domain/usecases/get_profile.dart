@@ -1,4 +1,4 @@
-import 'package:auror/layers/domain/usecases/models/profile_domain.dart';
+import 'package:auror/layers/domain/models/profile_domain.dart';
 import 'package:injectable/injectable.dart';
 
 abstract class IGetProfile {

@@ -12,11 +12,13 @@ class DashboardTabPlaceholder extends StatelessWidget {
     final scheme = Theme.of(context).colorScheme;
     return Scaffold(
       backgroundColor: scheme.surface,
-      body: Center(
-        child: Text(
-          label,
-          style: headlineM.copyWith(color: scheme.onSurface),
-          textAlign: TextAlign.center,
+      body: SafeArea(
+        child: Center(
+          child: Text(
+            label,
+            style: headlineM.copyWith(color: scheme.onSurface),
+            textAlign: TextAlign.center,
+          ),
         ),
       ),
     );

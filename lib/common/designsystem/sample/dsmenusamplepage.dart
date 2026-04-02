@@ -37,6 +37,13 @@ class DsMenuSamplePage extends StatelessWidget {
                 ),
                 const SizedBox(height: AppSpacings.m),
                 PrimaryButton(
+                  label: 'Badge',
+                  brand: ButtonBrand.primary,
+                  action: () =>
+                      context.router.push(DSComponentRoute(demoId: 'badge')),
+                ),
+                const SizedBox(height: AppSpacings.m),
+                PrimaryButton(
                   label: 'Circular loader',
                   brand: ButtonBrand.primary,
                   action: () => context.router.push(
@@ -73,6 +80,14 @@ class DsMenuSamplePage extends StatelessWidget {
                   brand: ButtonBrand.primary,
                   action: () => context.router.push(
                     DSComponentRoute(demoId: 'list_item'),
+                  ),
+                ),
+                const SizedBox(height: AppSpacings.m),
+                PrimaryButton(
+                  label: 'Navigation bar',
+                  brand: ButtonBrand.primary,
+                  action: () => context.router.push(
+                    DSComponentRoute(demoId: 'navigation_bar'),
                   ),
                 ),
                 const SizedBox(height: AppSpacings.m),

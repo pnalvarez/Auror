@@ -2,7 +2,8 @@ import 'package:auror/common/designsystem/atoms/colors/colors.dart';
 import 'package:auror/common/designsystem/atoms/spacing/radius.dart';
 import 'package:auror/common/designsystem/atoms/spacing/spacings.dart';
 import 'package:auror/common/designsystem/atoms/typography/typography.dart';
-import 'package:flutter/material.dart';
+import 'package:auror/common/designsystem/molecules/badges/badge.dart';
+import 'package:flutter/material.dart' hide Badge;
 
 /// Input model for [ListItem]: each subtype defines the inner layout; the shell
 /// applies padding, surface, border, and tap behavior (same pattern as mibook).
@@ -143,6 +144,84 @@ class IconDescriptionInput extends ListItemInput {
   }
 }
 
+/// Card row: top badges ([Badge] category + optional premium), title, body,
+/// trailing icon (e.g. lock).
+class BadgesTitleDescriptionInput extends ListItemInput {
+  BadgesTitleDescriptionInput({
+    required this.topMainBadgeText,
+    this.topSecondBadgeText,
+    this.secondBadgeIcon = Icons.workspace_premium_outlined,
+    required this.title,
+    required this.description,
+    required this.trailingIcon,
+    this.trailingIconSize = 22,
+  });
+
+  final String topMainBadgeText;
+
+  /// When null or empty, only [topMainBadgeText] is shown in the badge row.
+  final String? topSecondBadgeText;
+
+  /// Icon for the second badge (premium row). Ignored when [topSecondBadgeText] is empty.
+  final IconData secondBadgeIcon;
+
+  final String title;
+  final String description;
+  final IconData trailingIcon;
+  final double trailingIconSize;
+
+  @override
+  Widget buildContent(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final hasSecond =
+        topSecondBadgeText != null && topSecondBadgeText!.trim().isNotEmpty;
+
+    final titleStyle = headingH6.copyWith(color: scheme.onSurface, height: 1.2);
+    final descriptionStyle = body4Light.copyWith(
+      color: scheme.onSurfaceVariant,
+      height: 1.35,
+    );
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Wrap(
+                spacing: AppSpacings.s,
+                runSpacing: AppSpacings.s,
+                crossAxisAlignment: WrapCrossAlignment.center,
+                children: [
+                  Badge(label: topMainBadgeText, variant: BadgeVariant.neutral),
+                  if (hasSecond)
+                    Badge(
+                      label: topSecondBadgeText!.trim(),
+                      leadingIcon: secondBadgeIcon,
+                      variant: BadgeVariant.highlight,
+                    ),
+                ],
+              ),
+            ),
+            const SizedBox(width: AppSpacings.s),
+            Icon(
+              trailingIcon,
+              size: trailingIconSize,
+              color: scheme.onSurfaceVariant,
+            ),
+          ],
+        ),
+        const SizedBox(height: AppSpacings.m),
+        Text(title, style: titleStyle),
+        const SizedBox(height: AppSpacings.s),
+        Text(description, style: descriptionStyle),
+      ],
+    );
+  }
+}
+
 /// Escape hatch: wrap any [Widget] as a [ListItem] body.
 class GenericListItemInput extends ListItemInput {
   GenericListItemInput({required this.child});
@@ -163,21 +242,31 @@ class ListItem extends StatelessWidget {
     required this.input,
     this.isExpanded = false,
     this.onTap,
+    this.padding,
+    this.isSelected = false,
   });
 
   final ListItemInput input;
   final bool isExpanded;
   final VoidCallback? onTap;
 
+  /// Defaults to horizontal [AppSpacings.l], vertical [AppSpacings.m].
+  final EdgeInsetsGeometry? padding;
+
+  /// Highlights the card border with [ColorScheme.primary].
+  final bool isSelected;
+
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
 
     final padded = Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppSpacings.l,
-        vertical: AppSpacings.m,
-      ),
+      padding:
+          padding ??
+          const EdgeInsets.symmetric(
+            horizontal: AppSpacings.l,
+            vertical: AppSpacings.m,
+          ),
       child: input.buildContent(context),
     );
 
@@ -185,7 +274,12 @@ class ListItem extends StatelessWidget {
       decoration: BoxDecoration(
         color: scheme.surfaceContainerHigh,
         borderRadius: BorderRadius.circular(AppRadius.xl),
-        border: Border.all(color: scheme.outline.withValues(alpha: 0.35)),
+        border: Border.all(
+          color: isSelected
+              ? scheme.primary
+              : scheme.outline.withValues(alpha: 0.35),
+          width: isSelected ? 2 : 1,
+        ),
       ),
       child: Material(
         type: MaterialType.transparency,
