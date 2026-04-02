@@ -1,4 +1,4 @@
-import 'package:auror/common/designsystem/molecules/feedback/ds_snackbar.dart';
+import 'package:auror/common/designsystem/organisms/feedback/ds_snackbar.dart';
 import 'package:auror/common/strings.dart';
 import 'package:auror/layers/presentation/screens/onboardingrealexample/onboarding_real_example_event.dart';
 import 'package:auror/layers/presentation/screens/onboardingrealexample/onboarding_real_example_state.dart';

@@ -6,6 +6,7 @@ enum ButtonBrand {
   primary,
   secondary,
   tertiary,
+  error,
 }
 
 /// Resolved [ButtonBrand] colors for filled / outlined / text buttons.
@@ -35,6 +36,10 @@ class BrandButtonColors {
       ButtonBrand.tertiary => BrandButtonColors(
           fill: AppColors.Tertiary.tertiary,
           onFill: AppColors.Tertiary.onTertiary,
+        ),
+      ButtonBrand.error => BrandButtonColors(
+          fill: AppColors.Error.error,
+          onFill: AppColors.Error.onError,
         ),
     };
   }

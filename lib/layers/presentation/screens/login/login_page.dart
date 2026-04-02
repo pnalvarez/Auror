@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:auror/common/designsystem/atoms/colors/colors.dart';
 import 'package:auror/common/designsystem/atoms/spacing/radius.dart';
 import 'package:auror/common/designsystem/atoms/spacing/spacings.dart';
@@ -12,6 +14,7 @@ import 'package:auror/layers/presentation/screens/login/login_event.dart';
 import 'package:auror/layers/presentation/screens/login/login_state.dart';
 import 'package:auror/layers/presentation/screens/login/login_validators.dart';
 import 'package:auror/layers/presentation/screens/login/login_view_model.dart';
+import 'package:auror/layers/presentation/routes/app_router.gr.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -58,6 +61,11 @@ class _LoginScaffoldState extends State<_LoginScaffold> {
     showDialog<void>(
       context: context,
       builder: (ctx) {
+        final screenW = MediaQuery.sizeOf(ctx).width;
+        final contentWidth = math.max(
+          240.0,
+          math.min(screenW - 80.0, 560.0),
+        );
         return AlertDialog(
           backgroundColor: scheme.surfaceContainerHigh,
           surfaceTintColor: Colors.transparent,
@@ -69,37 +77,43 @@ class _LoginScaffoldState extends State<_LoginScaffold> {
             loginPasswordRequirementsTitle,
             style: headlineS.copyWith(color: scheme.onSurface),
           ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _PasswordReqBullet(
-                scheme: scheme,
-                text: loginPasswordRequirementMinLength,
-              ),
-              _PasswordReqBullet(
-                scheme: scheme,
-                text: loginPasswordRequirementUppercase,
-              ),
-              _PasswordReqBullet(
-                scheme: scheme,
-                text: loginPasswordRequirementDigit,
-              ),
-              _PasswordReqBullet(
-                scheme: scheme,
-                text: loginPasswordRequirementSpecial,
-              ),
-            ],
-          ),
-          actions: [
-            Center(
-              child: PrimaryButton(
-                label: loginPasswordRequirementsClose,
-                action: Navigator.of(ctx).pop,
-                isExpanded: true,
-              ),
+          content: SizedBox(
+            width: contentWidth,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _PasswordReqBullet(
+                      scheme: scheme,
+                      text: loginPasswordRequirementMinLength,
+                    ),
+                    _PasswordReqBullet(
+                      scheme: scheme,
+                      text: loginPasswordRequirementUppercase,
+                    ),
+                    _PasswordReqBullet(
+                      scheme: scheme,
+                      text: loginPasswordRequirementDigit,
+                    ),
+                    _PasswordReqBullet(
+                      scheme: scheme,
+                      text: loginPasswordRequirementSpecial,
+                    ),
+                  ],
+                ),
+                SizedBox(height: AppSpacings.xl2),
+                PrimaryButton(
+                  label: loginPasswordRequirementsClose,
+                  action: Navigator.of(ctx).pop,
+                  isExpanded: true,
+                ),
+              ],
             ),
-          ],
+          ),
         );
       },
     );
@@ -157,277 +171,298 @@ class _LoginScaffoldState extends State<_LoginScaffold> {
         _nameController.clear();
         _confirmPasswordController.clear();
       },
-      child: Scaffold(
-        backgroundColor: scheme.surface,
-        body: SafeArea(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: AppSpacings.xl),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: IconButton(
-                    onPressed: () => context.router.popUntilRoot(),
-                    icon: Icon(
-                      Icons.arrow_back_rounded,
-                      color: scheme.onSurfaceVariant,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: AppSpacings.m),
-                Text(
-                  loginBrandTitle,
-                  textAlign: TextAlign.center,
-                  style: headlineL.copyWith(color: accent),
-                ),
-                const SizedBox(height: AppSpacings.m),
-                BlocSelector<LoginViewModel, LoginState, bool>(
-                  selector: (s) => s.isSignUp,
-                  builder: (context, isSignUp) {
-                    return Text(
-                      isSignUp ? loginSubtitleSignUp : loginSubtitleSignIn,
-                      textAlign: TextAlign.center,
-                      style: body2Light.copyWith(
+      child: BlocListener<LoginViewModel, LoginState>(
+        listenWhen: (previous, current) =>
+            !previous.pendingDashboardNavigation &&
+            current.pendingDashboardNavigation,
+        listener: (context, state) {
+          context.router.replace(DashboardRoute());
+          context.read<LoginViewModel>().add(
+            const LoginEvent.dashboardNavigationConsumed(),
+          );
+        },
+        child: Scaffold(
+          backgroundColor: scheme.surface,
+          body: SafeArea(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: AppSpacings.xl),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: IconButton(
+                      onPressed: () => context.router.popUntilRoot(),
+                      icon: Icon(
+                        Icons.arrow_back_rounded,
                         color: scheme.onSurfaceVariant,
-                        height: 1.45,
                       ),
-                    );
-                  },
-                ),
-                const SizedBox(height: AppSpacings.xl3),
-                DecoratedBox(
-                  decoration: BoxDecoration(
-                    color: scheme.surfaceContainerHigh,
-                    borderRadius: BorderRadius.circular(AppRadius.l),
-                    border: Border.all(
-                      color: scheme.outline.withValues(alpha: 0.35),
                     ),
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(AppSpacings.xl),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        BlocSelector<LoginViewModel, LoginState, bool>(
-                          selector: (s) => s.isSignUp,
-                          builder: (context, isSignUp) {
-                            if (!isSignUp) return const SizedBox.shrink();
-                            return BlocSelector<
-                              LoginViewModel,
-                              LoginState,
-                              String
-                            >(
-                              selector: (s) => s.name,
-                              builder: (context, name) {
-                                return Column(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.stretch,
-                                  children: [
-                                    InputField(
-                                      label: loginLabelName,
-                                      controller: _nameController,
-                                      focusNode: _nameFocus,
-                                      placeholder: loginPlaceholderName,
-                                      appearance: InputFieldAppearance.theme,
-                                      errorMessage: _shownError(
-                                        _nameFocus,
-                                        loginNameError(name),
-                                      ),
-                                      onChanged: (v) =>
-                                          vm.add(LoginEvent.nameChanged(v)),
-                                    ),
-                                    const SizedBox(height: AppSpacings.l),
-                                  ],
-                                );
-                              },
-                            );
-                          },
-                        ),
-                        BlocSelector<LoginViewModel, LoginState, String>(
-                          selector: (s) => s.email,
-                          builder: (context, email) {
-                            return InputField(
-                              label: loginLabelEmail,
-                              controller: _emailController,
-                              focusNode: _emailFocus,
-                              placeholder: loginPlaceholderEmail,
-                              keyboardType: TextInputType.emailAddress,
-                              appearance: InputFieldAppearance.theme,
-                              errorMessage: _shownError(
-                                _emailFocus,
-                                loginEmailError(email),
-                              ),
-                              onChanged: (v) =>
-                                  vm.add(LoginEvent.emailChanged(v)),
-                            );
-                          },
-                        ),
-                        const SizedBox(height: AppSpacings.l),
-                        BlocSelector<
-                          LoginViewModel,
-                          LoginState,
-                          (bool, String, bool)
-                        >(
-                          selector: (s) =>
-                              (s.obscurePassword, s.password, s.isSignUp),
-                          builder: (context, data) {
-                            final (obscurePassword, password, isSignUp) = data;
-                            return InputField(
-                              label: loginLabelPassword,
-                              controller: _passwordController,
-                              focusNode: _passwordFocus,
-                              placeholder: loginPlaceholderPassword,
-                              obscureText: obscurePassword,
-                              appearance: InputFieldAppearance.theme,
-                              infoIcon: true,
-                              onInfoTap: () =>
-                                  _showPasswordRequirementsDialog(context),
-                              errorMessage: _shownError(
-                                _passwordFocus,
-                                loginPasswordError(
-                                  password,
-                                  isSignUp: isSignUp,
-                                ),
-                              ),
-                              suffixIcon: IconButton(
-                                onPressed: () => vm.add(
-                                  const LoginEvent.passwordVisibilityToggled(),
-                                ),
-                                icon: Icon(
-                                  obscurePassword
-                                      ? Icons.visibility_outlined
-                                      : Icons.visibility_off_outlined,
-                                  color: scheme.onSurfaceVariant,
-                                ),
-                              ),
-                              onChanged: (v) =>
-                                  vm.add(LoginEvent.passwordChanged(v)),
-                            );
-                          },
-                        ),
-                        BlocSelector<LoginViewModel, LoginState, bool>(
-                          selector: (s) => s.isSignUp,
-                          builder: (context, isSignUp) {
-                            if (!isSignUp) return const SizedBox.shrink();
-                            return Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                const SizedBox(height: AppSpacings.l),
-                                BlocSelector<
-                                  LoginViewModel,
-                                  LoginState,
-                                  (bool, String, String)
-                                >(
-                                  selector: (s) => (
-                                    s.obscureConfirm,
-                                    s.confirmPassword,
-                                    s.password,
-                                  ),
-                                  builder: (context, data) {
-                                    final (obscureConfirm, confirm, password) =
-                                        data;
-                                    return InputField(
-                                      label: loginLabelConfirmPassword,
-                                      controller: _confirmPasswordController,
-                                      focusNode: _confirmFocus,
-                                      placeholder: loginPlaceholderPassword,
-                                      obscureText: obscureConfirm,
-                                      appearance: InputFieldAppearance.theme,
-                                      infoIcon: true,
-                                      onInfoTap: () =>
-                                          _showPasswordRequirementsDialog(
-                                            context,
-                                          ),
-                                      errorMessage: _shownError(
-                                        _confirmFocus,
-                                        loginConfirmPasswordError(
-                                          confirm,
-                                          password,
-                                        ),
-                                      ),
-                                      suffixIcon: IconButton(
-                                        onPressed: () => vm.add(
-                                          const LoginEvent.confirmPasswordVisibilityToggled(),
-                                        ),
-                                        icon: Icon(
-                                          obscureConfirm
-                                              ? Icons.visibility_outlined
-                                              : Icons.visibility_off_outlined,
-                                          color: scheme.onSurfaceVariant,
-                                        ),
-                                      ),
-                                      onChanged: (v) => vm.add(
-                                        LoginEvent.confirmPasswordChanged(v),
-                                      ),
-                                    );
-                                  },
-                                ),
-                              ],
-                            );
-                          },
-                        ),
-                        const SizedBox(height: AppSpacings.xl2),
-                        BlocSelector<LoginViewModel, LoginState, (bool, bool)>(
-                          selector: (s) => (s.canSubmit, s.isSignUp),
-                          builder: (context, tuple) {
-                            final (canSubmit, isSignUp) = tuple;
-                            return PrimaryButton(
-                              label: isSignUp ? loginCtaSignUp : loginCtaSignIn,
-                              brand: ButtonBrand.primary,
-                              enabled: canSubmit,
-                              action: () =>
-                                  vm.add(const LoginEvent.submitTapped()),
-                            );
-                          },
-                        ),
-                      ],
-                    ),
+                  const SizedBox(height: AppSpacings.m),
+                  Text(
+                    loginBrandTitle,
+                    textAlign: TextAlign.center,
+                    style: headlineL.copyWith(color: accent),
                   ),
-                ),
-                const SizedBox(height: AppSpacings.xl2),
-                BlocSelector<LoginViewModel, LoginState, bool>(
-                  selector: (s) => s.isSignUp,
-                  builder: (context, isSignUp) {
-                    final footerPrefix = isSignUp
-                        ? loginFooterHasAccount
-                        : loginFooterNoAccount;
-                    final footerLink = isSignUp
-                        ? loginFooterSignIn
-                        : loginFooterCreateAccount;
-                    return Center(
-                      child: Wrap(
-                        alignment: WrapAlignment.center,
-                        crossAxisAlignment: WrapCrossAlignment.center,
+                  const SizedBox(height: AppSpacings.m),
+                  BlocSelector<LoginViewModel, LoginState, bool>(
+                    selector: (s) => s.isSignUp,
+                    builder: (context, isSignUp) {
+                      return Text(
+                        isSignUp ? loginSubtitleSignUp : loginSubtitleSignIn,
+                        textAlign: TextAlign.center,
+                        style: body2Light.copyWith(
+                          color: scheme.onSurfaceVariant,
+                          height: 1.45,
+                        ),
+                      );
+                    },
+                  ),
+                  const SizedBox(height: AppSpacings.xl3),
+                  DecoratedBox(
+                    decoration: BoxDecoration(
+                      color: scheme.surfaceContainerHigh,
+                      borderRadius: BorderRadius.circular(AppRadius.l),
+                      border: Border.all(
+                        color: scheme.outline.withValues(alpha: 0.35),
+                      ),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(AppSpacings.xl),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          Text(
-                            footerPrefix,
-                            style: body4Light.copyWith(
-                              color: scheme.onSurfaceVariant,
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              final next = isSignUp
-                                  ? LoginContext.signIn
-                                  : LoginContext.signUp;
-                              vm.add(LoginEvent.loginContextChanged(next));
+                          BlocSelector<LoginViewModel, LoginState, bool>(
+                            selector: (s) => s.isSignUp,
+                            builder: (context, isSignUp) {
+                              if (!isSignUp) return const SizedBox.shrink();
+                              return BlocSelector<
+                                LoginViewModel,
+                                LoginState,
+                                String
+                              >(
+                                selector: (s) => s.name,
+                                builder: (context, name) {
+                                  return Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.stretch,
+                                    children: [
+                                      InputField(
+                                        label: loginLabelName,
+                                        controller: _nameController,
+                                        focusNode: _nameFocus,
+                                        placeholder: loginPlaceholderName,
+                                        appearance: InputFieldAppearance.theme,
+                                        errorMessage: _shownError(
+                                          _nameFocus,
+                                          loginNameError(name),
+                                        ),
+                                        onChanged: (v) =>
+                                            vm.add(LoginEvent.nameChanged(v)),
+                                      ),
+                                      const SizedBox(height: AppSpacings.l),
+                                    ],
+                                  );
+                                },
+                              );
                             },
-                            child: Text(
-                              footerLink,
-                              style: body4Light.copyWith(
-                                color: accent,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
+                          ),
+                          BlocSelector<LoginViewModel, LoginState, String>(
+                            selector: (s) => s.email,
+                            builder: (context, email) {
+                              return InputField(
+                                label: loginLabelEmail,
+                                controller: _emailController,
+                                focusNode: _emailFocus,
+                                placeholder: loginPlaceholderEmail,
+                                keyboardType: TextInputType.emailAddress,
+                                appearance: InputFieldAppearance.theme,
+                                errorMessage: _shownError(
+                                  _emailFocus,
+                                  loginEmailError(email),
+                                ),
+                                onChanged: (v) =>
+                                    vm.add(LoginEvent.emailChanged(v)),
+                              );
+                            },
+                          ),
+                          const SizedBox(height: AppSpacings.l),
+                          BlocSelector<
+                            LoginViewModel,
+                            LoginState,
+                            (bool, String, bool)
+                          >(
+                            selector: (s) =>
+                                (s.obscurePassword, s.password, s.isSignUp),
+                            builder: (context, data) {
+                              final (obscurePassword, password, isSignUp) =
+                                  data;
+                              return InputField(
+                                label: loginLabelPassword,
+                                controller: _passwordController,
+                                focusNode: _passwordFocus,
+                                placeholder: loginPlaceholderPassword,
+                                obscureText: obscurePassword,
+                                appearance: InputFieldAppearance.theme,
+                                infoIcon: true,
+                                onInfoTap: () =>
+                                    _showPasswordRequirementsDialog(context),
+                                errorMessage: _shownError(
+                                  _passwordFocus,
+                                  loginPasswordError(
+                                    password,
+                                    isSignUp: isSignUp,
+                                  ),
+                                ),
+                                suffixIcon: IconButton(
+                                  onPressed: () => vm.add(
+                                    const LoginEvent.passwordVisibilityToggled(),
+                                  ),
+                                  icon: Icon(
+                                    obscurePassword
+                                        ? Icons.visibility_outlined
+                                        : Icons.visibility_off_outlined,
+                                    color: scheme.onSurfaceVariant,
+                                  ),
+                                ),
+                                onChanged: (v) =>
+                                    vm.add(LoginEvent.passwordChanged(v)),
+                              );
+                            },
+                          ),
+                          BlocSelector<LoginViewModel, LoginState, bool>(
+                            selector: (s) => s.isSignUp,
+                            builder: (context, isSignUp) {
+                              if (!isSignUp) return const SizedBox.shrink();
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  const SizedBox(height: AppSpacings.l),
+                                  BlocSelector<
+                                    LoginViewModel,
+                                    LoginState,
+                                    (bool, String, String)
+                                  >(
+                                    selector: (s) => (
+                                      s.obscureConfirm,
+                                      s.confirmPassword,
+                                      s.password,
+                                    ),
+                                    builder: (context, data) {
+                                      final (
+                                        obscureConfirm,
+                                        confirm,
+                                        password,
+                                      ) = data;
+                                      return InputField(
+                                        label: loginLabelConfirmPassword,
+                                        controller: _confirmPasswordController,
+                                        focusNode: _confirmFocus,
+                                        placeholder: loginPlaceholderPassword,
+                                        obscureText: obscureConfirm,
+                                        appearance: InputFieldAppearance.theme,
+                                        infoIcon: true,
+                                        onInfoTap: () =>
+                                            _showPasswordRequirementsDialog(
+                                              context,
+                                            ),
+                                        errorMessage: _shownError(
+                                          _confirmFocus,
+                                          loginConfirmPasswordError(
+                                            confirm,
+                                            password,
+                                          ),
+                                        ),
+                                        suffixIcon: IconButton(
+                                          onPressed: () => vm.add(
+                                            const LoginEvent.confirmPasswordVisibilityToggled(),
+                                          ),
+                                          icon: Icon(
+                                            obscureConfirm
+                                                ? Icons.visibility_outlined
+                                                : Icons.visibility_off_outlined,
+                                            color: scheme.onSurfaceVariant,
+                                          ),
+                                        ),
+                                        onChanged: (v) => vm.add(
+                                          LoginEvent.confirmPasswordChanged(v),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                          ),
+                          const SizedBox(height: AppSpacings.xl2),
+                          BlocSelector<
+                            LoginViewModel,
+                            LoginState,
+                            (bool, bool)
+                          >(
+                            selector: (s) => (s.canSubmit, s.isSignUp),
+                            builder: (context, tuple) {
+                              final (canSubmit, isSignUp) = tuple;
+                              return PrimaryButton(
+                                label: isSignUp
+                                    ? loginCtaSignUp
+                                    : loginCtaSignIn,
+                                brand: ButtonBrand.primary,
+                                enabled: canSubmit,
+                                action: () =>
+                                    vm.add(const LoginEvent.submitTapped()),
+                              );
+                            },
                           ),
                         ],
                       ),
-                    );
-                  },
-                ),
-                const SizedBox(height: AppSpacings.xl2),
-              ],
+                    ),
+                  ),
+                  const SizedBox(height: AppSpacings.xl2),
+                  BlocSelector<LoginViewModel, LoginState, bool>(
+                    selector: (s) => s.isSignUp,
+                    builder: (context, isSignUp) {
+                      final footerPrefix = isSignUp
+                          ? loginFooterHasAccount
+                          : loginFooterNoAccount;
+                      final footerLink = isSignUp
+                          ? loginFooterSignIn
+                          : loginFooterCreateAccount;
+                      return Center(
+                        child: Wrap(
+                          alignment: WrapAlignment.center,
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          children: [
+                            Text(
+                              footerPrefix,
+                              style: body4Light.copyWith(
+                                color: scheme.onSurfaceVariant,
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                final next = isSignUp
+                                    ? LoginContext.signIn
+                                    : LoginContext.signUp;
+                                vm.add(LoginEvent.loginContextChanged(next));
+                              },
+                              child: Text(
+                                footerLink,
+                                style: body4Light.copyWith(
+                                  color: accent,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                  const SizedBox(height: AppSpacings.xl2),
+                ],
+              ),
             ),
           ),
         ),

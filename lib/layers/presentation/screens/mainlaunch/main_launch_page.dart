@@ -10,7 +10,7 @@ import 'package:auror/common/designsystem/atoms/typography/typography.dart';
 import 'package:auror/common/designsystem/molecules/buttons/action_buttons.dart';
 import 'package:auror/common/designsystem/molecules/buttons/button_brand.dart';
 import 'package:auror/common/designsystem/molecules/chips/status_chip.dart';
-import 'package:auror/common/designsystem/molecules/feedback/circular_loader.dart';
+import 'package:auror/common/designsystem/organisms/feedback/circular_loader.dart';
 import 'package:auror/layers/presentation/screens/login/login_context.dart';
 import 'package:auror/layers/presentation/screens/mainlaunch/main_launch_event.dart';
 import 'package:auror/layers/presentation/screens/mainlaunch/main_launch_state.dart';

@@ -15,6 +15,7 @@ class LoginViewModel extends Bloc<LoginEvent, LoginState> {
       _onConfirmPasswordVisibilityToggled,
     );
     on<LoginSubmitTapped>(_onSubmitTapped);
+    on<LoginDashboardNavigationConsumed>(_onDashboardNavigationConsumed);
     on<LoginContextChanged>(_onLoginContextChanged);
   }
 
@@ -28,6 +29,7 @@ class LoginViewModel extends Bloc<LoginEvent, LoginState> {
         name: '',
         confirmPassword: '',
         obscureConfirm: true,
+        pendingDashboardNavigation: false,
       ),
     );
   }
@@ -71,5 +73,13 @@ class LoginViewModel extends Bloc<LoginEvent, LoginState> {
   void _onSubmitTapped(LoginSubmitTapped event, Emitter<LoginState> emit) {
     if (!state.canSubmit) return;
     // TODO: wire auth repository / session.
+    emit(state.copyWith(pendingDashboardNavigation: true));
+  }
+
+  void _onDashboardNavigationConsumed(
+    LoginDashboardNavigationConsumed event,
+    Emitter<LoginState> emit,
+  ) {
+    emit(state.copyWith(pendingDashboardNavigation: false));
   }
 }

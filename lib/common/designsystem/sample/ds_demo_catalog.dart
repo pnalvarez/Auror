@@ -4,7 +4,10 @@ import 'package:auror/common/designsystem/sample/demos/feedback_tile_demo.dart';
 import 'package:auror/common/designsystem/sample/demos/ds_action_buttons_demo.dart';
 import 'package:auror/common/designsystem/sample/demos/ds_snackbar_demo.dart';
 import 'package:auror/common/designsystem/sample/demos/input_field_demo.dart';
+import 'package:auror/common/designsystem/sample/demos/list_item_demo.dart';
+import 'package:auror/common/designsystem/sample/demos/profile_header_demo.dart';
 import 'package:auror/common/designsystem/sample/demos/recall_card_demo.dart';
+import 'package:auror/common/designsystem/sample/demos/score_tile_demo.dart';
 import 'package:auror/common/designsystem/sample/demos/status_chip_demo.dart';
 import 'package:flutter/material.dart';
 
@@ -41,9 +44,21 @@ abstract final class DsDemoCatalog {
         title: 'Input field',
         demo: InputFieldDemo(),
       ),
+      'list_item' => const DsDemoEntry(
+        title: 'List item',
+        demo: ListItemDemo(),
+      ),
+      'profile_header' => const DsDemoEntry(
+        title: 'Profile header',
+        demo: ProfileHeaderDemo(),
+      ),
       'recall_card' => const DsDemoEntry(
         title: 'Recall card',
         demo: RecallCardDemo(),
+      ),
+      'score_tile' => const DsDemoEntry(
+        title: 'Score tile',
+        demo: ScoreTileDemo(),
       ),
       'status_chip' => const DsDemoEntry(
         title: 'Status chip',

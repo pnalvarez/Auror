@@ -2,7 +2,7 @@ import 'package:auror/common/designsystem/atoms/colors/colors.dart';
 import 'package:auror/common/designsystem/atoms/spacing/radius.dart';
 import 'package:auror/common/designsystem/atoms/spacing/spacings.dart';
 import 'package:auror/common/designsystem/atoms/typography/typography.dart';
-import 'package:auror/common/designsystem/molecules/feedback/circular_loader.dart';
+import 'package:auror/common/designsystem/organisms/feedback/circular_loader.dart';
 import 'package:flutter/material.dart';
 
 /// Demo of [CircularLoader] for filled vs neutral backgrounds.
