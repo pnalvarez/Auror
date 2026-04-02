@@ -24,4 +24,7 @@ sealed class LoginEvent with _$LoginEvent {
       LoginConfirmPasswordVisibilityToggled;
 
   const factory LoginEvent.submitTapped() = LoginSubmitTapped;
+
+  const factory LoginEvent.dashboardNavigationConsumed() =
+      LoginDashboardNavigationConsumed;
 }

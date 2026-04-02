@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:auror/common/designsystem/atoms/spacing/spacings.dart';
 import 'package:auror/common/designsystem/molecules/buttons/action_buttons.dart';
 import 'package:auror/common/designsystem/molecules/buttons/button_brand.dart';
+import 'package:auror/common/designsystem/theme/main_launch_dark_theme.dart';
 import 'package:auror/layers/presentation/routes/app_router.gr.dart';
 import 'package:flutter/material.dart';
 
@@ -11,75 +12,127 @@ class DsMenuSamplePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Design system')),
-      body: ListView(
-        padding: const EdgeInsets.all(AppSpacings.xl2),
-        children: [
-          PrimaryButton(
-            label: 'Action buttons',
-            brand: ButtonBrand.primary,
-            action: () => context.router.push(
-              DSComponentRoute(demoId: 'action_buttons'),
+    return Theme(
+      data: mainLaunchDarkTheme(),
+      child: Builder(
+        builder: (context) {
+          final scheme = Theme.of(context).colorScheme;
+          return Scaffold(
+            backgroundColor: scheme.surface,
+            appBar: AppBar(
+              backgroundColor: scheme.surface,
+              surfaceTintColor: Colors.transparent,
+              elevation: 0,
+              title: const Text('Design system'),
             ),
-          ),
-          const SizedBox(height: AppSpacings.m),
-          PrimaryButton(
-            label: 'Circular loader',
-            brand: ButtonBrand.primary,
-            action: () => context.router.push(
-              DSComponentRoute(demoId: 'circular_loader'),
+            body: ListView(
+              padding: const EdgeInsets.all(AppSpacings.xl2),
+              children: [
+                PrimaryButton(
+                  label: 'Action buttons',
+                  brand: ButtonBrand.primary,
+                  action: () => context.router.push(
+                    DSComponentRoute(demoId: 'action_buttons'),
+                  ),
+                ),
+                const SizedBox(height: AppSpacings.m),
+                PrimaryButton(
+                  label: 'Badge',
+                  brand: ButtonBrand.primary,
+                  action: () =>
+                      context.router.push(DSComponentRoute(demoId: 'badge')),
+                ),
+                const SizedBox(height: AppSpacings.m),
+                PrimaryButton(
+                  label: 'Circular loader',
+                  brand: ButtonBrand.primary,
+                  action: () => context.router.push(
+                    DSComponentRoute(demoId: 'circular_loader'),
+                  ),
+                ),
+                const SizedBox(height: AppSpacings.m),
+                PrimaryButton(
+                  label: 'Disclaimer card',
+                  brand: ButtonBrand.primary,
+                  action: () => context.router.push(
+                    DSComponentRoute(demoId: 'disclaimer_card'),
+                  ),
+                ),
+                const SizedBox(height: AppSpacings.m),
+                PrimaryButton(
+                  label: 'Feedback tile',
+                  brand: ButtonBrand.primary,
+                  action: () => context.router.push(
+                    DSComponentRoute(demoId: 'feedback_tile'),
+                  ),
+                ),
+                const SizedBox(height: AppSpacings.m),
+                PrimaryButton(
+                  label: 'Input field',
+                  brand: ButtonBrand.primary,
+                  action: () => context.router.push(
+                    DSComponentRoute(demoId: 'input_field'),
+                  ),
+                ),
+                const SizedBox(height: AppSpacings.m),
+                PrimaryButton(
+                  label: 'List item',
+                  brand: ButtonBrand.primary,
+                  action: () => context.router.push(
+                    DSComponentRoute(demoId: 'list_item'),
+                  ),
+                ),
+                const SizedBox(height: AppSpacings.m),
+                PrimaryButton(
+                  label: 'Navigation bar',
+                  brand: ButtonBrand.primary,
+                  action: () => context.router.push(
+                    DSComponentRoute(demoId: 'navigation_bar'),
+                  ),
+                ),
+                const SizedBox(height: AppSpacings.m),
+                PrimaryButton(
+                  label: 'Recall card',
+                  brand: ButtonBrand.primary,
+                  action: () => context.router.push(
+                    DSComponentRoute(demoId: 'recall_card'),
+                  ),
+                ),
+                const SizedBox(height: AppSpacings.m),
+                PrimaryButton(
+                  label: 'Score tile',
+                  brand: ButtonBrand.primary,
+                  action: () => context.router.push(
+                    DSComponentRoute(demoId: 'score_tile'),
+                  ),
+                ),
+                const SizedBox(height: AppSpacings.m),
+                PrimaryButton(
+                  label: 'Profile header',
+                  brand: ButtonBrand.primary,
+                  action: () => context.router.push(
+                    DSComponentRoute(demoId: 'profile_header'),
+                  ),
+                ),
+                const SizedBox(height: AppSpacings.m),
+                PrimaryButton(
+                  label: 'Status chip',
+                  brand: ButtonBrand.primary,
+                  action: () => context.router.push(
+                    DSComponentRoute(demoId: 'status_chip'),
+                  ),
+                ),
+                const SizedBox(height: AppSpacings.m),
+                PrimaryButton(
+                  label: 'Snackbar',
+                  brand: ButtonBrand.primary,
+                  action: () =>
+                      context.router.push(DSComponentRoute(demoId: 'snackbar')),
+                ),
+              ],
             ),
-          ),
-          const SizedBox(height: AppSpacings.m),
-          PrimaryButton(
-            label: 'Disclaimer card',
-            brand: ButtonBrand.primary,
-            action: () => context.router.push(
-              DSComponentRoute(demoId: 'disclaimer_card'),
-            ),
-          ),
-          const SizedBox(height: AppSpacings.m),
-          PrimaryButton(
-            label: 'Feedback tile',
-            brand: ButtonBrand.primary,
-            action: () => context.router.push(
-              DSComponentRoute(demoId: 'feedback_tile'),
-            ),
-          ),
-          const SizedBox(height: AppSpacings.m),
-          PrimaryButton(
-            label: 'Input field',
-            brand: ButtonBrand.primary,
-            action: () => context.router.push(
-              DSComponentRoute(demoId: 'input_field'),
-            ),
-          ),
-          const SizedBox(height: AppSpacings.m),
-          PrimaryButton(
-            label: 'Recall card',
-            brand: ButtonBrand.primary,
-            action: () => context.router.push(
-              DSComponentRoute(demoId: 'recall_card'),
-            ),
-          ),
-          const SizedBox(height: AppSpacings.m),
-          PrimaryButton(
-            label: 'Status chip',
-            brand: ButtonBrand.primary,
-            action: () => context.router.push(
-              DSComponentRoute(demoId: 'status_chip'),
-            ),
-          ),
-          const SizedBox(height: AppSpacings.m),
-          PrimaryButton(
-            label: 'Snackbar',
-            brand: ButtonBrand.primary,
-            action: () => context.router.push(
-              DSComponentRoute(demoId: 'snackbar'),
-            ),
-          ),
-        ],
+          );
+        },
       ),
     );
   }

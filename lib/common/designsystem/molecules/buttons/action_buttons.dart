@@ -3,7 +3,7 @@ import 'package:auror/common/designsystem/atoms/spacing/radius.dart';
 import 'package:auror/common/designsystem/atoms/spacing/spacings.dart';
 import 'package:auror/common/designsystem/atoms/typography/typography.dart';
 import 'package:auror/common/designsystem/molecules/buttons/button_brand.dart';
-import 'package:auror/common/designsystem/molecules/feedback/circular_loader.dart';
+import 'package:auror/common/designsystem/organisms/feedback/circular_loader.dart';
 import 'package:flutter/material.dart';
 
 const double _kButtonDisabledOpacity = 0.5;
@@ -19,6 +19,8 @@ class PrimaryButton extends StatelessWidget {
     this.enabled = true,
     this.loading = false,
     this.isExpanded = false,
+    this.leadingIcon,
+    this.trailingIcon,
   });
 
   final String label;
@@ -27,6 +29,8 @@ class PrimaryButton extends StatelessWidget {
   final bool enabled;
   final bool loading;
   final bool isExpanded;
+  final IconData? leadingIcon;
+  final IconData? trailingIcon;
 
   static const double _radius = AppRadius.l;
 
@@ -55,10 +59,24 @@ class PrimaryButton extends StatelessWidget {
             heightFactor: 1,
             child: loading
                 ? CircularLoader(color: colors.onFill)
-                : Text(
-                    label,
-                    style: body4Light.copyWith(color: colors.onFill),
-                    textAlign: TextAlign.center,
+                : Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      if (leadingIcon != null) ...[
+                        Icon(leadingIcon, size: 18, color: colors.onFill),
+                        const SizedBox(width: AppSpacings.xs),
+                      ],
+                      Text(
+                        label,
+                        style: body4Light.copyWith(color: colors.onFill),
+                        textAlign: TextAlign.center,
+                      ),
+                      if (trailingIcon != null) ...[
+                        const SizedBox(width: AppSpacings.xs),
+                        Icon(trailingIcon, size: 18, color: colors.onFill),
+                      ],
+                    ],
                   ),
           ),
         ),
@@ -86,6 +104,8 @@ class SecondaryButton extends StatelessWidget {
     this.enabled = true,
     this.loading = false,
     this.isExpanded = false,
+    this.leadingIcon,
+    this.trailingIcon,
   });
 
   final String label;
@@ -94,6 +114,8 @@ class SecondaryButton extends StatelessWidget {
   final bool enabled;
   final bool loading;
   final bool isExpanded;
+  final IconData? leadingIcon;
+  final IconData? trailingIcon;
 
   static const double _radius = AppRadius.l;
 
@@ -125,10 +147,24 @@ class SecondaryButton extends StatelessWidget {
               heightFactor: 1,
               child: loading
                   ? CircularLoader(color: colors.fill)
-                  : Text(
-                      label,
-                      style: body4Light.copyWith(color: colors.fill),
-                      textAlign: TextAlign.center,
+                  : Row(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        if (leadingIcon != null) ...[
+                          Icon(leadingIcon, size: 18, color: colors.fill),
+                          const SizedBox(width: AppSpacings.xs),
+                        ],
+                        Text(
+                          label,
+                          style: body4Light.copyWith(color: colors.fill),
+                          textAlign: TextAlign.center,
+                        ),
+                        if (trailingIcon != null) ...[
+                          const SizedBox(width: AppSpacings.xs),
+                          Icon(trailingIcon, size: 18, color: colors.fill),
+                        ],
+                      ],
                     ),
             ),
           ),
@@ -157,6 +193,8 @@ class TertiaryButton extends StatelessWidget {
     this.enabled = true,
     this.loading = false,
     this.isExpanded = false,
+    this.leadingIcon,
+    this.trailingIcon,
   });
 
   final String label;
@@ -165,6 +203,8 @@ class TertiaryButton extends StatelessWidget {
   final bool enabled;
   final bool loading;
   final bool isExpanded;
+  final IconData? leadingIcon;
+  final IconData? trailingIcon;
 
   @override
   Widget build(BuildContext context) {
@@ -189,10 +229,24 @@ class TertiaryButton extends StatelessWidget {
           ),
           child: loading
               ? Center(child: CircularLoader(color: colors.fill))
-              : Text(
-                  label,
-                  style: body4Light.copyWith(color: colors.fill),
-                  textAlign: TextAlign.center,
+              : Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    if (leadingIcon != null) ...[
+                      Icon(leadingIcon, size: 18, color: colors.fill),
+                      const SizedBox(width: AppSpacings.xs),
+                    ],
+                    Text(
+                      label,
+                      style: body4Light.copyWith(color: colors.fill),
+                      textAlign: TextAlign.center,
+                    ),
+                    if (trailingIcon != null) ...[
+                      const SizedBox(width: AppSpacings.xs),
+                      Icon(trailingIcon, size: 18, color: colors.fill),
+                    ],
+                  ],
                 ),
         ),
       ),

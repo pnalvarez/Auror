@@ -16,12 +16,97 @@ class ActionButtonsDemo extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Text(
-          'Filled, outlined, and text buttons across brand palettes.',
+          'Filled, outlined, and text buttons across brand palettes. Optional '
+          'leading and trailing icons on all three variants (18px, brand color).',
           style: body2Medium.copyWith(
             color: Theme.of(context).colorScheme.onSurfaceVariant,
           ),
         ),
         const SizedBox(height: AppSpacings.xl2),
+        _Section(
+          title: 'With icons',
+          children: [
+            PrimaryButton(
+              label: 'Primary · leading',
+              brand: ButtonBrand.primary,
+              leadingIcon: Icons.play_arrow_rounded,
+              action: () {},
+            ),
+            PrimaryButton(
+              label: 'Primary · trailing',
+              brand: ButtonBrand.primary,
+              trailingIcon: Icons.chevron_right_rounded,
+              action: () {},
+            ),
+            PrimaryButton(
+              label: 'Primary · both',
+              brand: ButtonBrand.primary,
+              leadingIcon: Icons.download_rounded,
+              trailingIcon: Icons.open_in_new_rounded,
+              action: () {},
+            ),
+            SecondaryButton(
+              label: 'Secondary · leading',
+              brand: ButtonBrand.primary,
+              leadingIcon: Icons.play_arrow_rounded,
+              action: () {},
+            ),
+            SecondaryButton(
+              label: 'Secondary · trailing',
+              brand: ButtonBrand.primary,
+              trailingIcon: Icons.chevron_right_rounded,
+              action: () {},
+            ),
+            SecondaryButton(
+              label: 'Secondary · both',
+              brand: ButtonBrand.primary,
+              leadingIcon: Icons.download_rounded,
+              trailingIcon: Icons.open_in_new_rounded,
+              action: () {},
+            ),
+            TertiaryButton(
+              label: 'Tertiary · leading',
+              brand: ButtonBrand.primary,
+              leadingIcon: Icons.play_arrow_rounded,
+              action: () {},
+            ),
+            TertiaryButton(
+              label: 'Tertiary · trailing',
+              brand: ButtonBrand.primary,
+              trailingIcon: Icons.chevron_right_rounded,
+              action: () {},
+            ),
+            TertiaryButton(
+              label: 'Tertiary · both',
+              brand: ButtonBrand.primary,
+              leadingIcon: Icons.download_rounded,
+              trailingIcon: Icons.open_in_new_rounded,
+              action: () {},
+            ),
+            PrimaryButton(
+              label: 'Primary · full width · leading',
+              brand: ButtonBrand.primary,
+              leadingIcon: Icons.login_rounded,
+              isExpanded: true,
+              action: () {},
+            ),
+            SecondaryButton(
+              label: 'Secondary · full width · trailing',
+              brand: ButtonBrand.primary,
+              trailingIcon: Icons.arrow_forward_rounded,
+              isExpanded: true,
+              action: () {},
+            ),
+            TertiaryButton(
+              label: 'Tertiary · full width · both',
+              brand: ButtonBrand.primary,
+              leadingIcon: Icons.check_rounded,
+              trailingIcon: Icons.chevron_right_rounded,
+              isExpanded: true,
+              action: () {},
+            ),
+          ],
+        ),
         _Section(
           title: 'Primary',
           children: [
@@ -58,6 +143,18 @@ class ActionButtonsDemo extends StatelessWidget {
             PrimaryButton(
               label: 'Primary · tertiary · disabled',
               brand: ButtonBrand.tertiary,
+              enabled: false,
+              action: () {},
+            ),
+            PrimaryButton(
+              label: 'Primary · error · enabled',
+              brand: ButtonBrand.error,
+              enabled: true,
+              action: () {},
+            ),
+            PrimaryButton(
+              label: 'Primary · error · disabled',
+              brand: ButtonBrand.error,
               enabled: false,
               action: () {},
             ),
@@ -102,6 +199,18 @@ class ActionButtonsDemo extends StatelessWidget {
               enabled: false,
               action: () {},
             ),
+            SecondaryButton(
+              label: 'Secondary · error · enabled',
+              brand: ButtonBrand.error,
+              enabled: true,
+              action: () {},
+            ),
+            SecondaryButton(
+              label: 'Secondary · error · disabled',
+              brand: ButtonBrand.error,
+              enabled: false,
+              action: () {},
+            ),
           ],
         ),
         _Section(
@@ -143,6 +252,18 @@ class ActionButtonsDemo extends StatelessWidget {
               enabled: false,
               action: () {},
             ),
+            TertiaryButton(
+              label: 'Tertiary · error · enabled',
+              brand: ButtonBrand.error,
+              enabled: true,
+              action: () {},
+            ),
+            TertiaryButton(
+              label: 'Tertiary · error · disabled',
+              brand: ButtonBrand.error,
+              enabled: false,
+              action: () {},
+            ),
           ],
         ),
         _Section(
@@ -169,6 +290,13 @@ class ActionButtonsDemo extends StatelessWidget {
               loading: true,
               action: () {},
             ),
+            PrimaryButton(
+              label: 'Primary · error · loading',
+              brand: ButtonBrand.error,
+              enabled: true,
+              loading: true,
+              action: () {},
+            ),
             SecondaryButton(
               label: 'Secondary · primary · loading',
               brand: ButtonBrand.primary,
@@ -190,6 +318,13 @@ class ActionButtonsDemo extends StatelessWidget {
               loading: true,
               action: () {},
             ),
+            SecondaryButton(
+              label: 'Secondary · error · loading',
+              brand: ButtonBrand.error,
+              enabled: true,
+              loading: true,
+              action: () {},
+            ),
             TertiaryButton(
               label: 'Tertiary · primary · loading',
               brand: ButtonBrand.primary,
@@ -207,6 +342,13 @@ class ActionButtonsDemo extends StatelessWidget {
             TertiaryButton(
               label: 'Tertiary · tertiary · loading',
               brand: ButtonBrand.tertiary,
+              enabled: true,
+              loading: true,
+              action: () {},
+            ),
+            TertiaryButton(
+              label: 'Tertiary · error · loading',
+              brand: ButtonBrand.error,
               enabled: true,
               loading: true,
               action: () {},

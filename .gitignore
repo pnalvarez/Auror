@@ -23,9 +23,10 @@ migrate_working_dir/
 # is commented out by default.
 #.vscode/
 
-# Generated (build_runner / auto_route)
+# Generated (build_runner / auto_route / injectable)
 *.gr.dart
 *.freezed.dart
+**/di.config.dart
 
 # Flutter/Dart/Pub related
 **/doc/api/

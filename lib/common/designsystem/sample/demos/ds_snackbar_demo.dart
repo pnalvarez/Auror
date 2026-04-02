@@ -2,7 +2,7 @@ import 'package:auror/common/designsystem/atoms/spacing/spacings.dart';
 import 'package:auror/common/designsystem/atoms/typography/typography.dart';
 import 'package:auror/common/designsystem/molecules/buttons/action_buttons.dart';
 import 'package:auror/common/designsystem/molecules/buttons/button_brand.dart';
-import 'package:auror/common/designsystem/molecules/feedback/ds_snackbar.dart';
+import 'package:auror/common/designsystem/organisms/feedback/ds_snackbar.dart';
 import 'package:flutter/material.dart';
 
 /// Showcases [showSnackbar] for all semantic states (anchored at the top).
