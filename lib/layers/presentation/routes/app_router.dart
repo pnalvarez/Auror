@@ -7,10 +7,12 @@ class AppRouter extends RootStackRouter {
   List<AutoRoute> get routes => [
     AutoRoute(page: MainLaunchRoute.page, initial: true),
     AutoRoute(page: LoginRoute.page),
+    AutoRoute(page: RevisionQuizRoute.page),
     AutoRoute(
       page: DashboardRoute.page,
       children: [
         AutoRoute(page: DashboardHomeRoute.page, path: 'home'),
+        AutoRoute(page: DashboardRevisionHubRoute.page, path: 'revisions'),
         AutoRoute(page: DashboardExploreRoute.page, path: 'explore'),
         AutoRoute(page: DashboardRoutesRoute.page, path: 'routes'),
         AutoRoute(page: DashboardProfileRoute.page, path: 'profile'),

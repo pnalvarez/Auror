@@ -1,9 +1,11 @@
-import 'package:auror/common/designsystem/atoms/colors/colors.dart';
 import 'package:auror/common/designsystem/atoms/spacing/radius.dart';
 import 'package:auror/common/designsystem/atoms/spacing/spacings.dart';
 import 'package:auror/common/designsystem/atoms/typography/typography.dart';
 import 'package:auror/common/designsystem/molecules/badges/badge.dart';
+import 'package:auror/common/designsystem/organisms/list_item/list_item_brand.dart';
 import 'package:flutter/material.dart' hide Badge;
+
+export 'list_item_brand.dart';
 
 /// Input model for [ListItem]: each subtype defines the inner layout; the shell
 /// applies padding, surface, border, and tap behavior (same pattern as mibook).
@@ -13,12 +15,28 @@ abstract class ListItemInput {
   Widget buildContent(BuildContext context);
 }
 
+class TextInput extends ListItemInput {
+  TextInput({required this.text});
+
+  final String text;
+
+  @override
+  Widget buildContent(BuildContext context) {
+    final brandStyle = ListItemBrandScope.of(context);
+    return Text(
+      text,
+      style: body4Medium.copyWith(color: brandStyle.titleTextColor),
+    );
+  }
+}
+
 /// Horizontal row: leading icon, title + optional description, optional chevron.
 class IconTitleDescriptionInput extends ListItemInput {
   IconTitleDescriptionInput({
     required this.leadingIcon,
     required this.title,
     this.description,
+    this.descriptionLeadingIcon,
     this.showTrailing = true,
     this.leadingIconColor,
   });
@@ -29,26 +47,34 @@ class IconTitleDescriptionInput extends ListItemInput {
   /// When null or empty, only the title row is shown (e.g. navigation-only rows).
   final String? description;
 
+  /// Shown before [description] when set; uses the same color as the description text.
+  final IconData? descriptionLeadingIcon;
+
   final bool showTrailing;
 
-  /// Defaults to [AppColors.DarkContent.accent] when null (profile / dark gold).
+  /// Defaults to [ListItemBrand.neutral] leading color when null.
   final Color? leadingIconColor;
 
   static const double _iconSize = 24;
+  static const double _descriptionLeadingIconSize = 16;
 
   @override
   Widget buildContent(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
+    final brandStyle = ListItemBrandScope.of(context);
+    final descriptionColor = brandStyle.bodyTextColor;
 
-    final titleStyle = headingH6.copyWith(color: scheme.onSurface, height: 1.2);
+    final titleStyle = headingH6.copyWith(
+      color: brandStyle.titleTextColor,
+      height: 1.2,
+    );
     final descriptionStyle = body4Light.copyWith(
-      color: scheme.onSurfaceVariant,
+      color: descriptionColor,
       height: 1.25,
     );
 
-    final iconColor = leadingIconColor ?? AppColors.DarkContent.accent;
+    final iconColor = leadingIconColor ?? brandStyle.leadingIconColor;
     final hasDescription =
-        description != null && description!.trim().isNotEmpty;
+        description != null && (description ?? '').trim().isNotEmpty;
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -68,11 +94,29 @@ class IconTitleDescriptionInput extends ListItemInput {
               ),
               if (hasDescription) ...[
                 const SizedBox(height: AppSpacings.xs),
-                Text(
-                  description!.trim(),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: descriptionStyle,
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (descriptionLeadingIcon != null) ...[
+                      Padding(
+                        padding: const EdgeInsets.only(top: 2),
+                        child: Icon(
+                          descriptionLeadingIcon,
+                          size: _descriptionLeadingIconSize,
+                          color: descriptionColor,
+                        ),
+                      ),
+                      const SizedBox(width: AppSpacings.xs),
+                    ],
+                    Expanded(
+                      child: Text(
+                        (description ?? '').trim(),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: descriptionStyle,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ],
@@ -83,7 +127,7 @@ class IconTitleDescriptionInput extends ListItemInput {
           Icon(
             Icons.chevron_right_rounded,
             size: 22,
-            color: scheme.onSurfaceVariant,
+            color: brandStyle.trailingIconColor,
           ),
         ],
       ],
@@ -111,10 +155,10 @@ class IconDescriptionInput extends ListItemInput {
 
   @override
   Widget buildContent(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
-    final iconColor = leadingIconColor ?? AppColors.DarkContent.accent;
+    final brandStyle = ListItemBrandScope.of(context);
+    final iconColor = leadingIconColor ?? brandStyle.leadingIconColor;
     final titleStyle = body3Light.copyWith(
-      color: scheme.onSurface,
+      color: brandStyle.titleTextColor,
       height: 1.25,
     );
 
@@ -136,7 +180,7 @@ class IconDescriptionInput extends ListItemInput {
           Icon(
             Icons.chevron_right_rounded,
             size: 22,
-            color: scheme.onSurfaceVariant,
+            color: brandStyle.trailingIconColor,
           ),
         ],
       ],
@@ -172,13 +216,16 @@ class BadgesTitleDescriptionInput extends ListItemInput {
 
   @override
   Widget buildContent(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
+    final brandStyle = ListItemBrandScope.of(context);
     final hasSecond =
         topSecondBadgeText != null && topSecondBadgeText!.trim().isNotEmpty;
 
-    final titleStyle = headingH6.copyWith(color: scheme.onSurface, height: 1.2);
+    final titleStyle = headingH6.copyWith(
+      color: brandStyle.titleTextColor,
+      height: 1.2,
+    );
     final descriptionStyle = body4Light.copyWith(
-      color: scheme.onSurfaceVariant,
+      color: brandStyle.bodyTextColor,
       height: 1.35,
     );
 
@@ -209,7 +256,7 @@ class BadgesTitleDescriptionInput extends ListItemInput {
             Icon(
               trailingIcon,
               size: trailingIconSize,
-              color: scheme.onSurfaceVariant,
+              color: brandStyle.trailingIconColor,
             ),
           ],
         ),
@@ -240,6 +287,7 @@ class ListItem extends StatelessWidget {
   ListItem({
     super.key,
     required this.input,
+    this.brand = ListItemBrand.neutral,
     this.isExpanded = false,
     this.onTap,
     this.padding,
@@ -247,6 +295,11 @@ class ListItem extends StatelessWidget {
   });
 
   final ListItemInput input;
+
+  /// Border, background, and default text/icon colors for the shell and inner
+  /// [ListItemInput] layouts.
+  final ListItemBrand brand;
+
   final bool isExpanded;
   final VoidCallback? onTap;
 
@@ -259,36 +312,50 @@ class ListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
+    final brandStyle = ListItemBrandStyle.resolve(brand, scheme);
 
-    final padded = Padding(
-      padding:
-          padding ??
-          const EdgeInsets.symmetric(
-            horizontal: AppSpacings.l,
-            vertical: AppSpacings.m,
+    final resolvedPadding =
+        padding ??
+        const EdgeInsets.symmetric(
+          horizontal: AppSpacings.l,
+          vertical: AppSpacings.m,
+        );
+
+    // [ListItemBrandScope] must be an *ancestor* of the context passed to
+    // [ListItemInput.buildContent], or [ListItemBrandScope.of] falls back to
+    // neutral and picks theme onSurface (e.g. white on dark themes).
+    Widget body(BuildContext rowContext) {
+      return Padding(
+        padding: resolvedPadding,
+        child: input.buildContent(rowContext),
+      );
+    }
+
+    final content = isExpanded
+        ? SizedBox(
+            width: double.infinity,
+            child: Builder(builder: body),
+          )
+        : Builder(builder: body);
+
+    return ListItemBrandScope(
+      style: brandStyle,
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: brandStyle.backgroundColor,
+          borderRadius: BorderRadius.circular(AppRadius.m),
+          border: Border.all(
+            color: isSelected ? scheme.primary : brandStyle.borderColor,
+            width: isSelected ? 2 : brandStyle.borderWidth,
           ),
-      child: input.buildContent(context),
-    );
-
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: scheme.surfaceContainerHigh,
-        borderRadius: BorderRadius.circular(AppRadius.xl),
-        border: Border.all(
-          color: isSelected
-              ? scheme.primary
-              : scheme.outline.withValues(alpha: 0.35),
-          width: isSelected ? 2 : 1,
         ),
-      ),
-      child: Material(
-        type: MaterialType.transparency,
-        child: InkWell(
-          onTap: onTap,
-          borderRadius: BorderRadius.circular(AppRadius.xl),
-          child: isExpanded
-              ? SizedBox(width: double.infinity, child: padded)
-              : padded,
+        child: Material(
+          type: MaterialType.transparency,
+          child: InkWell(
+            onTap: onTap,
+            borderRadius: BorderRadius.circular(AppRadius.xl),
+            child: content,
+          ),
         ),
       ),
     );

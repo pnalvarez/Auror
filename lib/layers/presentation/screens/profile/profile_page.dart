@@ -143,7 +143,7 @@ class _ProfileScaffold extends StatelessWidget {
                           title: profileNavMyRoutes,
                         ),
                         onTap: () {
-                          context.tabsRouter.setActiveIndex(2);
+                          context.tabsRouter.setActiveIndex(3);
                         },
                       ),
                     ],

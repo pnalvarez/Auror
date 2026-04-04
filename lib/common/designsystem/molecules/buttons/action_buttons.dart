@@ -69,7 +69,7 @@ class PrimaryButton extends StatelessWidget {
                       ],
                       Text(
                         label,
-                        style: body4Light.copyWith(color: colors.onFill),
+                        style: body4Semibold.copyWith(color: colors.onFill),
                         textAlign: TextAlign.center,
                       ),
                       if (trailingIcon != null) ...[
@@ -157,7 +157,7 @@ class SecondaryButton extends StatelessWidget {
                         ],
                         Text(
                           label,
-                          style: body4Light.copyWith(color: colors.fill),
+                          style: body4Semibold.copyWith(color: colors.fill),
                           textAlign: TextAlign.center,
                         ),
                         if (trailingIcon != null) ...[
@@ -239,7 +239,7 @@ class TertiaryButton extends StatelessWidget {
                     ],
                     Text(
                       label,
-                      style: body4Light.copyWith(color: colors.fill),
+                      style: body4Semibold.copyWith(color: colors.fill),
                       textAlign: TextAlign.center,
                     ),
                     if (trailingIcon != null) ...[

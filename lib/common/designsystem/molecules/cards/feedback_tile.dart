@@ -4,11 +4,7 @@ import 'package:auror/common/designsystem/atoms/typography/typography.dart';
 import 'package:flutter/material.dart';
 
 /// Semantic state for [FeedbackTile]: fixed icon and accent per variant.
-enum FeedbackTileState {
-  error,
-  warning,
-  success,
-}
+enum FeedbackTileState { error, warning, success }
 
 /// Tappable rounded card for spaced-repetition-style feedback: icon, title, subtitle.
 ///
@@ -22,18 +18,12 @@ class FeedbackTile extends StatelessWidget {
     required this.title,
     required this.subtitle,
     required this.onTap,
-    this.width,
-    this.height,
   });
 
   final FeedbackTileState state;
   final String title;
   final String subtitle;
   final VoidCallback onTap;
-
-  /// When both are set, the tile is exactly this size (e.g. horizontal toolbars).
-  final double? width;
-  final double? height;
 
   static const double _iconSize = 22;
 
@@ -47,10 +37,7 @@ class FeedbackTile extends StatelessWidget {
       fontWeight: FontWeight.w700,
       height: 1.2,
     );
-    final subtitleStyle = tagS.copyWith(
-      color: style.accent,
-      height: 1.15,
-    );
+    final subtitleStyle = tagS.copyWith(color: style.accent, height: 1.15);
 
     final padded = Padding(
       padding: const EdgeInsets.symmetric(
@@ -87,7 +74,7 @@ class FeedbackTile extends StatelessWidget {
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(AppRadius.xl2),
-        child: width != null && height != null ? Center(child: padded) : padded,
+        child: Center(child: padded),
       ),
     );
 
@@ -99,24 +86,13 @@ class FeedbackTile extends StatelessWidget {
       ),
       child: ink,
     );
-
-    if (width != null && height != null) {
-      return SizedBox(
-        width: width,
-        height: height,
-        child: content,
-      );
-    }
     return content;
   }
 }
 
 @immutable
 class _FeedbackTileStyle {
-  const _FeedbackTileStyle({
-    required this.accent,
-    required this.icon,
-  });
+  const _FeedbackTileStyle({required this.accent, required this.icon});
 
   final Color accent;
   final IconData icon;
@@ -125,17 +101,17 @@ class _FeedbackTileStyle {
   static _FeedbackTileStyle of(FeedbackTileState state) {
     return switch (state) {
       FeedbackTileState.error => const _FeedbackTileStyle(
-          accent: Color(0xFFFF6B6B),
-          icon: Icons.replay_rounded,
-        ),
+        accent: Color(0xFFFF6B6B),
+        icon: Icons.replay_rounded,
+      ),
       FeedbackTileState.warning => const _FeedbackTileStyle(
-          accent: Color(0xFFFFD93D),
-          icon: Icons.horizontal_rule_rounded,
-        ),
+        accent: Color(0xFFFFD93D),
+        icon: Icons.horizontal_rule_rounded,
+      ),
       FeedbackTileState.success => const _FeedbackTileStyle(
-          accent: Color(0xFF2ECC71),
-          icon: Icons.thumb_up_outlined,
-        ),
+        accent: Color(0xFF2ECC71),
+        icon: Icons.thumb_up_outlined,
+      ),
     };
   }
 }

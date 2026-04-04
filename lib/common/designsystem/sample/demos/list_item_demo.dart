@@ -1,6 +1,7 @@
 import 'package:auror/common/designsystem/atoms/spacing/spacings.dart';
 import 'package:auror/common/designsystem/atoms/typography/typography.dart';
 import 'package:auror/common/designsystem/organisms/list_item/list_item.dart';
+import 'package:auror/common/designsystem/sample/demos/list_item_brands_demo.dart';
 import 'package:flutter/material.dart';
 
 /// Showcases [ListItem] with [IconTitleDescriptionInput] and [GenericListItemInput].
@@ -49,6 +50,19 @@ class ListItemDemo extends StatelessWidget {
           onTap: () {},
         ),
         const SizedBox(height: AppSpacings.xl2),
+        Text('Descrição com ícone à esquerda', style: headlineS),
+        const SizedBox(height: AppSpacings.m),
+        ListItem(
+          input: IconTitleDescriptionInput(
+            leadingIcon: Icons.person_outline_rounded,
+            title: 'Perfil',
+            description: 'Informações visíveis para outros leitores',
+            descriptionLeadingIcon: Icons.visibility_outlined,
+          ),
+          isExpanded: true,
+          onTap: () {},
+        ),
+        const SizedBox(height: AppSpacings.xl2),
         Text('Sem chevron', style: headlineS),
         const SizedBox(height: AppSpacings.m),
         ListItem(
@@ -87,6 +101,10 @@ class ListItemDemo extends StatelessWidget {
           isExpanded: true,
           onTap: () {},
         ),
+        const SizedBox(height: AppSpacings.xl2),
+        const Divider(height: 1),
+        const SizedBox(height: AppSpacings.xl2),
+        const ListItemBrandsDemo(),
       ],
     );
   }

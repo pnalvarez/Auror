@@ -14,7 +14,7 @@ enum InputFieldAppearance { light, theme }
 class InputField extends StatelessWidget {
   const InputField({
     super.key,
-    required this.label,
+    this.label = '',
     required this.controller,
     this.isEnabled = true,
     this.placeholder = '',
@@ -28,6 +28,8 @@ class InputField extends StatelessWidget {
     this.focusNode,
     this.infoIcon = false,
     this.onInfoTap,
+    this.minLines,
+    this.maxLines,
     required this.onChanged,
   });
 
@@ -45,6 +47,8 @@ class InputField extends StatelessWidget {
   final InputFieldAppearance appearance;
   final bool infoIcon;
   final VoidCallback? onInfoTap;
+  final int? minLines;
+  final int? maxLines;
   final ValueChanged<String> onChanged;
 
   bool get _hasError => errorMessage != null && errorMessage!.trim().isNotEmpty;
@@ -176,6 +180,8 @@ class InputField extends StatelessWidget {
             ),
             disabledBorder: _outline(disabledOutline),
           ),
+          minLines: obscureText ? 1 : minLines,
+          maxLines: obscureText ? 1 : maxLines,
           onChanged: onChanged,
         ),
         if (_hasError) ...[

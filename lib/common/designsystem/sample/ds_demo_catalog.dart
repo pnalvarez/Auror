@@ -5,12 +5,15 @@ import 'package:auror/common/designsystem/sample/demos/feedback_tile_demo.dart';
 import 'package:auror/common/designsystem/sample/demos/ds_action_buttons_demo.dart';
 import 'package:auror/common/designsystem/sample/demos/ds_snackbar_demo.dart';
 import 'package:auror/common/designsystem/sample/demos/input_field_demo.dart';
+import 'package:auror/common/designsystem/sample/demos/list_item_brands_demo.dart';
 import 'package:auror/common/designsystem/sample/demos/list_item_demo.dart';
+import 'package:auror/common/designsystem/sample/demos/media_backdrop_card_demo.dart';
 import 'package:auror/common/designsystem/sample/demos/navigation_bar_demo.dart';
 import 'package:auror/common/designsystem/sample/demos/profile_header_demo.dart';
 import 'package:auror/common/designsystem/sample/demos/recall_card_demo.dart';
 import 'package:auror/common/designsystem/sample/demos/score_tile_demo.dart';
 import 'package:auror/common/designsystem/sample/demos/status_chip_demo.dart';
+import 'package:auror/common/designsystem/sample/demos/step_progress_bar_demo.dart';
 import 'package:flutter/material.dart';
 
 /// Registry for design-system demo screens: maps a [demoId] to a title and
@@ -54,6 +57,30 @@ abstract final class DsDemoCatalog {
         title: 'List item',
         demo: ListItemDemo(),
       ),
+      'list_item_brands' => const DsDemoEntry(
+        title: 'List item · brands',
+        demo: ListItemBrandsDemo(),
+      ),
+      'list_item_brand_neutral' => const DsDemoEntry(
+        title: 'List item · neutral',
+        demo: ListItemBrandNeutralCatalogDemo(),
+      ),
+      'list_item_brand_success' => const DsDemoEntry(
+        title: 'List item · success',
+        demo: ListItemBrandSuccessCatalogDemo(),
+      ),
+      'list_item_brand_warning' => const DsDemoEntry(
+        title: 'List item · warning',
+        demo: ListItemBrandWarningCatalogDemo(),
+      ),
+      'list_item_brand_error' => const DsDemoEntry(
+        title: 'List item · error',
+        demo: ListItemBrandErrorCatalogDemo(),
+      ),
+      'media_backdrop_card' => const DsDemoEntry(
+        title: 'Media backdrop card',
+        demo: MediaBackdropCardDemo(),
+      ),
       'navigation_bar' => const DsDemoEntry(
         title: 'Navigation bar',
         demo: NavigationBarDemo(),
@@ -73,6 +100,10 @@ abstract final class DsDemoCatalog {
       'status_chip' => const DsDemoEntry(
         title: 'Status chip',
         demo: StatusChipDemo(),
+      ),
+      'step_progress_bar' => const DsDemoEntry(
+        title: 'Step progress bar',
+        demo: StepProgressBarDemo(),
       ),
       'snackbar' => const DsDemoEntry(title: 'Snackbar', demo: SnackbarDemo()),
       _ => null,

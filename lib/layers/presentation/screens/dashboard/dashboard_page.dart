@@ -12,6 +12,7 @@ class DashboardPage extends StatelessWidget {
 
   static const _tabs = <_DashboardTabSpec>[
     _DashboardTabSpec(label: home, icon: Icons.home_outlined),
+    _DashboardTabSpec(label: revisions, icon: Icons.psychology_outlined),
     _DashboardTabSpec(label: explore, icon: Icons.explore_outlined),
     _DashboardTabSpec(label: routes, icon: Icons.route_outlined),
     _DashboardTabSpec(label: profile, icon: Icons.person_outline),
@@ -24,6 +25,7 @@ class DashboardPage extends StatelessWidget {
       child: AutoTabsRouter(
         routes: const [
           DashboardHomeRoute(),
+          DashboardRevisionHubRoute(),
           DashboardExploreRoute(),
           DashboardRoutesRoute(),
           DashboardProfileRoute(),

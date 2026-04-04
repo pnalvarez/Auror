@@ -9,6 +9,7 @@ import 'package:auror/common/designsystem/molecules/buttons/button_brand.dart';
 import 'package:auror/common/designsystem/molecules/inputfields/input_field.dart';
 import 'package:auror/common/designsystem/theme/main_launch_dark_theme.dart';
 import 'package:auror/common/strings/login_strings.dart';
+import 'package:auror/core/di/di.dart';
 import 'package:auror/layers/presentation/screens/login/login_context.dart';
 import 'package:auror/layers/presentation/screens/login/login_event.dart';
 import 'package:auror/layers/presentation/screens/login/login_state.dart';
@@ -28,7 +29,7 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => LoginViewModel(loginContext: loginContext),
+      create: (_) => getIt<LoginViewModel>(param1: loginContext),
       child: Theme(data: mainLaunchDarkTheme(), child: const _LoginScaffold()),
     );
   }
@@ -62,10 +63,7 @@ class _LoginScaffoldState extends State<_LoginScaffold> {
       context: context,
       builder: (ctx) {
         final screenW = MediaQuery.sizeOf(ctx).width;
-        final contentWidth = math.max(
-          240.0,
-          math.min(screenW - 80.0, 560.0),
-        );
+        final contentWidth = math.max(240.0, math.min(screenW - 80.0, 560.0));
         return AlertDialog(
           backgroundColor: scheme.surfaceContainerHigh,
           surfaceTintColor: Colors.transparent,

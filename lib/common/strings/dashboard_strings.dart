@@ -1,5 +1,6 @@
 // Tabs
 const home = 'Home';
+const revisions = 'Revisões';
 const explore = 'Explorar';
 const routes = 'Rotas';
 const profile = 'Perfil';
