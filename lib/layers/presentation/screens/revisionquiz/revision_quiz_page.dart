@@ -12,6 +12,7 @@ import 'package:auror/common/designsystem/theme/main_launch_dark_theme.dart';
 import 'package:auror/common/strings/revision_quiz_strings.dart';
 import 'package:auror/core/di/di.dart';
 import 'package:auror/layers/domain/models/revision_domain.dart';
+import 'package:auror/layers/presentation/routes/app_router.gr.dart';
 import 'package:auror/layers/presentation/screens/revisionquiz/revision_registered_dialog.dart';
 import 'package:auror/layers/presentation/screens/revisionquiz/revision_quiz_view_model.dart';
 import 'package:auror/layers/presentation/screens/revisionquiz/revision_quiz_event.dart';
@@ -267,11 +268,26 @@ class _RevisionQuizBody extends StatelessWidget {
                       const SizedBox(height: AppSpacings.m),
                       _FeedbackRow(
                         lessonTitle: item?.title ?? '',
+                        isFinalRevision:
+                            state.currentIndex == state.allRevisions.length - 1,
                         onContinue: () {
+                          final isFinal =
+                              state.currentIndex == state.allRevisions.length - 1;
                           context.router.maybePop().then((_) {
-                            viewModel.add(
-                              const RevisionQuizEvent.advanceAfterFeedback(),
-                            );
+                            if (!context.mounted) {
+                              return;
+                            }
+                            if (isFinal) {
+                              context.router.root.push(
+                                RevisionEndRoute(
+                                  revisionCount: state.allRevisions.length,
+                                ),
+                              );
+                            } else {
+                              viewModel.add(
+                                const RevisionQuizEvent.advanceAfterFeedback(),
+                              );
+                            }
                           });
                         },
                       ),
@@ -384,9 +400,14 @@ class _ExpectedAnswerCard extends StatelessWidget {
 }
 
 class _FeedbackRow extends StatelessWidget {
-  const _FeedbackRow({required this.lessonTitle, required this.onContinue});
+  const _FeedbackRow({
+    required this.lessonTitle,
+    required this.onContinue,
+    required this.isFinalRevision,
+  });
 
   final String lessonTitle;
+  final bool isFinalRevision;
   final VoidCallback onContinue;
 
   @override
@@ -395,6 +416,7 @@ class _FeedbackRow extends StatelessWidget {
       showRevisionRegisteredDialog(
         context,
         lessonTitle: lessonTitle,
+        ctaText: isFinalRevision ? finalize : nextRevision,
         schedule: schedule,
         onContinue: onContinue,
       );

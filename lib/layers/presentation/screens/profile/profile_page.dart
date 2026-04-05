@@ -72,7 +72,7 @@ class _ProfileScaffold extends StatelessWidget {
                 child: SingleChildScrollView(
                   padding: const EdgeInsets.fromLTRB(
                     AppSpacings.xl2,
-                    AppSpacings.m,
+                    AppSpacings.xl4,
                     AppSpacings.xl2,
                     AppSpacings.m,
                   ),

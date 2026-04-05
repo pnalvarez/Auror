@@ -1,5 +1,5 @@
 import 'package:auror/layers/domain/models/revision_domain.dart';
-import 'package:auror/layers/domain/usecases/get_pending_revisions.dart';
+import 'package:auror/layers/domain/usecases/get_revisions.dart';
 import 'package:auror/layers/presentation/screens/revisionhub/revision_hub_event.dart';
 import 'package:auror/layers/presentation/screens/revisionhub/revision_hub_state.dart';
 import 'package:auror/layers/presentation/screens/revisionhub/revision_hub_ui.dart';

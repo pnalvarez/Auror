@@ -139,7 +139,10 @@ class _RevisionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
-    final titleStyle = headingH6.copyWith(color: scheme.onSurface, height: 1.2);
+    final titleStyle = body4Semibold.copyWith(
+      color: scheme.onSurface,
+      height: 1.2,
+    );
     final descriptionStyle = body4Light.copyWith(
       color: scheme.onSurfaceVariant,
       height: 1.25,
@@ -210,7 +213,6 @@ class _RevisionCard extends StatelessWidget {
           ],
         ),
       ),
-      onTap: () {},
     );
   }
 }

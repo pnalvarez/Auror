@@ -19,6 +19,7 @@ const _vVideoPlayerExampleButterfly =
 const List<RevisionDomain> kMockRevisionDomains = [
   RevisionDomain(
     id: 'rev-ei-01',
+    title: 'Inteligência emocional na liderança',
     question:
         'Por que a inteligência emocional importa mais que o QI em liderança?',
     videoUrl: _vBee,
@@ -30,6 +31,7 @@ const List<RevisionDomain> kMockRevisionDomains = [
   ),
   RevisionDomain(
     id: 'rev-inv-01',
+    title: 'Investir vs especular no curto prazo',
     question: 'O que diferencia investir de especular no curto prazo?',
     videoUrl: _vButterfly,
     category: 'Investimentos',
@@ -40,6 +42,7 @@ const List<RevisionDomain> kMockRevisionDomains = [
   ),
   RevisionDomain(
     id: 'rev-int-01',
+    title: 'Confiar na intuição em decisões financeiras',
     question: 'Quando confiar na intuição em decisões financeiras?',
     videoUrl: _vExoBunnySmall,
     category: 'Intuição',
@@ -50,6 +53,7 @@ const List<RevisionDomain> kMockRevisionDomains = [
   ),
   RevisionDomain(
     id: 'rev-com-01',
+    title: 'Feedback honesto em times remotos',
     question: 'Como feedback honesto fortalece times remotos?',
     videoUrl: _vExoAndroidScreens,
     category: 'Comunicação',
@@ -60,6 +64,7 @@ const List<RevisionDomain> kMockRevisionDomains = [
   ),
   RevisionDomain(
     id: 'rev-fin-01',
+    title: 'Reserva de emergência antes de investir',
     question: 'Qual o papel da reserva de emergência antes de investir?',
     videoUrl: _vExoSample,
     category: 'Finanças pessoais',
@@ -70,6 +75,7 @@ const List<RevisionDomain> kMockRevisionDomains = [
   ),
   RevisionDomain(
     id: 'rev-mind-01',
+    title: 'Mindfulness para regulação emocional',
     question: 'Como mindfulness ajuda na regulação emocional no trabalho?',
     videoUrl: _vVideoPlayerExampleButterfly,
     category: 'Bem-estar',

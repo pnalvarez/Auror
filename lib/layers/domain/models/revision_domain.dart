@@ -2,6 +2,7 @@
 class RevisionDomain {
   const RevisionDomain({
     required this.id,
+    required this.title,
     required this.question,
     required this.videoUrl,
     required this.category,
@@ -11,6 +12,8 @@ class RevisionDomain {
   });
 
   final String id;
+
+  final String title;
 
   final String question;
 

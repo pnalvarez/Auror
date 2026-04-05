@@ -15,7 +15,7 @@ sealed class RevisionIntroUI with _$RevisionIntroUI {
 
   factory RevisionIntroUI.fromDomain(RevisionDomain domain) {
     return RevisionIntroUI(
-      title: domain.question,
+      title: domain.title,
       minutes: '${domain.minutes} min',
     );
   }

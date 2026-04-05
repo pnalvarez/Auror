@@ -31,6 +31,17 @@ const revisionQuizRegisteredNextIntervalD7 = 'em 7 dias (D+7).';
 
 const revisionQuizRegisteredBodyMiddle = ' será revisado novamente ';
 
-const revisionQuizRegisteredCta = 'Próxima revisão';
+const nextRevision = 'Próxima revisão';
+const finalize = 'Finalizar';
 
 const revisionQuizAnswerSentDisclaimer = 'Sua resposta foi enviada!';
+
+/// [RevisionEndPage] — all daily revisions completed.
+const revisionQuizEndTitle = 'Revisões concluídas';
+
+/// Use with a rich [TextSpan] for the bold revision count.
+const revisionQuizEndBodyPrefix = 'Todas as ';
+const revisionQuizEndBodySuffix =
+    ' revisões de hoje foram feitas. Seu conhecimento agradece.';
+
+const revisionQuizEndBackToToday = 'Voltar para Hoje';

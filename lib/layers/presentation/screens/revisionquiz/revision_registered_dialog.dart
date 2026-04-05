@@ -27,6 +27,7 @@ enum RevisionFeedbackSchedule {
 Future<void> showRevisionRegisteredDialog(
   BuildContext context, {
   required String lessonTitle,
+  required String ctaText,
   required RevisionFeedbackSchedule schedule,
   required VoidCallback onContinue,
 }) {
@@ -91,7 +92,7 @@ Future<void> showRevisionRegisteredDialog(
               ),
               const SizedBox(height: AppSpacings.xl4),
               PrimaryButton(
-                label: revisionQuizRegisteredCta,
+                label: ctaText,
                 trailingIcon: Icons.chevron_right,
                 action: onContinue,
                 isExpanded: true,
