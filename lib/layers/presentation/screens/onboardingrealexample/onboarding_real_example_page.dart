@@ -1,5 +1,6 @@
 import 'package:auror/common/designsystem/organisms/feedback/ds_snackbar.dart';
 import 'package:auror/common/strings.dart';
+import 'package:auror/core/di/di.dart';
 import 'package:auror/layers/presentation/screens/onboardingrealexample/onboarding_real_example_event.dart';
 import 'package:auror/layers/presentation/screens/onboardingrealexample/onboarding_real_example_state.dart';
 import 'package:auror/layers/presentation/screens/onboardingrealexample/onboarding_real_example_view_model.dart';
@@ -26,7 +27,8 @@ class OnboardingRealExamplePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) =>
-          OnboardingRealExampleViewModel()..add(OnboardingRealExampleStarted()),
+          getIt<OnboardingRealExampleViewModel>()
+            ..add(const OnboardingRealExampleStarted()),
       child: Theme(
         data: mainLaunchDarkTheme(),
         child: const _OnboardingRealExampleContent(),

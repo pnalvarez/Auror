@@ -1,7 +1,9 @@
 import 'package:auror/layers/presentation/screens/onboardingrealexample/onboarding_real_example_event.dart';
 import 'package:auror/layers/presentation/screens/onboardingrealexample/onboarding_real_example_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:injectable/injectable.dart';
 
+@injectable
 class OnboardingRealExampleViewModel
     extends Bloc<OnboardingRealExampleEvent, OnboardingRealExampleState> {
   OnboardingRealExampleViewModel()

@@ -16,6 +16,7 @@ class DsNavigationBar extends StatelessWidget implements PreferredSizeWidget {
     required this.title,
     this.description,
     this.trailingIcon,
+    this.trailingWidget,
     this.leadingIconColor,
     this.trailingIconColor,
     this.leadingIconSize = 32,
@@ -29,6 +30,7 @@ class DsNavigationBar extends StatelessWidget implements PreferredSizeWidget {
   /// When null or empty, only the title line is shown under the leading icon.
   final String? description;
   final IconData? trailingIcon;
+  final Widget? trailingWidget;
 
   /// Defaults to [AppColors.DarkContent.accent] when null.
   final Color? leadingIconColor;
@@ -103,7 +105,7 @@ class DsNavigationBar extends StatelessWidget implements PreferredSizeWidget {
                 if (hasDescription) ...[
                   const SizedBox(height: AppSpacings.xs),
                   Text(
-                    description!.trim(),
+                    (description ?? '').trim(),
                     maxLines: 3,
                     overflow: TextOverflow.ellipsis,
                     style: descriptionStyle,
@@ -114,7 +116,13 @@ class DsNavigationBar extends StatelessWidget implements PreferredSizeWidget {
           ),
         ),
         const SizedBox(width: AppSpacings.m),
-        Icon(trailingIcon, size: trailingIconSize, color: trailColor),
+        if (trailingWidget != null)
+          Padding(
+            padding: const EdgeInsets.only(top: AppSpacings.m),
+            child: trailingWidget,
+          )
+        else if (trailingIcon != null)
+          Icon(trailingIcon, size: trailingIconSize, color: trailColor),
       ],
     );
 

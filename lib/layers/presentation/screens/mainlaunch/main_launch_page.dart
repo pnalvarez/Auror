@@ -1,4 +1,5 @@
 import 'package:auror/common/environment/app_environment.dart';
+import 'package:auror/core/di/di.dart';
 import 'package:auror/layers/presentation/routes/app_router.gr.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:auror/common/strings/main_launch_strings.dart';
@@ -26,7 +27,7 @@ class MainLaunchPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) =>
-          MainLaunchViewModel()..add(const MainLaunchEvent.started()),
+          getIt<MainLaunchViewModel>()..add(const MainLaunchEvent.started()),
       child: Theme(data: mainLaunchDarkTheme(), child: const _MainLaunchView()),
     );
   }

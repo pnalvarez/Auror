@@ -84,6 +84,54 @@ class DsMenuSamplePage extends StatelessWidget {
                 ),
                 const SizedBox(height: AppSpacings.m),
                 PrimaryButton(
+                  label: 'List item · brands',
+                  brand: ButtonBrand.primary,
+                  action: () => context.router.push(
+                    DSComponentRoute(demoId: 'list_item_brands'),
+                  ),
+                ),
+                const SizedBox(height: AppSpacings.m),
+                PrimaryButton(
+                  label: 'List item · neutral',
+                  brand: ButtonBrand.primary,
+                  action: () => context.router.push(
+                    DSComponentRoute(demoId: 'list_item_brand_neutral'),
+                  ),
+                ),
+                const SizedBox(height: AppSpacings.m),
+                PrimaryButton(
+                  label: 'List item · success',
+                  brand: ButtonBrand.primary,
+                  action: () => context.router.push(
+                    DSComponentRoute(demoId: 'list_item_brand_success'),
+                  ),
+                ),
+                const SizedBox(height: AppSpacings.m),
+                PrimaryButton(
+                  label: 'List item · warning',
+                  brand: ButtonBrand.primary,
+                  action: () => context.router.push(
+                    DSComponentRoute(demoId: 'list_item_brand_warning'),
+                  ),
+                ),
+                const SizedBox(height: AppSpacings.m),
+                PrimaryButton(
+                  label: 'List item · error',
+                  brand: ButtonBrand.primary,
+                  action: () => context.router.push(
+                    DSComponentRoute(demoId: 'list_item_brand_error'),
+                  ),
+                ),
+                const SizedBox(height: AppSpacings.m),
+                PrimaryButton(
+                  label: 'Media backdrop card',
+                  brand: ButtonBrand.primary,
+                  action: () => context.router.push(
+                    DSComponentRoute(demoId: 'media_backdrop_card'),
+                  ),
+                ),
+                const SizedBox(height: AppSpacings.m),
+                PrimaryButton(
                   label: 'Navigation bar',
                   brand: ButtonBrand.primary,
                   action: () => context.router.push(
@@ -120,6 +168,14 @@ class DsMenuSamplePage extends StatelessWidget {
                   brand: ButtonBrand.primary,
                   action: () => context.router.push(
                     DSComponentRoute(demoId: 'status_chip'),
+                  ),
+                ),
+                const SizedBox(height: AppSpacings.m),
+                PrimaryButton(
+                  label: 'Step progress bar',
+                  brand: ButtonBrand.primary,
+                  action: () => context.router.push(
+                    DSComponentRoute(demoId: 'step_progress_bar'),
                   ),
                 ),
                 const SizedBox(height: AppSpacings.m),

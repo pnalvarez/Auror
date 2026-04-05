@@ -2,9 +2,11 @@ import 'package:auror/layers/presentation/screens/login/login_context.dart';
 import 'package:auror/layers/presentation/screens/login/login_event.dart';
 import 'package:auror/layers/presentation/screens/login/login_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:injectable/injectable.dart';
 
+@injectable
 class LoginViewModel extends Bloc<LoginEvent, LoginState> {
-  LoginViewModel({required LoginContext loginContext})
+  LoginViewModel(@factoryParam LoginContext loginContext)
     : super(LoginState(loginContext: loginContext)) {
     on<LoginNameChanged>(_onNameChanged);
     on<LoginEmailChanged>(_onEmailChanged);

@@ -174,8 +174,6 @@ class _RecallCardState extends State<RecallCard> {
                                 state: state,
                                 title: title,
                                 subtitle: subtitle,
-                                width: tileW,
-                                height: h,
                                 onTap: () {
                                   onTap?.call();
                                 },

@@ -1,7 +1,9 @@
 import 'package:auror/layers/presentation/screens/mainlaunch/main_launch_event.dart';
 import 'package:auror/layers/presentation/screens/mainlaunch/main_launch_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:injectable/injectable.dart';
 
+@injectable
 class MainLaunchViewModel extends Bloc<MainLaunchEvent, MainLaunchState> {
   MainLaunchViewModel() : super(const MainLaunchState.initial()) {
     on<MainLaunchStarted>(_onStarted);
