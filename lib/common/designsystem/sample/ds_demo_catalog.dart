@@ -1,4 +1,5 @@
 import 'package:auror/common/designsystem/sample/demos/badge_demo.dart';
+import 'package:auror/common/designsystem/sample/demos/chip_picker_demo.dart';
 import 'package:auror/common/designsystem/sample/demos/circular_loader_demo.dart';
 import 'package:auror/common/designsystem/sample/demos/disclaimer_card_demo.dart';
 import 'package:auror/common/designsystem/sample/demos/feedback_tile_demo.dart';
@@ -40,6 +41,10 @@ abstract final class DsDemoCatalog {
       'circular_loader' => const DsDemoEntry(
         title: 'Circular loader',
         demo: CircularLoaderDemo(),
+      ),
+      'chip_picker' => const DsDemoEntry(
+        title: 'Chip picker',
+        demo: ChipPickerDemo(),
       ),
       'disclaimer_card' => const DsDemoEntry(
         title: 'Disclaimer card',

@@ -176,7 +176,7 @@ class _RevisionQuizBody extends StatelessWidget {
                         const SizedBox(height: AppSpacings.xl2),
                         Align(
                           alignment: Alignment.centerLeft,
-                          child: Badge(
+                          child: DsBadge(
                             label: item.category,
                             variant: BadgeVariant.neutral,
                           ),
@@ -272,7 +272,8 @@ class _RevisionQuizBody extends StatelessWidget {
                             state.currentIndex == state.allRevisions.length - 1,
                         onContinue: () {
                           final isFinal =
-                              state.currentIndex == state.allRevisions.length - 1;
+                              state.currentIndex ==
+                              state.allRevisions.length - 1;
                           context.router.maybePop().then((_) {
                             if (!context.mounted) {
                               return;

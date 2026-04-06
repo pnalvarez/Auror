@@ -188,7 +188,7 @@ class IconDescriptionInput extends ListItemInput {
   }
 }
 
-/// Card row: top badges ([Badge] category + optional premium), title, body,
+/// Card row: top badges ([DsBadge] category + optional premium), title, body,
 /// trailing icon (e.g. lock).
 class BadgesTitleDescriptionInput extends ListItemInput {
   BadgesTitleDescriptionInput({
@@ -242,9 +242,12 @@ class BadgesTitleDescriptionInput extends ListItemInput {
                 runSpacing: AppSpacings.s,
                 crossAxisAlignment: WrapCrossAlignment.center,
                 children: [
-                  Badge(label: topMainBadgeText, variant: BadgeVariant.neutral),
+                  DsBadge(
+                    label: topMainBadgeText,
+                    variant: BadgeVariant.neutral,
+                  ),
                   if (hasSecond)
-                    Badge(
+                    DsBadge(
                       label: topSecondBadgeText!.trim(),
                       leadingIcon: secondBadgeIcon,
                       variant: BadgeVariant.highlight,
