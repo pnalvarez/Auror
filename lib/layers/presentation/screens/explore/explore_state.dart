@@ -13,5 +13,7 @@ sealed class ExploreState with _$ExploreState {
     @Default(<KnowledgeCardDomain?>[]) List<KnowledgeCardDomain?> cardSlots,
     @Default(false) bool isLoadingCard,
     String? errorMessage,
+    /// Incremented when the feed is replaced (e.g. category filter) so the UI can reset [PageView].
+    @Default(0) int feedRevision,
   }) = _ExploreState;
 }

@@ -103,6 +103,25 @@ class _ExploreFeedState extends State<_ExploreFeed> {
     super.dispose();
   }
 
+  @override
+  void didUpdateWidget(covariant _ExploreFeed oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.state.feedRevision != oldWidget.state.feedRevision) {
+      setState(() => _visiblePage = 0);
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) {
+          return;
+        }
+        if (_pageController.hasClients) {
+          _pageController.jumpToPage(0);
+        }
+        context.read<ExploreViewModel>().add(
+              const ExploreEvent.pageBecameVisible(0),
+            );
+      });
+    }
+  }
+
   String _videoUrlForSlot(int index) {
     final slots = widget.state.cardSlots;
     if (index < 0 || index >= slots.length) {
