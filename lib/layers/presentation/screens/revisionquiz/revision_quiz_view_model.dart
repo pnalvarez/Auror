@@ -12,6 +12,7 @@ class RevisionQuizViewModel extends Bloc<RevisionQuizEvent, RevisionQuizState> {
   RevisionQuizViewModel(
     this._sendAnswer, {
     @factoryParam required List<RevisionDomain> revisions,
+    @factoryParam required bool isRevisionTrack,
   }) : answerDraftController = TextEditingController(),
        super(
          RevisionQuizState(

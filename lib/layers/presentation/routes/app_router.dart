@@ -8,6 +8,7 @@ class AppRouter extends RootStackRouter {
     AutoRoute(page: MainLaunchRoute.page, initial: true),
     AutoRoute(page: LoginRoute.page),
     AutoRoute(page: RevisionQuizRoute.page),
+    AutoRoute(page: RecallCardRoute.page),
     AutoRoute(page: RevisionEndRoute.page),
     AutoRoute(
       page: DashboardRoute.page,

@@ -1,4 +1,3 @@
-import 'package:auror/common/designsystem/atoms/spacing/radius.dart';
 import 'package:auror/common/designsystem/atoms/spacing/spacings.dart';
 import 'package:auror/common/designsystem/atoms/typography/typography.dart';
 import 'package:auror/common/designsystem/molecules/badges/badge.dart';
@@ -33,7 +32,8 @@ class RevisionQuizPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => getIt<RevisionQuizViewModel>(param1: revisions),
+      create: (_) =>
+          getIt<RevisionQuizViewModel>(param1: revisions, param2: true),
       child: Theme(
         data: mainLaunchDarkTheme(),
         child: const _RevisionQuizScaffold(),
@@ -230,7 +230,14 @@ class _RevisionQuizBody extends StatelessWidget {
                       ],
                       if (state.answerRevealed && item != null) ...[
                         const SizedBox(height: AppSpacings.xl2),
-                        _ExpectedAnswerCard(correctAnswer: item.correctAnswer),
+                        ListItem(
+                          input: IconTitleParagraphInput(
+                            title: revisionQuizExpectedLabel,
+                            description: item.correctAnswer,
+                          ),
+                          brand: ListItemBrand.success,
+                          isExpanded: true,
+                        ),
                       ],
                       if (state.shouldShowAnswerSentDisclaimer) ...[
                         const SizedBox(height: AppSpacings.m),
@@ -360,41 +367,6 @@ class _CTAStack extends StatelessWidget {
             action: onRevealAnswer as VoidCallback,
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _ExpectedAnswerCard extends StatelessWidget {
-  const _ExpectedAnswerCard({required this.correctAnswer});
-
-  final String correctAnswer;
-
-  @override
-  Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: scheme.surfaceContainerHigh,
-        borderRadius: BorderRadius.circular(AppRadius.m),
-        border: Border.all(color: scheme.primary.withValues(alpha: 0.85)),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(AppSpacings.m),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              revisionQuizExpectedLabel,
-              style: tagS.copyWith(color: scheme.primary, height: 1.3),
-            ),
-            const SizedBox(height: AppSpacings.s),
-            Text(
-              correctAnswer,
-              style: body2Light.copyWith(color: scheme.onSurface, height: 1.45),
-            ),
-          ],
-        ),
       ),
     );
   }

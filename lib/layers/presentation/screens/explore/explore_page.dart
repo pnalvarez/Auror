@@ -13,7 +13,9 @@ import 'package:auror/layers/domain/models/knowledge_card_domain.dart';
 import 'package:auror/layers/presentation/screens/explore/explore_event.dart';
 import 'package:auror/layers/presentation/screens/explore/explore_state.dart';
 import 'package:auror/layers/presentation/screens/explore/explore_video_background.dart';
+import 'package:auror/layers/presentation/routes/app_router.gr.dart';
 import 'package:auror/layers/presentation/screens/explore/explore_view_model.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart' hide Badge;
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -324,7 +326,11 @@ class _ExplorePagePanel extends StatelessWidget {
                         label: seeMore,
                         trailingIcon: Icons.add,
                         isExpanded: true,
-                        action: () {},
+                        action: content == null
+                            ? () {}
+                            : () => context.router.root.push(
+                                  RecallCardRoute(card: content),
+                                ),
                       ),
                     ),
                     const SizedBox(width: AppSpacings.m),

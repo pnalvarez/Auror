@@ -47,7 +47,7 @@ class ListItemBrandStyle {
         borderColor: scheme.outline.withValues(alpha: 0.35),
         titleTextColor: scheme.onSurface,
         bodyTextColor: scheme.onSurfaceVariant,
-        leadingIconColor: AppColors.DarkContent.accent,
+        leadingIconColor: scheme.onSurface,
         trailingIconColor: scheme.onSurfaceVariant,
       ),
       ListItemBrand.success => ListItemBrandStyle(

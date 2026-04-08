@@ -68,6 +68,13 @@ class DsMenuSamplePage extends StatelessWidget {
                 ),
                 const SizedBox(height: AppSpacings.m),
                 PrimaryButton(
+                  label: 'Dropdown',
+                  brand: ButtonBrand.primary,
+                  action: () =>
+                      context.router.push(DSComponentRoute(demoId: 'dropdown')),
+                ),
+                const SizedBox(height: AppSpacings.m),
+                PrimaryButton(
                   label: 'Feedback tile',
                   brand: ButtonBrand.primary,
                   action: () => context.router.push(
@@ -128,6 +135,14 @@ class DsMenuSamplePage extends StatelessWidget {
                   brand: ButtonBrand.primary,
                   action: () => context.router.push(
                     DSComponentRoute(demoId: 'list_item_brand_error'),
+                  ),
+                ),
+                const SizedBox(height: AppSpacings.m),
+                PrimaryButton(
+                  label: 'List item · icon title paragraph',
+                  brand: ButtonBrand.primary,
+                  action: () => context.router.push(
+                    DSComponentRoute(demoId: 'list_item_icon_title_paragraph'),
                   ),
                 ),
                 const SizedBox(height: AppSpacings.m),

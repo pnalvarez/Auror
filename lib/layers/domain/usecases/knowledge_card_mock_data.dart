@@ -11,10 +11,10 @@ const _vExoBunnySmall =
 /// Mock knowledge cards for development and previews.
 const List<KnowledgeCardDomain> kMockKnowledgeCardDomains = [
   KnowledgeCardDomain(
+    id: '1',
     category: 'Inteligência emocional',
     title: 'Regular emoções sob pressão',
-    quote:
-        'A liderança não é ausência de emoção, é escolher a resposta certa.',
+    quote: 'A liderança não é ausência de emoção, é escolher a resposta certa.',
     description:
         'Reconhecer o gatilho, nomear o sentimento e decidir com intenção '
         'reduz reações impulsivas e fortalece a confiança da equipe.',
@@ -27,6 +27,8 @@ const List<KnowledgeCardDomain> kMockKnowledgeCardDomains = [
         'reuniões.',
   ),
   KnowledgeCardDomain(
+    id: '2',
+
     category: 'Investimentos',
     title: 'Horizonte e disciplina',
     quote: 'Tempo no mercado costuma vencer timing de mercado.',
@@ -42,6 +44,8 @@ const List<KnowledgeCardDomain> kMockKnowledgeCardDomains = [
         'plano.',
   ),
   KnowledgeCardDomain(
+    id: '3',
+
     category: 'Comunicação',
     title: 'Feedback observável',
     quote: 'Fale do comportamento, não do caráter.',

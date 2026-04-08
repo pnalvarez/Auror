@@ -2,12 +2,14 @@ import 'package:auror/common/designsystem/sample/demos/badge_demo.dart';
 import 'package:auror/common/designsystem/sample/demos/chip_picker_demo.dart';
 import 'package:auror/common/designsystem/sample/demos/circular_loader_demo.dart';
 import 'package:auror/common/designsystem/sample/demos/disclaimer_card_demo.dart';
+import 'package:auror/common/designsystem/sample/demos/dropdown_demo.dart';
 import 'package:auror/common/designsystem/sample/demos/feedback_tile_demo.dart';
 import 'package:auror/common/designsystem/sample/demos/ds_action_buttons_demo.dart';
 import 'package:auror/common/designsystem/sample/demos/ds_snackbar_demo.dart';
 import 'package:auror/common/designsystem/sample/demos/input_field_demo.dart';
 import 'package:auror/common/designsystem/sample/demos/list_item_brands_demo.dart';
 import 'package:auror/common/designsystem/sample/demos/list_item_demo.dart';
+import 'package:auror/common/designsystem/sample/demos/list_item_icon_title_paragraph_demo.dart';
 import 'package:auror/common/designsystem/sample/demos/media_backdrop_card_demo.dart';
 import 'package:auror/common/designsystem/sample/demos/navigation_bar_demo.dart';
 import 'package:auror/common/designsystem/sample/demos/profile_header_demo.dart';
@@ -50,6 +52,10 @@ abstract final class DsDemoCatalog {
         title: 'Disclaimer card',
         demo: DisclaimerCardDemo(),
       ),
+      'dropdown' => const DsDemoEntry(
+        title: 'Dropdown',
+        demo: DropdownDemo(),
+      ),
       'feedback_tile' => const DsDemoEntry(
         title: 'Feedback tile',
         demo: FeedbackTileDemo(),
@@ -81,6 +87,10 @@ abstract final class DsDemoCatalog {
       'list_item_brand_error' => const DsDemoEntry(
         title: 'List item · error',
         demo: ListItemBrandErrorCatalogDemo(),
+      ),
+      'list_item_icon_title_paragraph' => const DsDemoEntry(
+        title: 'List item · icon title paragraph',
+        demo: ListItemIconTitleParagraphDemo(),
       ),
       'media_backdrop_card' => const DsDemoEntry(
         title: 'Media backdrop card',
