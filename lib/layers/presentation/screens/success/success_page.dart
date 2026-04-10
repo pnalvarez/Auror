@@ -11,8 +11,8 @@ import 'package:flutter/material.dart';
 /// Shown after the last revision’s “Finalizar” confirmation; summarizes the session
 /// and returns the user to [DashboardHomeRoute] via the bottom tab bar.
 @RoutePage()
-class RevisionEndPage extends StatelessWidget {
-  const RevisionEndPage({super.key, required this.revisionCount});
+class SuccessPage extends StatelessWidget {
+  const SuccessPage({super.key, required this.revisionCount});
 
   final int revisionCount;
 
@@ -26,6 +26,7 @@ class RevisionEndPage extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: AppSpacings.xl2),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const _SuccessMark(),
                 const SizedBox(height: AppSpacings.xl2),

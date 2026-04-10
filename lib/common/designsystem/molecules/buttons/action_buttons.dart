@@ -21,6 +21,7 @@ class PrimaryButton extends StatelessWidget {
     this.isExpanded = false,
     this.leadingIcon,
     this.trailingIcon,
+    this.mainIcon,
   });
 
   final String label;
@@ -31,6 +32,7 @@ class PrimaryButton extends StatelessWidget {
   final bool isExpanded;
   final IconData? leadingIcon;
   final IconData? trailingIcon;
+  final IconData? mainIcon;
 
   static const double _radius = AppRadius.l;
 
@@ -63,18 +65,23 @@ class PrimaryButton extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      if (leadingIcon != null) ...[
-                        Icon(leadingIcon, size: 18, color: colors.onFill),
+                      if (mainIcon != null) ...[
+                        Icon(mainIcon, size: 18, color: colors.onFill),
                         const SizedBox(width: AppSpacings.xs),
-                      ],
-                      Text(
-                        label,
-                        style: body4Semibold.copyWith(color: colors.onFill),
-                        textAlign: TextAlign.center,
-                      ),
-                      if (trailingIcon != null) ...[
-                        const SizedBox(width: AppSpacings.xs),
-                        Icon(trailingIcon, size: 18, color: colors.onFill),
+                      ] else ...[
+                        if (leadingIcon != null) ...[
+                          Icon(leadingIcon, size: 18, color: colors.onFill),
+                          const SizedBox(width: AppSpacings.xs),
+                        ],
+                        Text(
+                          label,
+                          style: body4Semibold.copyWith(color: colors.onFill),
+                          textAlign: TextAlign.center,
+                        ),
+                        if (trailingIcon != null) ...[
+                          const SizedBox(width: AppSpacings.xs),
+                          Icon(trailingIcon, size: 18, color: colors.onFill),
+                        ],
                       ],
                     ],
                   ),
@@ -106,6 +113,7 @@ class SecondaryButton extends StatelessWidget {
     this.isExpanded = false,
     this.leadingIcon,
     this.trailingIcon,
+    this.mainIcon,
   });
 
   final String label;
@@ -116,6 +124,7 @@ class SecondaryButton extends StatelessWidget {
   final bool isExpanded;
   final IconData? leadingIcon;
   final IconData? trailingIcon;
+  final IconData? mainIcon;
 
   static const double _radius = AppRadius.l;
 
@@ -151,18 +160,23 @@ class SecondaryButton extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        if (leadingIcon != null) ...[
-                          Icon(leadingIcon, size: 18, color: colors.fill),
+                        if (mainIcon != null) ...[
+                          Icon(mainIcon, size: 18, color: colors.fill),
                           const SizedBox(width: AppSpacings.xs),
-                        ],
-                        Text(
-                          label,
-                          style: body4Semibold.copyWith(color: colors.fill),
-                          textAlign: TextAlign.center,
-                        ),
-                        if (trailingIcon != null) ...[
-                          const SizedBox(width: AppSpacings.xs),
-                          Icon(trailingIcon, size: 18, color: colors.fill),
+                        ] else ...[
+                          if (leadingIcon != null) ...[
+                            Icon(leadingIcon, size: 18, color: colors.fill),
+                            const SizedBox(width: AppSpacings.xs),
+                          ],
+                          Text(
+                            label,
+                            style: body4Semibold.copyWith(color: colors.fill),
+                            textAlign: TextAlign.center,
+                          ),
+                          if (trailingIcon != null) ...[
+                            const SizedBox(width: AppSpacings.xs),
+                            Icon(trailingIcon, size: 18, color: colors.fill),
+                          ],
                         ],
                       ],
                     ),
@@ -195,6 +209,7 @@ class TertiaryButton extends StatelessWidget {
     this.isExpanded = false,
     this.leadingIcon,
     this.trailingIcon,
+    this.mainIcon,
   });
 
   final String label;
@@ -205,6 +220,7 @@ class TertiaryButton extends StatelessWidget {
   final bool isExpanded;
   final IconData? leadingIcon;
   final IconData? trailingIcon;
+  final IconData? mainIcon;
 
   @override
   Widget build(BuildContext context) {
@@ -233,18 +249,23 @@ class TertiaryButton extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    if (leadingIcon != null) ...[
-                      Icon(leadingIcon, size: 18, color: colors.fill),
+                    if (mainIcon != null) ...[
+                      Icon(mainIcon, size: 18, color: colors.fill),
                       const SizedBox(width: AppSpacings.xs),
-                    ],
-                    Text(
-                      label,
-                      style: body4Semibold.copyWith(color: colors.fill),
-                      textAlign: TextAlign.center,
-                    ),
-                    if (trailingIcon != null) ...[
-                      const SizedBox(width: AppSpacings.xs),
-                      Icon(trailingIcon, size: 18, color: colors.fill),
+                    ] else ...[
+                      if (leadingIcon != null) ...[
+                        Icon(leadingIcon, size: 18, color: colors.fill),
+                        const SizedBox(width: AppSpacings.xs),
+                      ],
+                      Text(
+                        label,
+                        style: body4Semibold.copyWith(color: colors.fill),
+                        textAlign: TextAlign.center,
+                      ),
+                      if (trailingIcon != null) ...[
+                        const SizedBox(width: AppSpacings.xs),
+                        Icon(trailingIcon, size: 18, color: colors.fill),
+                      ],
                     ],
                   ],
                 ),

@@ -203,6 +203,13 @@ class DsMenuSamplePage extends StatelessWidget {
                 ),
                 const SizedBox(height: AppSpacings.m),
                 PrimaryButton(
+                  label: 'Tooltip',
+                  brand: ButtonBrand.primary,
+                  action: () =>
+                      context.router.push(DSComponentRoute(demoId: 'tooltip')),
+                ),
+                const SizedBox(height: AppSpacings.m),
+                PrimaryButton(
                   label: 'Snackbar',
                   brand: ButtonBrand.primary,
                   action: () =>

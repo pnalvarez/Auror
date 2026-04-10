@@ -13,3 +13,5 @@ const exploreLoadError =
 const recallPracticalExampleTitle = 'Exemplo prático';
 
 const recallCommonErrorTitle = 'Erro comum';
+
+const clickHereToCheck = 'Clique para conferir';

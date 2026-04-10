@@ -9,5 +9,9 @@ sealed class RecallCardState with _$RecallCardState {
     @Default(false) bool isLoading,
     @Default(false) bool shouldRedirectTorRevisionQuiz,
     @Default(false) bool shouldDisplayErrorMessage,
+    @Default(true) bool shouldDisplayPracticalExampleTooltip,
+    @Default(false) bool shouldDisplayCommonErrorTooltip,
+    @Default(false) bool isCommonErrorDropdownEnabled,
+    @Default(false) bool shouldFloatingButtonAppear,
   }) = _RecallCardState;
 }

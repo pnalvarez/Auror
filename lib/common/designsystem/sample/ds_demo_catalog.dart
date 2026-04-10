@@ -17,6 +17,7 @@ import 'package:auror/common/designsystem/sample/demos/recall_card_demo.dart';
 import 'package:auror/common/designsystem/sample/demos/score_tile_demo.dart';
 import 'package:auror/common/designsystem/sample/demos/status_chip_demo.dart';
 import 'package:auror/common/designsystem/sample/demos/step_progress_bar_demo.dart';
+import 'package:auror/common/designsystem/sample/demos/tooltip_demo.dart';
 import 'package:flutter/material.dart';
 
 /// Registry for design-system demo screens: maps a [demoId] to a title and
@@ -119,6 +120,10 @@ abstract final class DsDemoCatalog {
       'step_progress_bar' => const DsDemoEntry(
         title: 'Step progress bar',
         demo: StepProgressBarDemo(),
+      ),
+      'tooltip' => const DsDemoEntry(
+        title: 'Tooltip',
+        demo: TooltipDemo(),
       ),
       'snackbar' => const DsDemoEntry(title: 'Snackbar', demo: SnackbarDemo()),
       _ => null,

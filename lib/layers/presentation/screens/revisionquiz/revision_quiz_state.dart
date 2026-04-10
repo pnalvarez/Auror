@@ -18,5 +18,6 @@ sealed class RevisionQuizState with _$RevisionQuizState {
     @Default(false) bool shouldShowAnswerSentDisclaimer,
     @Default(true) bool deepModeCTAEnabled,
     @Default(true) bool revealAnswerCTAEnabled,
+    @Default(true) bool isLoading,
   }) = _RevisionQuizState;
 }

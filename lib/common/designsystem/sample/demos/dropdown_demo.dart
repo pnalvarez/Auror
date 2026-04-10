@@ -50,6 +50,12 @@ class DropdownDemo extends StatelessWidget {
                   ),
                 ),
               ),
+              const SizedBox(height: AppSpacings.xl),
+              DsDropdown(
+                label: 'Desabilitado',
+                enabled: false,
+                child: SizedBox.shrink(),
+              ),
             ],
           );
         },

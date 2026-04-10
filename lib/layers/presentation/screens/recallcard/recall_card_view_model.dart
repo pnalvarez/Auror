@@ -8,53 +8,107 @@ import 'package:injectable/injectable.dart';
 @injectable
 class RecallCardViewModel extends Bloc<RecallCardEvent, RecallCardState> {
   RecallCardViewModel(@factoryParam this.card, this._saveRecallCard)
-    : super(const RecallCardState()) {
+    : super(
+        const RecallCardState(
+          shouldFloatingButtonAppear: false,
+        ),
+      ) {
     on<PracticalExampleExpansionChanged>(_onPracticalExampleExpansionChanged);
     on<CommonErrorExpansionChanged>(_onCommonErrorExpansionChanged);
+    on<ProceedCtaViewportVisibilityChanged>(
+      _onProceedCtaViewportVisibilityChanged,
+    );
     on<DidTapProceedCTA>(_onDidTapProceedCTA);
   }
 
   final KnowledgeCardDomain card;
   final ISaveRecallCard _saveRecallCard;
-  bool _practicalExampleExpanded = false;
-  bool _commonErrorExpanded = false;
+
+  /// Drives tooltip sequencing (set true after any open/close on practical example).
+  bool _didExpandPracticalExample = false;
+
+  /// True once each dropdown has been opened (expanded) at least once.
+  bool _hasExpandedPracticalExample = false;
+  bool _hasExpandedCommonError = false;
+
+  /// Until the first layout pass reports otherwise, assume the proceed CTA is on
+  /// screen so the floating shortcut stays hidden.
+  bool _proceedCtaVisibleInViewport = true;
+
+  RecallCardState _withFloatingButton(RecallCardState next) {
+    return next.copyWith(
+      shouldFloatingButtonAppear:
+          _hasExpandedPracticalExample &&
+          _hasExpandedCommonError &&
+          !_proceedCtaVisibleInViewport,
+    );
+  }
 
   void _onPracticalExampleExpansionChanged(
     PracticalExampleExpansionChanged event,
     Emitter<RecallCardState> emit,
   ) {
-    _practicalExampleExpanded = true;
+    if (event.expanded) {
+      _hasExpandedPracticalExample = true;
+    }
     emit(
-      state.copyWith(
-        isProceedCTAEnabled: _practicalExampleExpanded && _commonErrorExpanded,
+      _withFloatingButton(
+        state.copyWith(
+          shouldDisplayPracticalExampleTooltip: false,
+          shouldDisplayCommonErrorTooltip: !_didExpandPracticalExample,
+          isCommonErrorDropdownEnabled: true,
+        ),
       ),
     );
+    _didExpandPracticalExample = true;
   }
 
   void _onCommonErrorExpansionChanged(
     CommonErrorExpansionChanged event,
     Emitter<RecallCardState> emit,
   ) {
-    _commonErrorExpanded = true;
+    if (event.expanded) {
+      _hasExpandedCommonError = true;
+    }
     emit(
-      state.copyWith(
-        isProceedCTAEnabled: _practicalExampleExpanded && _commonErrorExpanded,
+      _withFloatingButton(
+        state.copyWith(
+          shouldDisplayCommonErrorTooltip: false,
+          isProceedCTAEnabled: true,
+        ),
       ),
     );
+  }
+
+  void _onProceedCtaViewportVisibilityChanged(
+    ProceedCtaViewportVisibilityChanged event,
+    Emitter<RecallCardState> emit,
+  ) {
+    if (_proceedCtaVisibleInViewport == event.isVisible) {
+      return;
+    }
+    _proceedCtaVisibleInViewport = event.isVisible;
+    emit(_withFloatingButton(state));
   }
 
   Future<void> _onDidTapProceedCTA(
     DidTapProceedCTA event,
     Emitter<RecallCardState> emit,
   ) async {
-    emit(state.copyWith(isLoading: true));
+    emit(_withFloatingButton(state.copyWith(isLoading: true)));
     try {
       await _saveRecallCard(cardId: card.id);
       emit(
-        state.copyWith(isLoading: false, shouldRedirectTorRevisionQuiz: true),
+        _withFloatingButton(
+          state.copyWith(isLoading: false, shouldRedirectTorRevisionQuiz: true),
+        ),
       );
     } catch (e) {
-      emit(state.copyWith(isLoading: false, shouldDisplayErrorMessage: true));
+      emit(
+        _withFloatingButton(
+          state.copyWith(isLoading: false, shouldDisplayErrorMessage: true),
+        ),
+      );
     }
   }
 }

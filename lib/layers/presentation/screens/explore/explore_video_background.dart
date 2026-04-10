@@ -1,6 +1,7 @@
 import 'dart:async' show TimeoutException, unawaited;
 
 import 'package:auror/common/designsystem/organisms/feedback/circular_loader.dart';
+import 'package:auror/common/support/auror_video_player_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
@@ -58,7 +59,7 @@ class _ExploreVideoBackgroundState extends State<ExploreVideoBackground> {
     final uri = Uri.parse(trimmed);
     final controller = VideoPlayerController.networkUrl(
       uri,
-      videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
+      videoPlayerOptions: aurorMutedLoopVideoPlayerOptions(),
     );
     _controller = controller;
     controller.addListener(_onControllerTick);
@@ -81,6 +82,9 @@ class _ExploreVideoBackgroundState extends State<ExploreVideoBackground> {
         ..setLooping(true)
         ..play();
       setState(() => _failed = false);
+      scheduleMacOsVideoTextureRefresh(() {
+        if (mounted) setState(() {});
+      });
     } catch (_) {
       if (!mounted) {
         return;
