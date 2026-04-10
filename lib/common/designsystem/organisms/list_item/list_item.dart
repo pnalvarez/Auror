@@ -7,6 +7,8 @@ import 'package:flutter/material.dart' hide Badge;
 
 export 'list_item_brand.dart';
 
+const double _kListItemDisabledOpacity = 0.5;
+
 /// Input model for [ListItem]: each subtype defines the inner layout; the shell
 /// applies padding, surface, border, and tap behavior (same pattern as mibook).
 abstract class ListItemInput {
@@ -350,6 +352,7 @@ class ListItem extends StatelessWidget {
     this.onTap,
     this.padding,
     this.isSelected = false,
+    this.isEnabled = true,
   });
 
   final ListItemInput input;
@@ -366,6 +369,9 @@ class ListItem extends StatelessWidget {
 
   /// Highlights the card border with [ColorScheme.primary].
   final bool isSelected;
+
+  /// When false, inner content is drawn at reduced opacity and [onTap] is ignored.
+  final bool isEnabled;
 
   @override
   Widget build(BuildContext context) {
@@ -389,12 +395,19 @@ class ListItem extends StatelessWidget {
       );
     }
 
-    final content = isExpanded
+    Widget content = isExpanded
         ? SizedBox(
             width: double.infinity,
             child: Builder(builder: body),
           )
         : Builder(builder: body);
+
+    if (!isEnabled) {
+      content = Opacity(
+        opacity: _kListItemDisabledOpacity,
+        child: content,
+      );
+    }
 
     return ListItemBrandScope(
       style: brandStyle,
@@ -410,7 +423,7 @@ class ListItem extends StatelessWidget {
         child: Material(
           type: MaterialType.transparency,
           child: InkWell(
-            onTap: onTap,
+            onTap: isEnabled ? onTap : null,
             borderRadius: BorderRadius.circular(AppRadius.xl),
             child: content,
           ),

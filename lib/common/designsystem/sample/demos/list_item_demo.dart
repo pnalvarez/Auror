@@ -16,7 +16,8 @@ class ListItemDemo extends StatelessWidget {
       children: [
         Text(
           'Tappable card row: polymorphic [ListItemInput] builds the inner layout; '
-          'the shell handles surface, border, and ink.',
+          'the shell handles surface, border, and ink. Use [isEnabled]: false to '
+          'dim inner content and disable tap.',
           style: body2Medium.copyWith(
             color: Theme.of(context).colorScheme.onSurfaceVariant,
           ),
@@ -114,6 +115,28 @@ class ListItemDemo extends StatelessWidget {
             ),
           ),
           isExpanded: true,
+          onTap: () {},
+        ),
+        const SizedBox(height: AppSpacings.xl2),
+        Text('Desativado', style: headlineS),
+        const SizedBox(height: AppSpacings.m),
+        Text(
+          '[isEnabled]: false — conteúdo interno com opacidade reduzida; toque '
+          'desligado.',
+          style: body3Light.copyWith(
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
+          ),
+        ),
+        const SizedBox(height: AppSpacings.m),
+        ListItem(
+          input: IconTitleDescriptionInput(
+            leadingIcon: Icons.workspace_premium_outlined,
+            title: 'Ítem indisponível',
+            description:
+                'Mesmo padrão que “Plano / upgrade”, sem interação.',
+          ),
+          isExpanded: true,
+          isEnabled: false,
           onTap: () {},
         ),
         const SizedBox(height: AppSpacings.xl2),
