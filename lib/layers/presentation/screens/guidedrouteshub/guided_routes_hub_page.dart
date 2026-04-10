@@ -83,13 +83,10 @@ class _GuidedRoutesHubBody extends StatelessWidget {
                   }
                   final routeIndex = index - 1;
                   final route = state.routes[routeIndex];
-                  final selected = state.selectedIndex == routeIndex;
                   return _GuidedRouteCard(
                     route: route,
-                    isSelected: selected,
-                    onTap: () => context.read<GuidedRoutesHubViewModel>().add(
-                      GuidedRoutesHubEvent.routeSelected(index: routeIndex),
-                    ),
+                    isPremium: state.isPremium,
+                    onTap: () {},
                   );
                 },
               ),
@@ -104,28 +101,26 @@ class _GuidedRoutesHubBody extends StatelessWidget {
 class _GuidedRouteCard extends StatelessWidget {
   const _GuidedRouteCard({
     required this.route,
-    required this.isSelected,
+    required this.isPremium,
     required this.onTap,
   });
 
   final GuidedRouteIntroUI route;
-  final bool isSelected;
   final VoidCallback onTap;
+  final bool isPremium;
 
   @override
   Widget build(BuildContext context) {
     return ListItem(
       isExpanded: true,
-      isSelected: isSelected,
+      isEnabled: isPremium,
       padding: const EdgeInsets.all(AppSpacings.xl2),
       input: BadgesTitleDescriptionInput(
         topMainBadgeText: route.topic,
-        topSecondBadgeText: route.isPremiumMode ? 'Premium' : null,
+        topSecondBadgeText: isPremium ? 'Premium' : null,
         title: route.title,
         description: route.description,
-        trailingIcon: route.isPremiumMode
-            ? Icons.lock_outline_rounded
-            : Icons.route_outlined,
+        trailingIcon: isPremium ? Icons.lock_outline_rounded : Icons.lock,
       ),
       onTap: onTap,
     );
