@@ -8,7 +8,7 @@ sealed class GuidedRoutesHubState with _$GuidedRoutesHubState {
   const factory GuidedRoutesHubState({
     @Default(true) bool isLoading,
     @Default(<GuidedRouteIntroUI>[]) List<GuidedRouteIntroUI> routes,
-    int? selectedIndex,
+    @Default(false) bool isPremium,
     String? errorMessage,
   }) = _GuidedRoutesHubState;
 }

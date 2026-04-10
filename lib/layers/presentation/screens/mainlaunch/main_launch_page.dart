@@ -81,109 +81,131 @@ class _LaunchContentBody extends StatelessWidget {
     final scheme = Theme.of(context).colorScheme;
     final accent = AppColors.Inverse.inversePrimary;
 
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        return SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: AppSpacings.xl),
-          child: ConstrainedBox(
-            constraints: BoxConstraints(minHeight: constraints.maxHeight),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                const SizedBox(height: AppSpacings.xl2),
-                Center(
-                  child: StatusChip(
-                    label: badgePill,
-                    state: StatusChipState.neutral,
-                  ),
-                ),
-                const SizedBox(height: AppSpacings.xl3),
-                Text.rich(
-                  TextSpan(
-                    style: headlineM.copyWith(
-                      color: scheme.onSurface,
-                      height: 1.2,
-                    ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Expanded(
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              return SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(horizontal: AppSpacings.xl),
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      const TextSpan(text: heroHeadlineFirst),
-                      TextSpan(
-                        text: heroHeadlineAccent,
-                        style: headlineM.copyWith(color: accent, height: 1.2),
+                      const SizedBox(height: AppSpacings.xl2),
+                      Center(
+                        child: StatusChip(
+                          label: badgePill,
+                          state: StatusChipState.neutral,
+                        ),
                       ),
+                      const SizedBox(height: AppSpacings.xl3),
+                      Text.rich(
+                        TextSpan(
+                          style: headlineM.copyWith(
+                            color: scheme.onSurface,
+                            height: 1.2,
+                          ),
+                          children: [
+                            const TextSpan(text: heroHeadlineFirst),
+                            TextSpan(
+                              text: heroHeadlineAccent,
+                              style: headlineM.copyWith(
+                                color: accent,
+                                height: 1.2,
+                              ),
+                            ),
+                          ],
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: AppSpacings.xl),
+                      Text(
+                        heroSubcopy,
+                        style: body2Light.copyWith(
+                          color: scheme.onSurfaceVariant,
+                          height: 1.45,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: AppSpacings.xl3),
+                      const _LaunchFeatureRow(
+                        icon: Icons.schedule_rounded,
+                        text: featureSessions,
+                      ),
+                      const SizedBox(height: AppSpacings.l),
+                      const _LaunchFeatureRow(
+                        icon: Icons.psychology_rounded,
+                        text: featureRecall,
+                      ),
+                      const SizedBox(height: AppSpacings.l),
+                      const _LaunchFeatureRow(
+                        icon: Icons.event_available_rounded,
+                        text: featureReviews,
+                      ),
+                      const SizedBox(height: AppSpacings.xl3),
                     ],
                   ),
-                  textAlign: TextAlign.center,
                 ),
-                const SizedBox(height: AppSpacings.xl),
-                Text(
-                  heroSubcopy,
-                  style: body2Light.copyWith(
-                    color: scheme.onSurfaceVariant,
-                    height: 1.45,
-                  ),
-                  textAlign: TextAlign.center,
+              );
+            },
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(
+            AppSpacings.xl,
+            0,
+            AppSpacings.xl,
+            AppSpacings.xl3,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              SizedBox(
+                width: double.infinity,
+                child: PrimaryButton(
+                  label: hasActiveSession ? ctaContinueStudying : ctaEnterApp,
+                  brand: ButtonBrand.primary,
+                  action: () {
+                    context.read<MainLaunchViewModel>().add(
+                      const MainLaunchEvent.enterAppTapped(),
+                    );
+                    if (!hasActiveSession) {
+                      context.router.push(
+                        LoginRoute(loginContext: LoginContext.signIn),
+                      );
+                    }
+                  },
                 ),
-                const SizedBox(height: AppSpacings.xl3),
-                const _LaunchFeatureRow(
-                  icon: Icons.schedule_rounded,
-                  text: featureSessions,
+              ),
+              const SizedBox(height: AppSpacings.m),
+              Center(
+                child: TertiaryButton(
+                  label: ctaHowItWorks,
+                  brand: ButtonBrand.primary,
+                  action: () =>
+                      context.router.push(OnboardingLearningLoopRoute()),
                 ),
+              ),
+              if (AppEnvironment.showDesignSystemCatalog) ...[
                 const SizedBox(height: AppSpacings.l),
-                const _LaunchFeatureRow(
-                  icon: Icons.psychology_rounded,
-                  text: featureRecall,
-                ),
-                const SizedBox(height: AppSpacings.l),
-                const _LaunchFeatureRow(
-                  icon: Icons.event_available_rounded,
-                  text: featureReviews,
-                ),
-                const SizedBox(height: AppSpacings.xl4),
                 SizedBox(
                   width: double.infinity,
                   child: PrimaryButton(
-                    label: hasActiveSession ? ctaContinueStudying : ctaEnterApp,
-                    brand: ButtonBrand.primary,
-                    action: () {
-                      context.read<MainLaunchViewModel>().add(
-                        const MainLaunchEvent.enterAppTapped(),
-                      );
-                      if (!hasActiveSession) {
-                        context.router.push(
-                          LoginRoute(loginContext: LoginContext.signIn),
-                        );
-                      }
-                    },
-                  ),
-                ),
-                const SizedBox(height: AppSpacings.m),
-                Center(
-                  child: TertiaryButton(
-                    label: ctaHowItWorks,
-                    brand: ButtonBrand.primary,
+                    label: ctaDesignSystem,
+                    brand: .tertiary,
                     action: () =>
-                        context.router.push(OnboardingLearningLoopRoute()),
+                        context.router.push(const DsMenuSampleRoute()),
                   ),
                 ),
-                if (AppEnvironment.showDesignSystemCatalog) ...[
-                  const SizedBox(height: AppSpacings.l),
-                  SizedBox(
-                    width: double.infinity,
-                    child: PrimaryButton(
-                      label: ctaDesignSystem,
-                      brand: .tertiary,
-                      action: () =>
-                          context.router.push(const DsMenuSampleRoute()),
-                    ),
-                  ),
-                ],
-                const SizedBox(height: AppSpacings.xl3),
               ],
-            ),
+            ],
           ),
-        );
-      },
+        ),
+      ],
     );
   }
 }

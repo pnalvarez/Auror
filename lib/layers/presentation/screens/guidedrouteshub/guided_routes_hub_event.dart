@@ -6,7 +6,4 @@ part 'guided_routes_hub_event.freezed.dart';
 sealed class GuidedRoutesHubEvent with _$GuidedRoutesHubEvent {
   const factory GuidedRoutesHubEvent.loadRequested() =
       GuidedRoutesHubLoadRequested;
-
-  const factory GuidedRoutesHubEvent.routeSelected({required int index}) =
-      GuidedRoutesHubRouteSelected;
 }
