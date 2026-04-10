@@ -71,7 +71,7 @@ class _RevisionHubBody extends StatelessWidget {
               description: revisionHubEstimatedTime(totalMinutes),
               trailingWidget: Visibility(
                 visible: pending > 0,
-                child: Badge(
+                child: DsBadge(
                   label: revisionHubPendingBadge(pending),
                   variant: BadgeVariant.highlight,
                 ),

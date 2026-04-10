@@ -1,4 +1,5 @@
 import 'package:auror/layers/domain/models/revision_domain.dart';
+import 'package:auror/layers/domain/usecases/get_card_revision.dart';
 import 'package:auror/layers/domain/usecases/send_answer.dart';
 import 'package:auror/layers/presentation/screens/revisionquiz/revision_quiz_event.dart';
 import 'package:auror/layers/presentation/screens/revisionquiz/revision_quiz_state.dart';
@@ -9,9 +10,20 @@ import 'package:injectable/injectable.dart';
 
 @injectable
 class RevisionQuizViewModel extends Bloc<RevisionQuizEvent, RevisionQuizState> {
+  /// Deep-mode answer field; cleared when advancing to the next card or [RevisionQuizClearAnswerDraft].
+  final TextEditingController answerDraftController;
+
+  /// When set, revision may be loaded with [IGetCardRevision] if [RevisionQuizState.allRevisions] was empty.
+  final String? cardId;
+
+  final ISendAnswer _sendAnswer;
+  final IGetCardRevision _getCardRevision;
+
   RevisionQuizViewModel(
-    this._sendAnswer, {
+    this._sendAnswer,
+    this._getCardRevision, {
     @factoryParam required List<RevisionDomain> revisions,
+    @factoryParam this.cardId,
   }) : answerDraftController = TextEditingController(),
        super(
          RevisionQuizState(
@@ -19,8 +31,10 @@ class RevisionQuizViewModel extends Bloc<RevisionQuizEvent, RevisionQuizState> {
            currentRevision: revisions.isEmpty
                ? null
                : RevisionQuizUI.fromDomain(revisions.first),
+           isLoading: cardId != null && revisions.isEmpty,
          ),
        ) {
+    on<RevisionQuizStarted>(_onStarted);
     on<RevisionQuizAnswerDraftChanged>(_onAnswerDraftChanged);
     on<RevisionQuizClearAnswerDraft>(_onClearAnswerDraft);
     on<RevisionQuizDeepModeToggled>(_onDeepModeToggled);
@@ -30,15 +44,34 @@ class RevisionQuizViewModel extends Bloc<RevisionQuizEvent, RevisionQuizState> {
     on<RevisionQuizAnswerSent>(_onAnswerSent);
   }
 
-  /// Deep-mode answer field; cleared when advancing to the next card or [RevisionQuizClearAnswerDraft].
-  final TextEditingController answerDraftController;
-  final ISendAnswer _sendAnswer;
-
   void _onAnswerDraftChanged(
     RevisionQuizAnswerDraftChanged event,
     Emitter<RevisionQuizState> emit,
   ) {
     emit(state.copyWith(isSendAnswerCTAEnabled: event.text.trim().isNotEmpty));
+  }
+
+  Future<void> _onStarted(
+    RevisionQuizStarted event,
+    Emitter<RevisionQuizState> emit,
+  ) async {
+    final id = cardId;
+    if (id == null) {
+      return;
+    }
+    emit(state.copyWith(isLoading: true));
+    try {
+      final revision = await _getCardRevision(cardId: id);
+      emit(
+        state.copyWith(
+          allRevisions: [revision],
+          currentRevision: RevisionQuizUI.fromDomain(revision),
+          isLoading: false,
+        ),
+      );
+    } on Object {
+      emit(state.copyWith(isLoading: false));
+    }
   }
 
   void _onClearAnswerDraft(

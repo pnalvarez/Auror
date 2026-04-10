@@ -1,4 +1,3 @@
-import 'package:auror/common/designsystem/atoms/spacing/radius.dart';
 import 'package:auror/common/designsystem/atoms/spacing/spacings.dart';
 import 'package:auror/common/designsystem/atoms/typography/typography.dart';
 import 'package:auror/common/designsystem/molecules/badges/badge.dart';
@@ -7,12 +6,14 @@ import 'package:auror/common/designsystem/molecules/buttons/button_brand.dart';
 import 'package:auror/common/designsystem/molecules/cards/feedback_tile.dart';
 import 'package:auror/common/designsystem/molecules/inputfields/input_field.dart';
 import 'package:auror/common/designsystem/molecules/progress/step_progress_bar.dart';
+import 'package:auror/common/designsystem/organisms/feedback/circular_loader.dart';
 import 'package:auror/common/designsystem/organisms/list_item/list_item.dart';
 import 'package:auror/common/designsystem/theme/main_launch_dark_theme.dart';
 import 'package:auror/common/strings/revision_quiz_strings.dart';
 import 'package:auror/core/di/di.dart';
 import 'package:auror/layers/domain/models/revision_domain.dart';
 import 'package:auror/layers/presentation/routes/app_router.gr.dart';
+import 'package:auror/layers/presentation/screens/revisionquiz/first_revision_completed_dialog.dart';
 import 'package:auror/layers/presentation/screens/revisionquiz/revision_registered_dialog.dart';
 import 'package:auror/layers/presentation/screens/revisionquiz/revision_quiz_view_model.dart';
 import 'package:auror/layers/presentation/screens/revisionquiz/revision_quiz_event.dart';
@@ -26,14 +27,22 @@ typedef _BlocBuilder = BlocBuilder<RevisionQuizViewModel, RevisionQuizState>;
 
 @RoutePage()
 class RevisionQuizPage extends StatelessWidget {
-  const RevisionQuizPage({super.key, required this.revisions});
+  const RevisionQuizPage({super.key, required this.revisions, this.cardId});
 
   final List<RevisionDomain> revisions;
+  final String? cardId;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => getIt<RevisionQuizViewModel>(param1: revisions),
+      create: (_) {
+        final vm = getIt<RevisionQuizViewModel>(
+          param1: revisions,
+          param2: cardId,
+        );
+        vm.add(const RevisionQuizEvent.started());
+        return vm;
+      },
       child: Theme(
         data: mainLaunchDarkTheme(),
         child: const _RevisionQuizScaffold(),
@@ -53,6 +62,9 @@ class _RevisionQuizScaffold extends StatelessWidget {
       body: SafeArea(
         child: _BlocBuilder(
           builder: (context, state) {
+            if (state.isLoading) {
+              return Center(child: CircularLoader(color: scheme.primary));
+            }
             if (state.allRevisions.isEmpty) {
               return Center(
                 child: Text(
@@ -103,31 +115,32 @@ class _RevisionQuizBody extends StatelessWidget {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(
-                  AppSpacings.s,
-                  AppSpacings.xs,
-                  AppSpacings.l,
-                  AppSpacings.xs,
-                ),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      child: StepProgressBar(
-                        currentValue: step,
-                        totalValue: total,
-                        showLabel: false,
+              if (state.allRevisions.length > 1)
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(
+                    AppSpacings.s,
+                    AppSpacings.xs,
+                    AppSpacings.l,
+                    AppSpacings.xs,
+                  ),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: StepProgressBar(
+                          currentValue: step,
+                          totalValue: total,
+                          showLabel: false,
+                        ),
                       ),
-                    ),
-                    const SizedBox(width: AppSpacings.s),
-                    Text(
-                      '$step/$total',
-                      style: tagS.copyWith(color: scheme.onSurfaceVariant),
-                    ),
-                  ],
+                      const SizedBox(width: AppSpacings.s),
+                      Text(
+                        '$step/$total',
+                        style: tagS.copyWith(color: scheme.onSurfaceVariant),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(
                   AppSpacings.xs,
@@ -176,7 +189,7 @@ class _RevisionQuizBody extends StatelessWidget {
                         const SizedBox(height: AppSpacings.xl2),
                         Align(
                           alignment: Alignment.centerLeft,
-                          child: Badge(
+                          child: DsBadge(
                             label: item.category,
                             variant: BadgeVariant.neutral,
                           ),
@@ -230,7 +243,14 @@ class _RevisionQuizBody extends StatelessWidget {
                       ],
                       if (state.answerRevealed && item != null) ...[
                         const SizedBox(height: AppSpacings.xl2),
-                        _ExpectedAnswerCard(correctAnswer: item.correctAnswer),
+                        ListItem(
+                          input: IconTitleParagraphInput(
+                            title: revisionQuizExpectedLabel,
+                            description: item.correctAnswer,
+                          ),
+                          brand: ListItemBrand.success,
+                          isExpanded: true,
+                        ),
                       ],
                       if (state.shouldShowAnswerSentDisclaimer) ...[
                         const SizedBox(height: AppSpacings.m),
@@ -270,25 +290,33 @@ class _RevisionQuizBody extends StatelessWidget {
                         lessonTitle: item?.title ?? '',
                         isFinalRevision:
                             state.currentIndex == state.allRevisions.length - 1,
-                        onContinue: () {
+                        onContinue: () async {
+                          final stackRouter = context.router;
+                          final rootRouter = stackRouter.root;
                           final isFinal =
-                              state.currentIndex == state.allRevisions.length - 1;
-                          context.router.maybePop().then((_) {
-                            if (!context.mounted) {
-                              return;
-                            }
-                            if (isFinal) {
-                              context.router.root.push(
-                                RevisionEndRoute(
-                                  revisionCount: state.allRevisions.length,
-                                ),
-                              );
-                            } else {
-                              viewModel.add(
-                                const RevisionQuizEvent.advanceAfterFeedback(),
-                              );
-                            }
-                          });
+                              state.currentIndex ==
+                              state.allRevisions.length - 1;
+                          final singleRevision =
+                              state.allRevisions.length == 1;
+                          final revisionCount = state.allRevisions.length;
+
+                          if (!isFinal) {
+                            viewModel.add(
+                              const RevisionQuizEvent.advanceAfterFeedback(),
+                            );
+                            return;
+                          }
+
+                          await stackRouter.maybePop();
+                          if (singleRevision) {
+                            await showFirstRevisionCompletedDialogForRouter(
+                              rootRouter,
+                            );
+                          } else {
+                            await rootRouter.push(
+                              SuccessRoute(revisionCount: revisionCount),
+                            );
+                          }
                         },
                       ),
                     ],
@@ -359,41 +387,6 @@ class _CTAStack extends StatelessWidget {
             action: onRevealAnswer as VoidCallback,
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _ExpectedAnswerCard extends StatelessWidget {
-  const _ExpectedAnswerCard({required this.correctAnswer});
-
-  final String correctAnswer;
-
-  @override
-  Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: scheme.surfaceContainerHigh,
-        borderRadius: BorderRadius.circular(AppRadius.m),
-        border: Border.all(color: scheme.primary.withValues(alpha: 0.85)),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(AppSpacings.m),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              revisionQuizExpectedLabel,
-              style: tagS.copyWith(color: scheme.primary, height: 1.3),
-            ),
-            const SizedBox(height: AppSpacings.s),
-            Text(
-              correctAnswer,
-              style: body2Light.copyWith(color: scheme.onSurface, height: 1.45),
-            ),
-          ],
-        ),
       ),
     );
   }

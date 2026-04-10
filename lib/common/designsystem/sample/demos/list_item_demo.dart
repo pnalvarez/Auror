@@ -4,7 +4,8 @@ import 'package:auror/common/designsystem/organisms/list_item/list_item.dart';
 import 'package:auror/common/designsystem/sample/demos/list_item_brands_demo.dart';
 import 'package:flutter/material.dart';
 
-/// Showcases [ListItem] with [IconTitleDescriptionInput] and [GenericListItemInput].
+/// Showcases [ListItem] with [IconTitleDescriptionInput], [IconTitleParagraphInput],
+/// and [GenericListItemInput].
 class ListItemDemo extends StatelessWidget {
   const ListItemDemo({super.key});
 
@@ -74,6 +75,20 @@ class ListItemDemo extends StatelessWidget {
           ),
           isExpanded: true,
           onTap: () {},
+        ),
+        const SizedBox(height: AppSpacings.xl2),
+        Text('Título + parágrafo (vertical)', style: headlineS),
+        const SizedBox(height: AppSpacings.m),
+        ListItem(
+          input: IconTitleParagraphInput(
+            leadingIcon: Icons.format_quote_rounded,
+            title: 'Resposta esperada',
+            description:
+                'Bloco informativo com ícone opcional; estados adicionais em '
+                'demoId list_item_icon_title_paragraph.',
+          ),
+          brand: ListItemBrand.neutral,
+          isExpanded: true,
         ),
         const SizedBox(height: AppSpacings.xl2),
         Text('Genérico', style: headlineS),

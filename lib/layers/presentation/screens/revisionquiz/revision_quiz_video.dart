@@ -2,6 +2,7 @@ import 'dart:async' show TimeoutException, unawaited;
 
 import 'package:auror/common/designsystem/atoms/spacing/radius.dart';
 import 'package:auror/common/designsystem/organisms/feedback/circular_loader.dart';
+import 'package:auror/common/support/auror_video_player_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
@@ -43,7 +44,7 @@ class _RevisionQuizVideoState extends State<RevisionQuizVideo> {
     final uri = Uri.parse(url);
     final controller = VideoPlayerController.networkUrl(
       uri,
-      videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
+      videoPlayerOptions: aurorMutedLoopVideoPlayerOptions(),
     );
     _controller = controller;
     controller.addListener(_onControllerTick);
@@ -66,6 +67,9 @@ class _RevisionQuizVideoState extends State<RevisionQuizVideo> {
         ..setLooping(true)
         ..play();
       setState(() {});
+      scheduleMacOsVideoTextureRefresh(() {
+        if (mounted) setState(() {});
+      });
     } catch (_) {
       if (!mounted) {
         return;

@@ -1,12 +1,15 @@
 import 'package:auror/common/designsystem/sample/demos/badge_demo.dart';
+import 'package:auror/common/designsystem/sample/demos/chip_picker_demo.dart';
 import 'package:auror/common/designsystem/sample/demos/circular_loader_demo.dart';
 import 'package:auror/common/designsystem/sample/demos/disclaimer_card_demo.dart';
+import 'package:auror/common/designsystem/sample/demos/dropdown_demo.dart';
 import 'package:auror/common/designsystem/sample/demos/feedback_tile_demo.dart';
 import 'package:auror/common/designsystem/sample/demos/ds_action_buttons_demo.dart';
 import 'package:auror/common/designsystem/sample/demos/ds_snackbar_demo.dart';
 import 'package:auror/common/designsystem/sample/demos/input_field_demo.dart';
 import 'package:auror/common/designsystem/sample/demos/list_item_brands_demo.dart';
 import 'package:auror/common/designsystem/sample/demos/list_item_demo.dart';
+import 'package:auror/common/designsystem/sample/demos/list_item_icon_title_paragraph_demo.dart';
 import 'package:auror/common/designsystem/sample/demos/media_backdrop_card_demo.dart';
 import 'package:auror/common/designsystem/sample/demos/navigation_bar_demo.dart';
 import 'package:auror/common/designsystem/sample/demos/profile_header_demo.dart';
@@ -14,6 +17,7 @@ import 'package:auror/common/designsystem/sample/demos/recall_card_demo.dart';
 import 'package:auror/common/designsystem/sample/demos/score_tile_demo.dart';
 import 'package:auror/common/designsystem/sample/demos/status_chip_demo.dart';
 import 'package:auror/common/designsystem/sample/demos/step_progress_bar_demo.dart';
+import 'package:auror/common/designsystem/sample/demos/tooltip_demo.dart';
 import 'package:flutter/material.dart';
 
 /// Registry for design-system demo screens: maps a [demoId] to a title and
@@ -41,9 +45,17 @@ abstract final class DsDemoCatalog {
         title: 'Circular loader',
         demo: CircularLoaderDemo(),
       ),
+      'chip_picker' => const DsDemoEntry(
+        title: 'Chip picker',
+        demo: ChipPickerDemo(),
+      ),
       'disclaimer_card' => const DsDemoEntry(
         title: 'Disclaimer card',
         demo: DisclaimerCardDemo(),
+      ),
+      'dropdown' => const DsDemoEntry(
+        title: 'Dropdown',
+        demo: DropdownDemo(),
       ),
       'feedback_tile' => const DsDemoEntry(
         title: 'Feedback tile',
@@ -77,6 +89,10 @@ abstract final class DsDemoCatalog {
         title: 'List item · error',
         demo: ListItemBrandErrorCatalogDemo(),
       ),
+      'list_item_icon_title_paragraph' => const DsDemoEntry(
+        title: 'List item · icon title paragraph',
+        demo: ListItemIconTitleParagraphDemo(),
+      ),
       'media_backdrop_card' => const DsDemoEntry(
         title: 'Media backdrop card',
         demo: MediaBackdropCardDemo(),
@@ -104,6 +120,10 @@ abstract final class DsDemoCatalog {
       'step_progress_bar' => const DsDemoEntry(
         title: 'Step progress bar',
         demo: StepProgressBarDemo(),
+      ),
+      'tooltip' => const DsDemoEntry(
+        title: 'Tooltip',
+        demo: TooltipDemo(),
       ),
       'snackbar' => const DsDemoEntry(title: 'Snackbar', demo: SnackbarDemo()),
       _ => null,

@@ -3,7 +3,7 @@ import 'package:auror/common/designsystem/atoms/typography/typography.dart';
 import 'package:auror/common/designsystem/molecules/badges/badge.dart';
 import 'package:flutter/material.dart' hide Badge;
 
-/// Showcases [Badge] neutral and premium (icon + label) variants.
+/// Showcases [DsBadge] neutral and premium (icon + label) variants.
 class BadgeDemo extends StatelessWidget {
   const BadgeDemo({super.key});
 
@@ -23,7 +23,7 @@ class BadgeDemo extends StatelessWidget {
         const SizedBox(height: AppSpacings.m),
         const Align(
           alignment: Alignment.centerLeft,
-          child: Badge(
+          child: DsBadge(
             label: 'Desenvolvimento Pessoal',
             variant: BadgeVariant.neutral,
           ),
@@ -33,7 +33,7 @@ class BadgeDemo extends StatelessWidget {
         const SizedBox(height: AppSpacings.m),
         const Align(
           alignment: Alignment.centerLeft,
-          child: Badge(
+          child: DsBadge(
             label: 'Premium',
             leadingIcon: Icons.workspace_premium_outlined,
             variant: BadgeVariant.highlight,
@@ -46,11 +46,11 @@ class BadgeDemo extends StatelessWidget {
           spacing: AppSpacings.s,
           runSpacing: AppSpacings.s,
           children: [
-            Badge(
+            DsBadge(
               label: 'Desenvolvimento Pessoal',
               variant: BadgeVariant.neutral,
             ),
-            Badge(
+            DsBadge(
               label: 'Premium',
               leadingIcon: Icons.workspace_premium_outlined,
               variant: BadgeVariant.highlight,

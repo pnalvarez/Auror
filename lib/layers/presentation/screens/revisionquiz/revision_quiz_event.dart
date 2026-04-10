@@ -4,6 +4,7 @@ part 'revision_quiz_event.freezed.dart';
 
 @freezed
 sealed class RevisionQuizEvent with _$RevisionQuizEvent {
+  const factory RevisionQuizEvent.started() = RevisionQuizStarted;
   const factory RevisionQuizEvent.answerDraftChanged(String text) =
       RevisionQuizAnswerDraftChanged;
 

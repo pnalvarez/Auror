@@ -16,6 +16,8 @@ ThemeData mainLaunchDarkTheme() {
       onPrimary: AppColors.Primary.onPrimary,
       primaryContainer: AppColors.Primary.primary.withValues(alpha: 0.22),
       onPrimaryContainer: AppColors.Primary.primaryFixed,
+      tertiary: AppColors.Tertiary.tertiary,
+      onTertiary: AppColors.Tertiary.onTertiary,
       surface: Color.lerp(const Color(0xFF060908), tealBg, 0.55)!,
       surfaceContainerLowest: Color.lerp(
         const Color(0xFF060908),

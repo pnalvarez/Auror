@@ -28,5 +28,8 @@
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
+	<!-- Impeller + AVPlayer textures: video can stay black / fail to load on macOS. -->
+	<key>FLTEnableImpeller</key>
+	<false/>
 </dict>
 </plist>

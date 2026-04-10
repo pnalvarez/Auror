@@ -4,18 +4,27 @@ import 'package:auror/common/designsystem/atoms/spacing/spacings.dart';
 import 'package:auror/common/designsystem/atoms/typography/typography.dart';
 import 'package:flutter/material.dart';
 
-/// Visual treatment for [Badge] (category pill vs premium accent).
+/// Visual treatment for [DsBadge] (category pill vs premium accent).
 enum BadgeVariant {
   /// Muted pill on elevated surface (e.g. category).
   neutral,
 
   /// Gold accent with optional leading icon (e.g. Premium).
   highlight,
+
+  primary,
+
+  secondary,
+
+  tertiary,
+
+  /// Semi-transparent surface on video/full-bleed media (e.g. day / link pill).
+  surfaceOverlay,
 }
 
 /// Small pill label; supports optional [leadingIcon] (e.g. crown for premium).
-class Badge extends StatelessWidget {
-  const Badge({
+class DsBadge extends StatelessWidget {
+  const DsBadge({
     super.key,
     required this.label,
     this.leadingIcon,
@@ -43,6 +52,24 @@ class Badge extends StatelessWidget {
         AppColors.DarkContent.accent.withValues(alpha: 0.2),
         AppColors.DarkContent.accent,
       ),
+      BadgeVariant.primary => (scheme.primary, scheme.onPrimary),
+      BadgeVariant.secondary => (scheme.secondary, scheme.onSecondary),
+      BadgeVariant.tertiary => (scheme.tertiary, scheme.onTertiary),
+      BadgeVariant.surfaceOverlay => (
+        scheme.surface.withValues(alpha: 0.55),
+        scheme.onSurface.withValues(alpha: 0.95),
+      ),
+    };
+
+    final EdgeInsetsGeometry padding = switch (variant) {
+      BadgeVariant.surfaceOverlay => const EdgeInsets.symmetric(
+        horizontal: AppSpacings.m,
+        vertical: AppSpacings.xs,
+      ),
+      _ => const EdgeInsets.symmetric(
+        horizontal: AppSpacings.s,
+        vertical: AppSpacings.xs2,
+      ),
     };
 
     return DecoratedBox(
@@ -53,10 +80,7 @@ class Badge extends StatelessWidget {
       child: ConstrainedBox(
         constraints: const BoxConstraints(minHeight: _minHeight),
         child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: AppSpacings.s,
-            vertical: AppSpacings.xs2,
-          ),
+          padding: padding,
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [

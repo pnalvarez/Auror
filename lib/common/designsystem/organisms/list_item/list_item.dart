@@ -188,7 +188,62 @@ class IconDescriptionInput extends ListItemInput {
   }
 }
 
-/// Card row: top badges ([Badge] category + optional premium), title, body,
+/// Vertical stack: optional leading icon before the title, then a paragraph
+/// ([body2Light]). No chevron — for informational cards (e.g. expected answer).
+class IconTitleParagraphInput extends ListItemInput {
+  IconTitleParagraphInput({
+    this.leadingIcon,
+    required this.title,
+    required this.description,
+    this.leadingIconColor,
+  });
+
+  /// Shown before [title] when non-null; omitted when null.
+  final IconData? leadingIcon;
+
+  final String title;
+  final String description;
+
+  /// Defaults to [ListItemBrand] leading color when null.
+  final Color? leadingIconColor;
+
+  static const double _iconSize = 24;
+
+  @override
+  Widget buildContent(BuildContext context) {
+    final brandStyle = ListItemBrandScope.of(context);
+    final titleStyle = body3Semibold.copyWith(
+      color: brandStyle.titleTextColor,
+      height: 1.2,
+    );
+    final descriptionStyle = body2Light.copyWith(
+      color: brandStyle.bodyTextColor,
+      height: 1.45,
+    );
+    final iconColor = leadingIconColor ?? brandStyle.leadingIconColor;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (leadingIcon != null) ...[
+              Icon(leadingIcon, size: _iconSize, color: iconColor),
+              const SizedBox(width: AppSpacings.s),
+            ],
+            Expanded(child: Text(title, style: titleStyle)),
+          ],
+        ),
+        const SizedBox(height: AppSpacings.s),
+        Text(description, style: descriptionStyle),
+      ],
+    );
+  }
+}
+
+/// Card row: top badges ([DsBadge] category + optional premium), title, body,
 /// trailing icon (e.g. lock).
 class BadgesTitleDescriptionInput extends ListItemInput {
   BadgesTitleDescriptionInput({
@@ -242,9 +297,12 @@ class BadgesTitleDescriptionInput extends ListItemInput {
                 runSpacing: AppSpacings.s,
                 crossAxisAlignment: WrapCrossAlignment.center,
                 children: [
-                  Badge(label: topMainBadgeText, variant: BadgeVariant.neutral),
+                  DsBadge(
+                    label: topMainBadgeText,
+                    variant: BadgeVariant.neutral,
+                  ),
                   if (hasSecond)
-                    Badge(
+                    DsBadge(
                       label: topSecondBadgeText!.trim(),
                       leadingIcon: secondBadgeIcon,
                       variant: BadgeVariant.highlight,

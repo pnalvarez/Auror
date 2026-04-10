@@ -93,6 +93,7 @@ class _PrimaryPalette {
 
   /// Brand anchor: vivid teal (micro-learning / clarity / focus).
   final Color primary = const Color(0xFF00CEC8);
+
   /// Dark teal for strong contrast on the bright primary (AA-friendly body text).
   final Color onPrimary = const Color(0xFF003D38);
   final Color primaryContainer = const Color(0xFFCCFBF9);
@@ -125,8 +126,8 @@ class _TertiaryPalette {
   const _TertiaryPalette();
 
   /// Soft amber: rewards and highlights with less visual punch for long sessions.
-  final Color tertiary = const Color(0xFFB0782E);
-  final Color onTertiary = const Color(0xFFFFFFFF);
+  final Color tertiary = const Color(0xFFEDC001);
+  final Color onTertiary = const Color(0xFF3A2A00);
   final Color tertiaryContainer = const Color(0xFFF5E6D4);
   final Color onTertiaryContainer = const Color(0xFF3D2608);
 

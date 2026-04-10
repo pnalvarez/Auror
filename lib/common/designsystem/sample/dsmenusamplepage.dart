@@ -52,11 +52,26 @@ class DsMenuSamplePage extends StatelessWidget {
                 ),
                 const SizedBox(height: AppSpacings.m),
                 PrimaryButton(
+                  label: 'Chip picker',
+                  brand: ButtonBrand.primary,
+                  action: () => context.router.push(
+                    DSComponentRoute(demoId: 'chip_picker'),
+                  ),
+                ),
+                const SizedBox(height: AppSpacings.m),
+                PrimaryButton(
                   label: 'Disclaimer card',
                   brand: ButtonBrand.primary,
                   action: () => context.router.push(
                     DSComponentRoute(demoId: 'disclaimer_card'),
                   ),
+                ),
+                const SizedBox(height: AppSpacings.m),
+                PrimaryButton(
+                  label: 'Dropdown',
+                  brand: ButtonBrand.primary,
+                  action: () =>
+                      context.router.push(DSComponentRoute(demoId: 'dropdown')),
                 ),
                 const SizedBox(height: AppSpacings.m),
                 PrimaryButton(
@@ -124,6 +139,14 @@ class DsMenuSamplePage extends StatelessWidget {
                 ),
                 const SizedBox(height: AppSpacings.m),
                 PrimaryButton(
+                  label: 'List item · icon title paragraph',
+                  brand: ButtonBrand.primary,
+                  action: () => context.router.push(
+                    DSComponentRoute(demoId: 'list_item_icon_title_paragraph'),
+                  ),
+                ),
+                const SizedBox(height: AppSpacings.m),
+                PrimaryButton(
                   label: 'Media backdrop card',
                   brand: ButtonBrand.primary,
                   action: () => context.router.push(
@@ -177,6 +200,13 @@ class DsMenuSamplePage extends StatelessWidget {
                   action: () => context.router.push(
                     DSComponentRoute(demoId: 'step_progress_bar'),
                   ),
+                ),
+                const SizedBox(height: AppSpacings.m),
+                PrimaryButton(
+                  label: 'Tooltip',
+                  brand: ButtonBrand.primary,
+                  action: () =>
+                      context.router.push(DSComponentRoute(demoId: 'tooltip')),
                 ),
                 const SizedBox(height: AppSpacings.m),
                 PrimaryButton(

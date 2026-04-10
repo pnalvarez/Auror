@@ -7,6 +7,7 @@ part 'revision_quiz_state.freezed.dart';
 @freezed
 sealed class RevisionQuizState with _$RevisionQuizState {
   const factory RevisionQuizState({
+    @Default(false) bool isRevisionTrack,
     required List<RevisionDomain> allRevisions,
     @Default(null) RevisionQuizUI? currentRevision,
     @Default(0) int currentIndex,
@@ -17,5 +18,6 @@ sealed class RevisionQuizState with _$RevisionQuizState {
     @Default(false) bool shouldShowAnswerSentDisclaimer,
     @Default(true) bool deepModeCTAEnabled,
     @Default(true) bool revealAnswerCTAEnabled,
+    @Default(true) bool isLoading,
   }) = _RevisionQuizState;
 }

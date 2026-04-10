@@ -45,3 +45,9 @@ const revisionQuizEndBodySuffix =
     ' revisões de hoje foram feitas. Seu conhecimento agradece.';
 
 const revisionQuizEndBackToToday = 'Voltar para Hoje';
+
+/// Shown once when the user completes a quiz session with a single revision only.
+const revisionQuizFirstRevisionTitle = 'Sua primeira revisão!';
+
+const revisionQuizFirstRevisionBody =
+    'Você concluiu sua primeira revisão. Continue voltando para fixar o que aprende.';
