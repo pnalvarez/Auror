@@ -5,7 +5,7 @@ import 'package:auror/common/designsystem/sample/demos/list_item_brands_demo.dar
 import 'package:flutter/material.dart';
 
 /// Showcases [ListItem] with [IconTitleDescriptionInput], [IconTitleParagraphInput],
-/// and [GenericListItemInput].
+/// [TitleDescriptionCTAProgressInput], and [GenericListItemInput].
 class ListItemDemo extends StatelessWidget {
   const ListItemDemo({super.key});
 
@@ -34,6 +34,22 @@ class ListItemDemo extends StatelessWidget {
                 'Desenvolva a capacidade de gerenciar a si mesmo, suas emoções '
                 'e seu tempo para alcançar metas pessoais e profissionais.',
             trailingIcon: Icons.lock_outline_rounded,
+          ),
+          padding: const EdgeInsets.all(AppSpacings.xl2),
+          isExpanded: true,
+          onTap: () {},
+        ),
+        const SizedBox(height: AppSpacings.xl2),
+        Text('Título, descrição, CTA e progresso', style: headlineS),
+        const SizedBox(height: AppSpacings.m),
+        ListItem(
+          input: TitleDescriptionCTAProgressInput(
+            title: 'Descubra algo novo',
+            description: '3 ideias selecionadas para você · ~7 min',
+            ctaText: 'Aprender agora',
+            onCtaTap: () {},
+            currentProgress: 2,
+            totalProgress: 3,
           ),
           padding: const EdgeInsets.all(AppSpacings.xl2),
           isExpanded: true,
@@ -151,21 +167,21 @@ class ListItemDemo extends StatelessWidget {
         const SizedBox(height: AppSpacings.xl2),
         ListItem(
           input: TextInput(text: 'Some text - Success'),
-          brand: .success,
+          brand: ListItemBrand.success,
           isEnabled: false,
           onTap: () {},
         ),
         const SizedBox(height: AppSpacings.xl2),
         ListItem(
           input: TextInput(text: 'Some text - Warning'),
-          brand: .warning,
+          brand: ListItemBrand.warning,
           isEnabled: false,
           onTap: () {},
         ),
         const SizedBox(height: AppSpacings.xl2),
         ListItem(
           input: TextInput(text: 'Some text - Error'),
-          brand: .error,
+          brand: ListItemBrand.error,
           isEnabled: false,
           onTap: () {},
         ),

@@ -147,6 +147,16 @@ class DsMenuSamplePage extends StatelessWidget {
                 ),
                 const SizedBox(height: AppSpacings.m),
                 PrimaryButton(
+                  label: 'List item · title description CTA progress',
+                  brand: ButtonBrand.primary,
+                  action: () => context.router.push(
+                    DSComponentRoute(
+                      demoId: 'list_item_title_description_cta_progress',
+                    ),
+                  ),
+                ),
+                const SizedBox(height: AppSpacings.m),
+                PrimaryButton(
                   label: 'Media backdrop card',
                   brand: ButtonBrand.primary,
                   action: () => context.router.push(

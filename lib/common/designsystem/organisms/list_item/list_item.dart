@@ -2,6 +2,9 @@ import 'package:auror/common/designsystem/atoms/spacing/radius.dart';
 import 'package:auror/common/designsystem/atoms/spacing/spacings.dart';
 import 'package:auror/common/designsystem/atoms/typography/typography.dart';
 import 'package:auror/common/designsystem/molecules/badges/badge.dart';
+import 'package:auror/common/designsystem/molecules/buttons/action_buttons.dart';
+import 'package:auror/common/designsystem/molecules/buttons/button_brand.dart';
+import 'package:auror/common/designsystem/molecules/progress/step_progress_bar.dart';
 import 'package:auror/common/designsystem/organisms/list_item/list_item_brand.dart';
 import 'package:flutter/material.dart' hide Badge;
 
@@ -329,6 +332,78 @@ class BadgesTitleDescriptionInput extends ListItemInput {
   }
 }
 
+/// Top row: title + optional description, [PrimaryButton] (brand primary) with
+/// chevron; divider; [StepProgressBar] with current/total.
+class TitleDescriptionCTAProgressInput extends ListItemInput {
+  TitleDescriptionCTAProgressInput({
+    required this.title,
+    this.description,
+    required this.ctaText,
+    required this.onCtaTap,
+    required this.currentProgress,
+    required this.totalProgress,
+  });
+
+  final String title;
+
+  /// When null or empty, only [title] is shown in the text column.
+  final String? description;
+
+  final String ctaText;
+  final VoidCallback onCtaTap;
+  final int currentProgress;
+  final int totalProgress;
+
+  @override
+  Widget buildContent(BuildContext context) {
+    final brandStyle = ListItemBrandScope.of(context);
+    final scheme = Theme.of(context).colorScheme;
+    final hasDescription =
+        description != null && (description ?? '').trim().isNotEmpty;
+
+    final titleStyle = headingH6.copyWith(
+      color: brandStyle.titleTextColor,
+      height: 1.2,
+    );
+    final descriptionStyle = body4Light.copyWith(
+      color: brandStyle.bodyTextColor,
+      height: 1.25,
+    );
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(title, style: titleStyle),
+            if (hasDescription) ...[
+              const SizedBox(height: AppSpacings.xs),
+              Text((description ?? '').trim(), style: descriptionStyle),
+            ],
+          ],
+        ),
+        const SizedBox(height: AppSpacings.m),
+        Divider(height: 1, thickness: 1, color: scheme.outline),
+        const SizedBox(height: AppSpacings.m),
+        StepProgressBar(
+          currentValue: currentProgress,
+          totalValue: totalProgress,
+        ),
+        const SizedBox(height: AppSpacings.l),
+        PrimaryButton(
+          label: ctaText,
+          action: onCtaTap,
+          brand: ButtonBrand.primary,
+          trailingIcon: Icons.chevron_right_rounded,
+        ),
+      ],
+    );
+  }
+}
+
 /// Escape hatch: wrap any [Widget] as a [ListItem] body.
 class GenericListItemInput extends ListItemInput {
   GenericListItemInput({required this.child});
@@ -403,10 +478,7 @@ class ListItem extends StatelessWidget {
         : Builder(builder: body);
 
     if (!isEnabled) {
-      content = Opacity(
-        opacity: _kListItemDisabledOpacity,
-        child: content,
-      );
+      content = Opacity(opacity: _kListItemDisabledOpacity, child: content);
     }
 
     return ListItemBrandScope(

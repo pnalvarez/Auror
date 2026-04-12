@@ -30,6 +30,7 @@ class DashboardPage extends StatelessWidget {
           DashboardRoutesRoute(),
           DashboardProfileRoute(),
         ],
+        navigatorObservers: () => [AutoRouteObserver()],
         transitionBuilder: (context, child, animation) =>
             FadeTransition(opacity: animation, child: child),
         builder: (context, child) {

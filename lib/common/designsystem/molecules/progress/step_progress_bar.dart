@@ -43,30 +43,14 @@ class StepProgressBar extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        LayoutBuilder(
-          builder: (context, constraints) {
-            final w = constraints.maxWidth * fraction;
-            return ClipRRect(
-              borderRadius: BorderRadius.circular(barHeight / 2),
-              child: SizedBox(
-                height: barHeight,
-                child: Stack(
-                  fit: StackFit.expand,
-                  children: [
-                    ColoredBox(color: track),
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: SizedBox(
-                        width: w,
-                        height: barHeight,
-                        child: ColoredBox(color: fill),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            );
-          },
+        ClipRRect(
+          borderRadius: BorderRadius.circular(barHeight / 2),
+          child: LinearProgressIndicator(
+            value: fraction,
+            minHeight: barHeight,
+            backgroundColor: track,
+            color: fill,
+          ),
         ),
         if (showLabel) ...[
           const SizedBox(height: AppSpacings.xs),
