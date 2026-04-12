@@ -3,15 +3,13 @@ import 'package:auror/common/designsystem/atoms/typography/typography.dart';
 import 'package:auror/common/designsystem/molecules/badges/badge.dart';
 import 'package:auror/common/designsystem/organisms/feedback/circular_loader.dart';
 import 'package:auror/common/designsystem/organisms/list_item/list_item.dart';
+import 'package:auror/common/strings/home_strings.dart';
 import 'package:auror/core/di/di.dart';
 import 'package:auror/layers/presentation/screens/home/home_event.dart';
-import 'package:auror/layers/presentation/screens/home/home_state.dart';
 import 'package:auror/layers/presentation/screens/home/home_view_model.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-typedef _BlocBuilder = BlocBuilder<HomeViewModel, HomeState>;
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -78,22 +76,23 @@ class _HomeContentState extends State<_HomeContent>
                   ),
                   const SizedBox(height: AppSpacings.xl3),
                   _SectionHeader(
-                    title: 'Revisões pendentes',
+                    title: homeSectionPendingRevisions,
                     icon: Icons.psychology_rounded,
                     badgeText: viewModel.state.revisions.length.toString(),
                   ),
                   const SizedBox(height: AppSpacings.xl3),
                   _SectionHeader(
-                    title: 'Novas ideias',
+                    title: homeSectionNewIdeas,
                     icon: Icons.info_outline,
                   ),
                   const SizedBox(height: AppSpacings.l),
                   ListItem(
                     input: TitleDescriptionCTAProgressInput(
-                      title: 'Descubra algo novo',
-                      description:
-                          '${viewModel.state.dailyIdea?.cards ?? 0} ideias selecionadas para você',
-                      ctaText: 'Aprender agora',
+                      title: homeDailyIdeaTitle,
+                      description: homeDailyIdeaDescription(
+                        viewModel.state.dailyIdea?.cards ?? 0,
+                      ),
+                      ctaText: homeDailyIdeaCta,
                       onCtaTap: () {},
                       currentProgress: 1,
                       totalProgress: 3,
@@ -125,20 +124,23 @@ class _HomeHeader extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Olá, $userName', style: headingH3),
+        Text(homeGreeting(userName), style: headingH3),
         const SizedBox(height: AppSpacings.s),
         Text.rich(
           TextSpan(
             style: body4Light,
             children: [
-              const TextSpan(text: 'Hoje você tem '),
-              TextSpan(text: '$totalRevisionTime min', style: body4Semibold),
-              const TextSpan(text: ' de revisão + '),
+              const TextSpan(text: homeHeaderTodayYouHave),
               TextSpan(
-                text: '$totalTimeToLearnDailyIdea min',
+                text: homeHeaderMinutes(totalRevisionTime),
                 style: body4Semibold,
               ),
-              const TextSpan(text: ' para aprender a ideia do dia.'),
+              const TextSpan(text: homeHeaderRevisionConnector),
+              TextSpan(
+                text: homeHeaderMinutes(totalTimeToLearnDailyIdea),
+                style: body4Semibold,
+              ),
+              const TextSpan(text: homeHeaderDailyIdeaSuffix),
             ],
           ),
         ),
