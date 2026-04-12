@@ -8,7 +8,8 @@ plugins {
 android {
     namespace = "com.example.auror"
     compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
+    // Keep in sync with `aurorNdkVersion` in ../build.gradle.kts (matches flutter.ndkVersion).
+    ndkVersion = "28.2.13676358"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17

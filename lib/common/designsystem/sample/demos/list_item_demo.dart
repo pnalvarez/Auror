@@ -132,8 +132,7 @@ class ListItemDemo extends StatelessWidget {
           input: IconTitleDescriptionInput(
             leadingIcon: Icons.workspace_premium_outlined,
             title: 'Ítem indisponível',
-            description:
-                'Mesmo padrão que “Plano / upgrade”, sem interação.',
+            description: 'Mesmo padrão que “Plano / upgrade”, sem interação.',
           ),
           isExpanded: true,
           isEnabled: false,
@@ -143,6 +142,33 @@ class ListItemDemo extends StatelessWidget {
         const Divider(height: 1),
         const SizedBox(height: AppSpacings.xl2),
         const ListItemBrandsDemo(),
+        const SizedBox(height: AppSpacings.xl2),
+        ListItem(
+          input: TextInput(text: 'Some text - Neutral'),
+          isEnabled: false,
+          onTap: () {},
+        ),
+        const SizedBox(height: AppSpacings.xl2),
+        ListItem(
+          input: TextInput(text: 'Some text - Success'),
+          brand: .success,
+          isEnabled: false,
+          onTap: () {},
+        ),
+        const SizedBox(height: AppSpacings.xl2),
+        ListItem(
+          input: TextInput(text: 'Some text - Warning'),
+          brand: .warning,
+          isEnabled: false,
+          onTap: () {},
+        ),
+        const SizedBox(height: AppSpacings.xl2),
+        ListItem(
+          input: TextInput(text: 'Some text - Error'),
+          brand: .error,
+          isEnabled: false,
+          onTap: () {},
+        ),
       ],
     );
   }
