@@ -1,8 +1,8 @@
-import 'package:auror/common/designsystem/atoms/colors/colors.dart';
-import 'package:auror/common/designsystem/atoms/spacing/spacings.dart';
-import 'package:auror/common/designsystem/atoms/typography/typography.dart';
-import 'package:auror/common/designsystem/molecules/buttons/action_buttons.dart';
-import 'package:auror/common/designsystem/theme/main_launch_dark_theme.dart';
+import 'package:auror_design_system/atoms/colors/colors.dart';
+import 'package:auror_design_system/atoms/spacing/spacings.dart';
+import 'package:auror_design_system/atoms/typography/typography.dart';
+import 'package:auror_design_system/molecules/buttons/action_buttons.dart';
+import 'package:auror_design_system/theme/main_launch_dark_theme.dart';
 import 'package:auror/common/strings/revision_quiz_strings.dart';
 import 'package:auror/layers/presentation/routes/app_router.gr.dart';
 import 'package:auto_route/auto_route.dart';

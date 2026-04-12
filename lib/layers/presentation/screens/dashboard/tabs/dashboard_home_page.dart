@@ -1,4 +1,4 @@
-import 'package:auror/layers/presentation/screens/dashboard/dashboard_tab_placeholder.dart';
+import 'package:auror/layers/presentation/screens/home/home_page.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
@@ -8,6 +8,6 @@ class DashboardHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const DashboardTabPlaceholder(label: 'Home');
+    return const HomePage();
   }
 }

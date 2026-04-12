@@ -1,7 +1,7 @@
-import 'package:auror/common/designsystem/atoms/spacing/spacings.dart';
-import 'package:auror/common/designsystem/atoms/typography/typography.dart';
-import 'package:auror/common/designsystem/organisms/list_item/list_item.dart';
-import 'package:auror/common/designsystem/organisms/navigation_bar/ds_navigation_bar.dart';
+import 'package:auror_design_system/atoms/spacing/spacings.dart';
+import 'package:auror_design_system/atoms/typography/typography.dart';
+import 'package:auror_design_system/organisms/list_item/list_item.dart';
+import 'package:auror_design_system/organisms/navigation_bar/ds_navigation_bar.dart';
 import 'package:auror/common/strings/guided_routes_hub_strings.dart';
 import 'package:auror/core/di/di.dart';
 import 'package:auror/layers/presentation/screens/guidedrouteshub/guided_routes_hub_event.dart';

@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:auror/common/designsystem/atoms/colors/colors.dart';
+import 'package:auror_design_system/atoms/colors/colors.dart';
 import 'package:auror/core/di/di.dart';
 import 'package:auror/layers/presentation/routes/app_router.dart';
 import 'package:flutter/foundation.dart';

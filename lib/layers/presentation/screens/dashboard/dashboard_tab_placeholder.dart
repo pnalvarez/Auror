@@ -1,4 +1,4 @@
-import 'package:auror/common/designsystem/atoms/typography/typography.dart';
+import 'package:auror_design_system/atoms/typography/typography.dart';
 import 'package:flutter/material.dart';
 
 /// Shared layout for dashboard tab shells: main-launch dark surface and centered label.
