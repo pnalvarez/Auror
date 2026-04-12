@@ -1,13 +1,13 @@
 import 'dart:math' as math;
 
-import 'package:auror/common/designsystem/atoms/colors/colors.dart';
-import 'package:auror/common/designsystem/atoms/spacing/radius.dart';
-import 'package:auror/common/designsystem/atoms/spacing/spacings.dart';
-import 'package:auror/common/designsystem/atoms/typography/typography.dart';
-import 'package:auror/common/designsystem/molecules/buttons/action_buttons.dart';
-import 'package:auror/common/designsystem/molecules/buttons/button_brand.dart';
-import 'package:auror/common/designsystem/molecules/inputfields/input_field.dart';
-import 'package:auror/common/designsystem/theme/main_launch_dark_theme.dart';
+import 'package:auror_design_system/atoms/colors/colors.dart';
+import 'package:auror_design_system/atoms/spacing/radius.dart';
+import 'package:auror_design_system/atoms/spacing/spacings.dart';
+import 'package:auror_design_system/atoms/typography/typography.dart';
+import 'package:auror_design_system/molecules/buttons/action_buttons.dart';
+import 'package:auror_design_system/molecules/buttons/button_brand.dart';
+import 'package:auror_design_system/molecules/inputfields/input_field.dart';
+import 'package:auror_design_system/theme/main_launch_dark_theme.dart';
 import 'package:auror/common/strings/login_strings.dart';
 import 'package:auror/core/di/di.dart';
 import 'package:auror/layers/presentation/screens/login/login_context.dart';

@@ -1,6 +1,6 @@
 import 'dart:async' show TimeoutException, unawaited;
 
-import 'package:auror/common/designsystem/organisms/feedback/circular_loader.dart';
+import 'package:auror_design_system/organisms/feedback/circular_loader.dart';
 import 'package:auror/common/support/auror_video_player_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';

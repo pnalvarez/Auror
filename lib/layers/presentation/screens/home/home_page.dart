@@ -1,8 +1,13 @@
-import 'package:auror/common/designsystem/atoms/spacing/spacings.dart';
-import 'package:auror/common/designsystem/atoms/typography/typography.dart';
-import 'package:auror/common/designsystem/molecules/badges/badge.dart';
-import 'package:auror/common/designsystem/organisms/feedback/circular_loader.dart';
-import 'package:auror/common/designsystem/organisms/list_item/list_item.dart';
+import 'package:auror/layers/presentation/routes/app_router.gr.dart';
+import 'package:auror/layers/presentation/screens/home/revision_ui.dart';
+import 'package:auror_design_system/atoms/colors/colors.dart';
+import 'package:auror_design_system/atoms/spacing/radius.dart';
+import 'package:auror_design_system/atoms/spacing/spacings.dart';
+import 'package:auror_design_system/atoms/typography/typography.dart';
+import 'package:auror_design_system/molecules/badges/badge.dart';
+import 'package:auror_design_system/molecules/buttons/action_buttons.dart';
+import 'package:auror_design_system/organisms/feedback/circular_loader.dart';
+import 'package:auror_design_system/organisms/list_item/list_item.dart';
 import 'package:auror/common/strings/home_strings.dart';
 import 'package:auror/core/di/di.dart';
 import 'package:auror/layers/presentation/screens/home/home_event.dart';
@@ -65,40 +70,45 @@ class _HomeContentState extends State<_HomeContent>
               if (viewModel.state.isLoading) {
                 return Center(child: CircularLoader(color: scheme.primary));
               }
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _HomeHeader(
-                    userName: viewModel.state.userName ?? '',
-                    totalRevisionTime: viewModel.state.totalRevisionTime ?? 0,
-                    totalTimeToLearnDailyIdea:
-                        viewModel.state.totalTimeToLearnDailyIdea ?? 0,
-                  ),
-                  const SizedBox(height: AppSpacings.xl3),
-                  _SectionHeader(
-                    title: homeSectionPendingRevisions,
-                    icon: Icons.psychology_rounded,
-                    badgeText: viewModel.state.revisions.length.toString(),
-                  ),
-                  const SizedBox(height: AppSpacings.xl3),
-                  _SectionHeader(
-                    title: homeSectionNewIdeas,
-                    icon: Icons.info_outline,
-                  ),
-                  const SizedBox(height: AppSpacings.l),
-                  ListItem(
-                    input: TitleDescriptionCTAProgressInput(
-                      title: homeDailyIdeaTitle,
-                      description: homeDailyIdeaDescription(
-                        viewModel.state.dailyIdea?.cards ?? 0,
-                      ),
-                      ctaText: homeDailyIdeaCta,
-                      onCtaTap: () {},
-                      currentProgress: 1,
-                      totalProgress: 3,
+              return SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _HomeHeader(
+                      userName: viewModel.state.userName ?? '',
+                      totalRevisionTime: viewModel.state.totalRevisionTime ?? 0,
+                      totalTimeToLearnDailyIdea:
+                          viewModel.state.totalTimeToLearnDailyIdea ?? 0,
                     ),
-                  ),
-                ],
+                    const SizedBox(height: AppSpacings.xl3),
+                    _SectionHeader(
+                      title: homeSectionPendingRevisions,
+                      icon: Icons.psychology_rounded,
+                      badgeText: viewModel.state.revisions.length.toString(),
+                    ),
+                    const SizedBox(height: AppSpacings.l),
+                    _HomeRevisionSection(viewModel.state.revisions),
+                    const SizedBox(height: AppSpacings.xl3),
+                    _SectionHeader(
+                      title: homeSectionNewIdeas,
+                      icon: Icons.info_outline,
+                    ),
+                    const SizedBox(height: AppSpacings.l),
+                    ListItem(
+                      input: TitleDescriptionCTAProgressInput(
+                        title: homeDailyIdeaTitle,
+                        description: homeDailyIdeaDescription(
+                          viewModel.state.dailyIdea?.cards ?? 0,
+                        ),
+                        ctaText: homeDailyIdeaCta,
+                        onCtaTap: () {},
+                        currentProgress:
+                            viewModel.state.dailyIdea?.progress ?? 0,
+                        totalProgress: viewModel.state.dailyIdea?.total ?? 0,
+                      ),
+                    ),
+                  ],
+                ),
               );
             },
           ),
@@ -171,6 +181,131 @@ class _SectionHeader extends StatelessWidget {
         const Spacer(),
         if (badgeText != null) DsBadge(label: badgeText!),
       ],
+    );
+  }
+}
+
+class _HomeRevisionSection extends StatelessWidget {
+  const _HomeRevisionSection(this.revisions);
+
+  final List<RevisionUi> revisions;
+
+  @override
+  Widget build(BuildContext context) {
+    final maxRevisionCount = revisions.length > 3 ? 3 : revisions.length;
+    return ListItem(
+      input: GenericListItemInput(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            for (var i = 0; i < maxRevisionCount; i++) ...[
+              if (i > 0) const SizedBox(height: AppSpacings.l),
+              _RevisionCard(revision: revisions[i]),
+            ],
+            const SizedBox(height: AppSpacings.s),
+            Align(
+              alignment: .bottomEnd,
+              child: TertiaryButton(
+                label: seeMore,
+                trailingIcon: Icons.add,
+                action: () {
+                  context.router.navigate(DashboardRevisionHubRoute());
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _RevisionCard extends StatelessWidget {
+  const _RevisionCard({required this.revision});
+
+  final RevisionUi revision;
+
+  static const double _leadingSize = 40;
+  static const double _leadingIconSize = 24;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final titleStyle = body4Semibold.copyWith(
+      color: scheme.onSurface,
+      height: 1.2,
+    );
+    final descriptionStyle = body4Light.copyWith(
+      color: scheme.onSurfaceVariant,
+      height: 1.25,
+    );
+    final desc = revision.time;
+
+    return ListItem(
+      isExpanded: true,
+      input: GenericListItemInput(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+              width: _leadingSize,
+              height: _leadingSize,
+              decoration: BoxDecoration(
+                color: scheme.surfaceContainerHighest,
+                borderRadius: BorderRadius.circular(AppRadius.s),
+                border: Border.all(
+                  color: scheme.outline.withValues(alpha: 0.35),
+                ),
+              ),
+              alignment: Alignment.center,
+              child: Icon(
+                Icons.psychology_rounded,
+                size: _leadingIconSize,
+                color: AppColors.DarkContent.accent,
+              ),
+            ),
+            const SizedBox(width: AppSpacings.m),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    revision.title,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: titleStyle,
+                  ),
+                  const SizedBox(height: AppSpacings.xs),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(top: 2),
+                        child: Icon(
+                          Icons.access_time,
+                          size: 16,
+                          color: scheme.onSurfaceVariant,
+                        ),
+                      ),
+                      const SizedBox(width: AppSpacings.xs),
+                      Expanded(
+                        child: Text(
+                          desc,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: descriptionStyle,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

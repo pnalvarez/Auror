@@ -45,8 +45,12 @@ class HomeViewModel extends Bloc<HomeEvent, HomeState> {
               )
               .toList(),
           dailyIdea: IdeaUi(
-            cards: dailyIdea.cards.length,
+            cards: dailyIdea.completedCards.length,
             totalTime: dailyIdea.totalTime,
+            progress: dailyIdea.completedCards.length,
+            total:
+                dailyIdea.completedCards.length +
+                dailyIdea.incompleteCards.length,
           ),
           totalTimeToLearnDailyIdea: dailyIdea.totalTime,
           totalRevisionTime: revisions.fold(

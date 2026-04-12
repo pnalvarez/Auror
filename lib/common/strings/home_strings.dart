@@ -17,3 +17,4 @@ String homeDailyIdeaDescription(int cards) =>
     '$cards ideias selecionadas para você';
 
 const homeDailyIdeaCta = 'Aprender agora';
+const seeMore = 'Ver mais';
