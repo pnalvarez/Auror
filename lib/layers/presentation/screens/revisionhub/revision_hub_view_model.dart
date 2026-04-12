@@ -22,15 +22,18 @@ class RevisionHubViewModel extends Bloc<RevisionHubEvent, RevisionHubState> {
   ) async {
     emit(state.copyWith(isLoading: true, errorMessage: null));
     try {
-      final domainList = await _getPendingRevisions();
-      this.revisions = domainList;
-      final revisions = domainList
+      final revisionSection = await _getPendingRevisions();
+      this.revisions = revisionSection.revisions;
+      final revisions = revisionSection.revisions
           .map(RevisionIntroUI.fromDomain)
           .toList(growable: false);
       emit(
         state.copyWith(
           isLoading: false,
-          totalMinutes: domainList.fold<int>(0, (sum, r) => sum + r.minutes),
+          totalMinutes: revisionSection.revisions.fold<int>(
+            0,
+            (sum, r) => sum + r.minutes,
+          ),
           revisions: revisions,
           errorMessage: null,
         ),

@@ -87,7 +87,10 @@ class _HomeContentState extends State<_HomeContent>
                       badgeText: viewModel.state.revisions.length.toString(),
                     ),
                     const SizedBox(height: AppSpacings.l),
-                    _HomeRevisionSection(viewModel.state.revisions),
+                    _HomeRevisionSection(
+                      viewModel.state.revisions,
+                      viewModel.state.tomorrowRevisions ?? 0,
+                    ),
                     const SizedBox(height: AppSpacings.xl3),
                     _SectionHeader(
                       title: homeSectionNewIdeas,
@@ -186,37 +189,49 @@ class _SectionHeader extends StatelessWidget {
 }
 
 class _HomeRevisionSection extends StatelessWidget {
-  const _HomeRevisionSection(this.revisions);
+  const _HomeRevisionSection(this.revisions, this.tomorrowRevisionsCount);
 
   final List<RevisionUi> revisions;
+  final int tomorrowRevisionsCount;
 
   @override
   Widget build(BuildContext context) {
     final maxRevisionCount = revisions.length > 3 ? 3 : revisions.length;
-    return ListItem(
-      input: GenericListItemInput(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            for (var i = 0; i < maxRevisionCount; i++) ...[
-              if (i > 0) const SizedBox(height: AppSpacings.l),
-              _RevisionCard(revision: revisions[i]),
-            ],
-            const SizedBox(height: AppSpacings.s),
-            Align(
-              alignment: .bottomEnd,
-              child: TertiaryButton(
-                label: seeMore,
-                trailingIcon: Icons.add,
-                action: () {
-                  context.router.navigate(DashboardRevisionHubRoute());
-                },
-              ),
+    return Column(
+      crossAxisAlignment: .start,
+      children: [
+        ListItem(
+          input: GenericListItemInput(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                for (var i = 0; i < maxRevisionCount; i++) ...[
+                  if (i > 0) const SizedBox(height: AppSpacings.l),
+                  _RevisionCard(revision: revisions[i]),
+                ],
+                const SizedBox(height: AppSpacings.s),
+                Align(
+                  alignment: .bottomEnd,
+                  child: TertiaryButton(
+                    label: seeMore,
+                    trailingIcon: Icons.add,
+                    action: () {
+                      context.router.navigate(DashboardRevisionHubRoute());
+                    },
+                  ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
-      ),
+        const SizedBox(height: AppSpacings.s),
+        Text(
+          tomorrowRevisions(tomorrowRevisionsCount),
+          style: tagRegular.copyWith(color: AppColors.Surface.onSurfaceVariant),
+        ),
+        // Text(tomorrowRevisions(tomorrowRevisionsCount), style: body,),
+      ],
     );
   }
 }

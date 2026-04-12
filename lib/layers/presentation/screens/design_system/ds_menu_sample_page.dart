@@ -37,6 +37,22 @@ class DsMenuSamplePage extends StatelessWidget {
                 ),
                 const SizedBox(height: AppSpacings.m),
                 PrimaryButton(
+                  label: 'App colors',
+                  brand: ButtonBrand.primary,
+                  action: () => context.router.push(
+                    DSComponentRoute(demoId: 'app_colors'),
+                  ),
+                ),
+                const SizedBox(height: AppSpacings.m),
+                PrimaryButton(
+                  label: 'Text styles',
+                  brand: ButtonBrand.primary,
+                  action: () => context.router.push(
+                    DSComponentRoute(demoId: 'text_styles'),
+                  ),
+                ),
+                const SizedBox(height: AppSpacings.m),
+                PrimaryButton(
                   label: 'Badge',
                   brand: ButtonBrand.primary,
                   action: () =>

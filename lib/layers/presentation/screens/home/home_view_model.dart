@@ -30,13 +30,13 @@ class HomeViewModel extends Bloc<HomeEvent, HomeState> {
 
     try {
       final user = await _getUser();
-      final revisions = await _getRevisions();
+      final revisionSection = await _getRevisions();
       final dailyIdea = await _getDailyIdea();
 
       emit(
         state.copyWith(
           userName: user.name,
-          revisions: revisions
+          revisions: revisionSection.revisions
               .map(
                 (revision) => RevisionUi(
                   title: revision.title,
@@ -53,7 +53,7 @@ class HomeViewModel extends Bloc<HomeEvent, HomeState> {
                 dailyIdea.incompleteCards.length,
           ),
           totalTimeToLearnDailyIdea: dailyIdea.totalTime,
-          totalRevisionTime: revisions.fold(
+          totalRevisionTime: revisionSection.revisions.fold(
             0,
             (sum, r) => sum ?? 0 + r.minutes,
           ),

@@ -1,6 +1,7 @@
 import 'package:auror_design_system/sample/demos/badge_demo.dart';
 import 'package:auror_design_system/sample/demos/chip_picker_demo.dart';
 import 'package:auror_design_system/sample/demos/circular_loader_demo.dart';
+import 'package:auror_design_system/sample/demos/colors_catalog_demo.dart';
 import 'package:auror_design_system/sample/demos/disclaimer_card_demo.dart';
 import 'package:auror_design_system/sample/demos/dropdown_demo.dart';
 import 'package:auror_design_system/sample/demos/feedback_tile_demo.dart';
@@ -19,6 +20,7 @@ import 'package:auror_design_system/sample/demos/score_tile_demo.dart';
 import 'package:auror_design_system/sample/demos/status_chip_demo.dart';
 import 'package:auror_design_system/sample/demos/step_progress_bar_demo.dart';
 import 'package:auror_design_system/sample/demos/tooltip_demo.dart';
+import 'package:auror_design_system/sample/demos/typography_catalog_demo.dart';
 import 'package:flutter/material.dart';
 
 /// Registry for design-system demo screens: maps a [demoId] to a title and
@@ -37,6 +39,10 @@ abstract final class DsDemoCatalog {
       'action_buttons' => const DsDemoEntry(
         title: 'Action buttons',
         demo: ActionButtonsDemo(),
+      ),
+      'app_colors' => const DsDemoEntry(
+        title: 'App colors',
+        demo: ColorsCatalogDemo(),
       ),
       'badge' => const DsDemoEntry(
         title: 'Badge',
@@ -129,6 +135,10 @@ abstract final class DsDemoCatalog {
       'tooltip' => const DsDemoEntry(
         title: 'Tooltip',
         demo: TooltipDemo(),
+      ),
+      'text_styles' => const DsDemoEntry(
+        title: 'Text styles',
+        demo: TypographyCatalogDemo(),
       ),
       'snackbar' => const DsDemoEntry(title: 'Snackbar', demo: SnackbarDemo()),
       _ => null,

@@ -12,5 +12,6 @@ sealed class HomeState with _$HomeState {
     @Default(null) int? totalRevisionTime,
     @Default(true) bool isLoading,
     @Default(null) String? userName,
+    @Default(null) int? tomorrowRevisions,
   }) = _HomeState;
 }

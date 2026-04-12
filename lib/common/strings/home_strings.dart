@@ -18,3 +18,5 @@ String homeDailyIdeaDescription(int cards) =>
 
 const homeDailyIdeaCta = 'Aprender agora';
 const seeMore = 'Ver mais';
+
+String tomorrowRevisions(int count) => 'Revisões amanhã: $count';
