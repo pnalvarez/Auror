@@ -182,7 +182,7 @@ class _SectionHeader extends StatelessWidget {
         const SizedBox(width: AppSpacings.s),
         Text(title, style: headingH5),
         const Spacer(),
-        if (badgeText != null) DsBadge(label: badgeText!),
+        if (badgeText != null) DsBadge(label: badgeText!, variant: .highlight),
       ],
     );
   }
@@ -230,7 +230,6 @@ class _HomeRevisionSection extends StatelessWidget {
           tomorrowRevisions(tomorrowRevisionsCount),
           style: tagRegular.copyWith(color: AppColors.Surface.onSurfaceVariant),
         ),
-        // Text(tomorrowRevisions(tomorrowRevisionsCount), style: body,),
       ],
     );
   }
