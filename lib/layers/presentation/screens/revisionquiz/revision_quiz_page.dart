@@ -11,10 +11,12 @@ import 'package:auror_design_system/organisms/list_item/list_item.dart';
 import 'package:auror_design_system/theme/main_launch_dark_theme.dart';
 import 'package:auror/common/strings/revision_quiz_strings.dart';
 import 'package:auror/core/di/di.dart';
+import 'package:auror/layers/domain/models/idea_track_flow_args.dart';
 import 'package:auror/layers/domain/models/revision_domain.dart';
 import 'package:auror/layers/presentation/routes/app_router.gr.dart';
 import 'package:auror/layers/presentation/screens/revisionquiz/first_revision_completed_dialog.dart';
 import 'package:auror/layers/presentation/screens/revisionquiz/revision_registered_dialog.dart';
+import 'package:auror/layers/presentation/screens/revisionquiz/revision_quiz_factory_args.dart';
 import 'package:auror/layers/presentation/screens/revisionquiz/revision_quiz_view_model.dart';
 import 'package:auror/layers/presentation/screens/revisionquiz/revision_quiz_event.dart';
 import 'package:auror/layers/presentation/screens/revisionquiz/revision_quiz_state.dart';
@@ -27,10 +29,16 @@ typedef _BlocBuilder = BlocBuilder<RevisionQuizViewModel, RevisionQuizState>;
 
 @RoutePage()
 class RevisionQuizPage extends StatelessWidget {
-  const RevisionQuizPage({super.key, required this.revisions, this.cardId});
+  const RevisionQuizPage({
+    super.key,
+    required this.revisions,
+    this.cardId,
+    this.ideaTrackFlow,
+  });
 
   final List<RevisionDomain> revisions;
   final String? cardId;
+  final IdeaTrackFlowArgs? ideaTrackFlow;
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +46,10 @@ class RevisionQuizPage extends StatelessWidget {
       create: (_) {
         final vm = getIt<RevisionQuizViewModel>(
           param1: revisions,
-          param2: cardId,
+          param2: RevisionQuizFactoryArgs(
+            cardId: cardId,
+            ideaTrackFlow: ideaTrackFlow,
+          ),
         );
         vm.add(const RevisionQuizEvent.started());
         return vm;
@@ -151,7 +162,13 @@ class _RevisionQuizBody extends StatelessWidget {
                 child: Row(
                   children: [
                     IconButton(
-                      onPressed: () => context.router.maybePop(),
+                      onPressed: () {
+                        // Root stack: [DashboardRoute, ...pushed]. Tab pages are nested,
+                        // so match [DashboardRoute.name] (not DashboardHomeRoute).
+                        context.router.popUntilRouteWithName(
+                          DashboardRoute.name,
+                        );
+                      },
                       icon: Icon(
                         Icons.arrow_back_ios_new_rounded,
                         color: scheme.onSurfaceVariant,
@@ -296,9 +313,11 @@ class _RevisionQuizBody extends StatelessWidget {
                           final isFinal =
                               state.currentIndex ==
                               state.allRevisions.length - 1;
-                          final singleRevision =
-                              state.allRevisions.length == 1;
+                          final singleRevision = state.allRevisions.length == 1;
                           final revisionCount = state.allRevisions.length;
+                          final ideaFlow = viewModel.ideaTrackFlow;
+
+                          await stackRouter.maybePop();
 
                           if (!isFinal) {
                             viewModel.add(
@@ -307,7 +326,22 @@ class _RevisionQuizBody extends StatelessWidget {
                             return;
                           }
 
-                          await stackRouter.maybePop();
+                          if (ideaFlow != null) {
+                            if (ideaFlow.hasNextCard) {
+                              final nextFlow = ideaFlow.advanceToNextCard();
+                              await stackRouter.replace(
+                                RecallCardRoute(
+                                  card: nextFlow.cards[nextFlow.currentIndex],
+                                  ideaTrackFlow: nextFlow,
+                                ),
+                              );
+                              return;
+                            }
+                            await rootRouter.push(
+                              SuccessRoute(revisionCount: ideaFlow.totalCards),
+                            );
+                            return;
+                          }
                           if (singleRevision) {
                             await showFirstRevisionCompletedDialogForRouter(
                               rootRouter,

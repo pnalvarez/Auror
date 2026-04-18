@@ -1,4 +1,6 @@
+import 'package:auror/layers/domain/models/idea_track_flow_args.dart';
 import 'package:auror/layers/domain/models/revision_domain.dart';
+import 'package:auror/layers/presentation/screens/revisionquiz/revision_quiz_factory_args.dart';
 import 'package:auror/layers/domain/usecases/get_card_revision.dart';
 import 'package:auror/layers/domain/usecases/send_answer.dart';
 import 'package:auror/layers/presentation/screens/revisionquiz/revision_quiz_event.dart';
@@ -16,6 +18,9 @@ class RevisionQuizViewModel extends Bloc<RevisionQuizEvent, RevisionQuizState> {
   /// When set, revision may be loaded with [IGetCardRevision] if [RevisionQuizState.allRevisions] was empty.
   final String? cardId;
 
+  /// When set, finishing this quiz advances the “ideia do dia” recall track.
+  final IdeaTrackFlowArgs? ideaTrackFlow;
+
   final ISendAnswer _sendAnswer;
   final IGetCardRevision _getCardRevision;
 
@@ -23,15 +28,17 @@ class RevisionQuizViewModel extends Bloc<RevisionQuizEvent, RevisionQuizState> {
     this._sendAnswer,
     this._getCardRevision, {
     @factoryParam required List<RevisionDomain> revisions,
-    @factoryParam this.cardId,
-  }) : answerDraftController = TextEditingController(),
+    @factoryParam RevisionQuizFactoryArgs? extras,
+  }) : cardId = extras?.cardId,
+       ideaTrackFlow = extras?.ideaTrackFlow,
+       answerDraftController = TextEditingController(),
        super(
          RevisionQuizState(
            allRevisions: revisions,
            currentRevision: revisions.isEmpty
                ? null
                : RevisionQuizUI.fromDomain(revisions.first),
-           isLoading: cardId != null && revisions.isEmpty,
+           isLoading: extras?.cardId != null && revisions.isEmpty,
          ),
        ) {
     on<RevisionQuizStarted>(_onStarted);

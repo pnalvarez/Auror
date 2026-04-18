@@ -8,6 +8,8 @@ import 'package:auror/layers/presentation/screens/home/revision_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 
+const _kDailyIdeaTrackCardCount = 3;
+
 @injectable
 class HomeViewModel extends Bloc<HomeEvent, HomeState> {
   HomeViewModel({
@@ -32,6 +34,9 @@ class HomeViewModel extends Bloc<HomeEvent, HomeState> {
       final user = await _getUser();
       final revisionSection = await _getRevisions();
       final dailyIdea = await _getDailyIdea();
+      final ideaTrack = dailyIdea.incompleteCards
+          .take(_kDailyIdeaTrackCardCount)
+          .toList(growable: false);
 
       emit(
         state.copyWith(
@@ -53,10 +58,11 @@ class HomeViewModel extends Bloc<HomeEvent, HomeState> {
                 dailyIdea.incompleteCards.length,
           ),
           totalTimeToLearnDailyIdea: dailyIdea.totalTime,
-          totalRevisionTime: revisionSection.revisions.fold(
+          totalRevisionTime: revisionSection.revisions.fold<int>(
             0,
-            (sum, r) => sum ?? 0 + r.minutes,
+            (sum, r) => sum + r.minutes,
           ),
+          dailyIdeaTrackCards: ideaTrack,
           isLoading: false,
         ),
       );

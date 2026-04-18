@@ -74,8 +74,23 @@ class GetDailyIdea implements IGetDailyIdea {
               'Dar feedback genérico ("precisa melhorar") sem exemplo nem próximo '
               'passo.',
         ),
+        KnowledgeCardDomain(
+          id: '4',
+          category: 'Produtividade',
+          title: 'Uma prioridade por vez',
+          quote: 'Multitarefa é troca rápida de contexto, não paralelismo real.',
+          description:
+              'Blocos de foco com interrupções controladas reduzem erro e tempo '
+              'de retomada comparado a saltar entre tarefas o dia inteiro.',
+          videoUrl: _vBee,
+          practicalExample:
+              'Reserve 25 minutos só para redigir o relatório; só depois abra o '
+              'e-mail.',
+          commonError:
+              'Manter dezenas de abas “para ler depois” e nunca fechar nenhuma.',
+        ),
       ],
-      totalTime: 7,
+      totalTime: 10,
     );
   }
 }
