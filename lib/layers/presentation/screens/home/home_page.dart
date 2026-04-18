@@ -10,6 +10,7 @@ import 'package:auror_design_system/organisms/feedback/circular_loader.dart';
 import 'package:auror_design_system/organisms/list_item/list_item.dart';
 import 'package:auror/common/strings/home_strings.dart';
 import 'package:auror/core/di/di.dart';
+import 'package:auror/layers/domain/models/idea_track_flow_args.dart';
 import 'package:auror/layers/presentation/screens/home/home_event.dart';
 import 'package:auror/layers/presentation/screens/home/home_view_model.dart';
 import 'package:auto_route/auto_route.dart';
@@ -104,7 +105,19 @@ class _HomeContentState extends State<_HomeContent>
                           viewModel.state.dailyIdea?.cards ?? 0,
                         ),
                         ctaText: homeDailyIdeaCta,
-                        onCtaTap: () {},
+                        onCtaTap: () {
+                          final track = viewModel.state.dailyIdeaTrackCards;
+                          if (track.isEmpty) return;
+                          context.router.push(
+                            RecallCardRoute(
+                              card: track.first,
+                              ideaTrackFlow: IdeaTrackFlowArgs(
+                                cards: track,
+                                currentIndex: 0,
+                              ),
+                            ),
+                          );
+                        },
                         currentProgress:
                             viewModel.state.dailyIdea?.progress ?? 0,
                         totalProgress: viewModel.state.dailyIdea?.total ?? 0,
