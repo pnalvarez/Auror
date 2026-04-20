@@ -62,6 +62,28 @@ class ListItemTitleDescriptionCheckpointsDemo extends StatelessWidget {
           padding: const EdgeInsets.all(AppSpacings.xl2),
           isExpanded: true,
         ),
+        const SizedBox(height: AppSpacings.xl2),
+        Text('Quaternário', style: headlineS),
+        const SizedBox(height: AppSpacings.m),
+        ListItem(
+          input: TitleDescriptionCheckpointsInput(
+            style: TitleDescriptionCheckpointsInputStyle.quaternary,
+            title: 'Check-in rápido',
+            description: 'Antes de fechar a sessão',
+            firstTrailingItem: r'R$99,99',
+            secondTrailingItem: 'ano',
+            checkpoints: const [
+              'O que ficou mais claro?',
+              'O que você aplicaria amanhã?',
+            ],
+            ctaText: 'Assinar agora',
+            footerText:
+                'Respostas são só para você — não enviamos para a nuvem.',
+            onTapCTA: () {},
+          ),
+          padding: const EdgeInsets.all(AppSpacings.xl2),
+          isExpanded: true,
+        ),
       ],
     );
   }

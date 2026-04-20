@@ -32,6 +32,10 @@ class SubscriptionUI {
       period: domain.period,
       description: domain.description,
       benefits: domain.benefits,
+      ctaText: domain.isPaid ? 'Assinar agora' : null,
+      footerText: domain.isPaid
+          ? 'Cancele quando quiser. Sem compromisso'
+          : null,
     );
   }
 }

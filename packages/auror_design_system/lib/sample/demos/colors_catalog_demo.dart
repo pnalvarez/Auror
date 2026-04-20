@@ -90,6 +90,39 @@ class ColorsCatalogDemo extends StatelessWidget {
           path: 'AppColors.Tertiary.onTertiaryFixedVariant',
           color: AppColors.Tertiary.onTertiaryFixedVariant,
         ),
+        // Quaternary
+        (
+          path: 'AppColors.Quaternary.quaternary',
+          color: AppColors.Quaternary.quaternary,
+        ),
+        (
+          path: 'AppColors.Quaternary.onQuaternary',
+          color: AppColors.Quaternary.onQuaternary,
+        ),
+        (
+          path: 'AppColors.Quaternary.quaternaryContainer',
+          color: AppColors.Quaternary.quaternaryContainer,
+        ),
+        (
+          path: 'AppColors.Quaternary.onQuaternaryContainer',
+          color: AppColors.Quaternary.onQuaternaryContainer,
+        ),
+        (
+          path: 'AppColors.Quaternary.quaternaryFixed',
+          color: AppColors.Quaternary.quaternaryFixed,
+        ),
+        (
+          path: 'AppColors.Quaternary.onQuaternaryFixed',
+          color: AppColors.Quaternary.onQuaternaryFixed,
+        ),
+        (
+          path: 'AppColors.Quaternary.quaternaryFixedDim',
+          color: AppColors.Quaternary.quaternaryFixedDim,
+        ),
+        (
+          path: 'AppColors.Quaternary.onQuaternaryFixedVariant',
+          color: AppColors.Quaternary.onQuaternaryFixedVariant,
+        ),
         // Dark content
         (
           path: 'AppColors.DarkContent.background',

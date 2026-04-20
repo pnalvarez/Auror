@@ -1,5 +1,6 @@
 import 'package:auror/core/di/di.dart';
 import 'package:auror/layers/presentation/screens/subscriptionupgrade/subscription_upgrade_event.dart';
+import 'package:auror/layers/presentation/screens/subscriptionupgrade/subscription_upgrade_state.dart';
 import 'package:auror/layers/presentation/screens/subscriptionupgrade/subscription_upgrade_view_model.dart';
 import 'package:auror_design_system/atoms/spacing/spacings.dart';
 import 'package:auror_design_system/organisms/list_item/list_item.dart';
@@ -19,60 +20,99 @@ class SubscriptionUpgradePage extends StatelessWidget {
       create: (_) =>
           getIt<SubscriptionUpgradeViewModel>()
             ..add(const SubscriptionUpgradeEvent.started()),
-      child: Theme(
-        data: mainLaunchDarkTheme(),
-        child: const _SubscriptionUpgradeContent(),
-      ),
+      child: const _SubscriptionUpgradeContent(),
     );
   }
 }
 
-class _SubscriptionUpgradeContent extends StatelessWidget {
+class _SubscriptionUpgradeContent extends StatefulWidget {
   const _SubscriptionUpgradeContent();
+
+  @override
+  State<_SubscriptionUpgradeContent> createState() =>
+      _SubscriptionUpgradeContentState();
+}
+
+class _SubscriptionUpgradeContentState
+    extends State<_SubscriptionUpgradeContent> {
+  static const String _kUltraSubscriptionId = 'ultra';
+
+  final GlobalKey _ultraCellKey = GlobalKey();
+  bool _didAutoScrollToUltra = false;
+
+  void _scheduleScrollToUltraOnce(SubscriptionUpgradeState state) {
+    if (_didAutoScrollToUltra) return;
+    if (state.isLoading || state.errorMessage != null) return;
+    if (!state.subscriptions.any((s) => s.id == _kUltraSubscriptionId)) return;
+
+    _didAutoScrollToUltra = true;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      final target = _ultraCellKey.currentContext;
+      if (target == null) return;
+      Scrollable.ensureVisible(
+        target,
+        duration: const Duration(milliseconds: 420),
+        curve: Curves.easeOutCubic,
+        alignment: 0.32,
+      );
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     final viewModel = context.watch<SubscriptionUpgradeViewModel>();
-    final scheme = Theme.of(context).colorScheme;
+    _scheduleScrollToUltraOnce(viewModel.state);
+    final darkTheme = mainLaunchDarkTheme();
 
-    return SafeArea(
-      child: Scaffold(
-        appBar: DsNavigationBar(
-          leadingIcon: Icons.arrow_back,
-          leadingIconColor: scheme.onSurface,
-          trailingIconColor: scheme.onSurface,
-          onLeadingTap: () => context.router.maybePop(),
-          title: 'Desbloqueio o Auror completo',
-          description: 'Aprenda sem limites',
-        ),
-        body: Padding(
-          padding: const EdgeInsets.only(top: AppSpacings.m),
-          child: ListView.separated(
-            padding: const EdgeInsets.fromLTRB(
-              AppSpacings.l,
-              AppSpacings.m,
-              AppSpacings.l,
-              AppSpacings.xl2,
+    return Theme(
+      data: darkTheme,
+      child: Material(
+        color: darkTheme.scaffoldBackgroundColor,
+        child: SafeArea(
+          child: Scaffold(
+            appBar: DsNavigationBar(
+              leadingIcon: Icons.arrow_back,
+              onLeadingTap: () => context.router.maybePop(),
+              title: 'Desbloqueio o Auror completo',
+              description: 'Aprenda sem limites',
             ),
-            itemBuilder: (context, index) {
-              final item = viewModel.state.subscriptions[index];
-              return ListItem(
-                input: TitleDescriptionCheckpointsInput(
-                  style: viewModel.getStyle(subscriptionId: item.id),
-                  title: item.title,
-                  description: item.description,
-                  checkpoints: item.benefits,
-                  ctaText: item.ctaText,
-                  onTapCTA: () => viewModel.add(
-                    SubscriptionUpgradeEvent.selected(id: item.id),
-                  ),
+            body: Padding(
+              padding: const EdgeInsets.only(top: AppSpacings.m),
+              child: ListView.separated(
+                padding: const EdgeInsets.fromLTRB(
+                  AppSpacings.l,
+                  AppSpacings.m,
+                  AppSpacings.l,
+                  AppSpacings.xl2,
                 ),
-              );
-            },
-            separatorBuilder: (BuildContext context, int index) {
-              return const SizedBox(height: AppSpacings.m);
-            },
-            itemCount: viewModel.state.subscriptions.length,
+                itemBuilder: (context, index) {
+                  final item = viewModel.state.subscriptions[index];
+                  return ListItem(
+                    key: item.id == _kUltraSubscriptionId
+                        ? _ultraCellKey
+                        : null,
+                    input: TitleDescriptionCheckpointsInput(
+                      style: viewModel.getStyle(subscriptionId: item.id),
+                      title: item.title,
+                      firstTrailingItem: item.price,
+                      secondTrailingItem: item.period,
+                      description: item.description,
+                      checkpoints: item.benefits,
+                      ctaText: item.ctaText,
+                      onTapCTA: () => viewModel.add(
+                        SubscriptionUpgradeEvent.selected(id: item.id),
+                      ),
+                      footerText: item.footerText,
+                    ),
+                  );
+                },
+                separatorBuilder: (BuildContext context, int index) {
+                  return const SizedBox(height: AppSpacings.xl2);
+                },
+                itemCount: viewModel.state.subscriptions.length,
+              ),
+            ),
           ),
         ),
       ),

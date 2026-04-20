@@ -1,3 +1,4 @@
+import 'package:auror/layers/presentation/routes/app_router.gr.dart';
 import 'package:auror_design_system/atoms/spacing/spacings.dart';
 import 'package:auror_design_system/atoms/typography/typography.dart';
 import 'package:auror_design_system/organisms/list_item/list_item.dart';
@@ -86,7 +87,9 @@ class _GuidedRoutesHubBody extends StatelessWidget {
                   return _GuidedRouteCard(
                     route: route,
                     isPremium: state.isPremium,
-                    onTap: () {},
+                    onTap: () {
+                      context.router.push(SubscriptionUpgradeRoute());
+                    },
                   );
                 },
               ),
@@ -113,7 +116,6 @@ class _GuidedRouteCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListItem(
       isExpanded: true,
-      isEnabled: isPremium,
       padding: const EdgeInsets.all(AppSpacings.xl2),
       input: BadgesTitleDescriptionInput(
         topMainBadgeText: route.topic,

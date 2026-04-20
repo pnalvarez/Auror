@@ -1,3 +1,4 @@
+import 'package:auror_design_system/atoms/colors/colors.dart';
 import 'package:auror_design_system/atoms/spacing/radius.dart';
 import 'package:auror_design_system/atoms/spacing/spacings.dart';
 import 'package:auror_design_system/atoms/typography/typography.dart';
@@ -421,6 +422,7 @@ enum TitleDescriptionCheckpointsTier {
   /// Plan title uses [ColorScheme.onSurface]; checkpoints use [ColorScheme.primary].
   standard,
   tertiary,
+  quaternary,
 }
 
 /// Style presets for [TitleDescriptionCheckpointsInput].
@@ -438,13 +440,15 @@ class TitleDescriptionCheckpointsInputStyle {
   final ButtonBrand buttonBrand;
 
   Color resolveTitleColor(ColorScheme scheme) => switch (tier) {
-    TitleDescriptionCheckpointsTier.standard => scheme.onSurface,
-    TitleDescriptionCheckpointsTier.tertiary => scheme.tertiary,
+    .standard => scheme.onSurface,
+    .tertiary => scheme.tertiary,
+    .quaternary => AppColors.Quaternary.quaternary,
   };
 
   Color resolveIconColor(ColorScheme scheme) => switch (tier) {
-    TitleDescriptionCheckpointsTier.standard => scheme.primary,
-    TitleDescriptionCheckpointsTier.tertiary => scheme.tertiary,
+    .standard => scheme.primary,
+    .tertiary => scheme.tertiary,
+    .quaternary => AppColors.Quaternary.quaternary,
   };
 
   static const standardStyle = TitleDescriptionCheckpointsInputStyle._(
@@ -458,9 +462,16 @@ class TitleDescriptionCheckpointsInputStyle {
     buttonBrand: ButtonBrand.tertiary,
   );
 
+  static const quaternaryStyle = TitleDescriptionCheckpointsInputStyle._(
+    tier: .quaternary,
+    buttonBrand: .quaternary,
+  );
+
   static const standard = standardStyle;
 
   static const tertiary = tertiaryStyle;
+
+  static const quaternary = quaternaryStyle;
 }
 
 class TitleDescriptionCheckpointsInput extends ListItemInput {
@@ -490,7 +501,7 @@ class TitleDescriptionCheckpointsInput extends ListItemInput {
   Widget buildContent(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
     final brandStyle = ListItemBrandScope.of(context);
-    final maxTitleDescriptionWidth = MediaQuery.sizeOf(context).width * 0.7;
+    final maxTitleDescriptionWidth = MediaQuery.sizeOf(context).width * 0.55;
 
     final titleStyle = headingH6.copyWith(
       color: style.resolveTitleColor(scheme),
@@ -570,7 +581,7 @@ class TitleDescriptionCheckpointsInput extends ListItemInput {
         ],
         if (footerText != null) ...[
           const SizedBox(height: AppSpacings.l),
-          Text(footerText!, style: body6Light),
+          Center(child: Text(footerText!, style: body6Light)),
         ],
       ],
     );

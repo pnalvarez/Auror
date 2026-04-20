@@ -51,11 +51,13 @@ class SubscriptionUpgradeViewModel
   }) {
     switch (subscriptionId) {
       case 'standard':
-        return TitleDescriptionCheckpointsInputStyle.standard;
+        return .standard;
       case 'pro':
-        return TitleDescriptionCheckpointsInputStyle.tertiary;
+        return .tertiary;
+      case 'ultra':
+        return .quaternary;
       default:
-        return TitleDescriptionCheckpointsInputStyle.standard;
+        return .standard;
     }
   }
 }

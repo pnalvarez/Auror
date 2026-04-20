@@ -38,6 +38,22 @@ class GetSubscriptions implements IGetSubscriptions {
         price: r'R$ 4,99',
         period: 'mês',
       ),
+      SubscriptionDomain(
+        id: 'ultra',
+        subscriptionName: 'Auror Ultra',
+        description:
+            'Tudo do Pro, com recursos premium e acompanhamento dedicado.',
+        isPaid: true,
+        benefits: [
+          'Tudo do Auror Pro',
+          'Rotas e objetivos guiados ilimitados',
+          'Exportação e back-ups avançados',
+          'Suporte dedicado com resposta priorizada',
+        ],
+        isCurrent: false,
+        price: r'R$ 9,99',
+        period: 'mês',
+      ),
     ];
   }
 }
