@@ -414,6 +414,169 @@ class GenericListItemInput extends ListItemInput {
   Widget buildContent(BuildContext context) => child;
 }
 
+/// Tier for [TitleDescriptionCheckpointsInput]. Colors are resolved from
+/// [ColorScheme] in [TitleDescriptionCheckpointsInput.buildContent] so titles
+/// and icons stay legible on neutral [ListItem] surfaces.
+enum TitleDescriptionCheckpointsTier {
+  /// Plan title uses [ColorScheme.onSurface]; checkpoints use [ColorScheme.primary].
+  standard,
+  tertiary,
+}
+
+/// Style presets for [TitleDescriptionCheckpointsInput].
+///
+/// Presets are [static const] (not [static final]) so hot reload does not leave
+/// stale instances across class layout changes.
+@immutable
+class TitleDescriptionCheckpointsInputStyle {
+  const TitleDescriptionCheckpointsInputStyle._({
+    required this.tier,
+    required this.buttonBrand,
+  });
+
+  final TitleDescriptionCheckpointsTier tier;
+  final ButtonBrand buttonBrand;
+
+  Color resolveTitleColor(ColorScheme scheme) => switch (tier) {
+    TitleDescriptionCheckpointsTier.standard => scheme.onSurface,
+    TitleDescriptionCheckpointsTier.tertiary => scheme.tertiary,
+  };
+
+  Color resolveIconColor(ColorScheme scheme) => switch (tier) {
+    TitleDescriptionCheckpointsTier.standard => scheme.primary,
+    TitleDescriptionCheckpointsTier.tertiary => scheme.tertiary,
+  };
+
+  static const standardStyle = TitleDescriptionCheckpointsInputStyle._(
+    tier: TitleDescriptionCheckpointsTier.standard,
+    buttonBrand: ButtonBrand.primary,
+  );
+
+  /// Premium styling (e.g. Pro plan). Prefer [tertiary]; [tertirary] is a legacy alias.
+  static const tertiaryStyle = TitleDescriptionCheckpointsInputStyle._(
+    tier: TitleDescriptionCheckpointsTier.tertiary,
+    buttonBrand: ButtonBrand.tertiary,
+  );
+
+  static const standard = standardStyle;
+
+  static const tertiary = tertiaryStyle;
+}
+
+class TitleDescriptionCheckpointsInput extends ListItemInput {
+  TitleDescriptionCheckpointsInput({
+    required this.style,
+    required this.title,
+    required this.description,
+    required this.checkpoints,
+    this.firstTrailingItem,
+    this.secondTrailingItem,
+    this.ctaText,
+    this.footerText,
+    this.onTapCTA,
+  });
+
+  final TitleDescriptionCheckpointsInputStyle style;
+  final String title;
+  final String description;
+  final List<String> checkpoints;
+  final String? firstTrailingItem;
+  final String? secondTrailingItem;
+  final String? ctaText;
+  final String? footerText;
+  final Function? onTapCTA;
+
+  @override
+  Widget buildContent(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final brandStyle = ListItemBrandScope.of(context);
+    final maxTitleDescriptionWidth = MediaQuery.sizeOf(context).width * 0.7;
+
+    final titleStyle = headingH6.copyWith(
+      color: style.resolveTitleColor(scheme),
+      height: 1.2,
+    );
+    final descriptionStyle = body4Light.copyWith(
+      color: brandStyle.bodyTextColor,
+      height: 1.25,
+    );
+    final firstTrailingStyle = body3Semibold.copyWith(
+      color: brandStyle.titleTextColor,
+      height: 1.2,
+    );
+    final secondTrailingStyle = body3Light.copyWith(
+      color: brandStyle.bodyTextColor,
+      height: 1.25,
+    );
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: maxTitleDescriptionWidth),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(title, style: titleStyle),
+                  if (description.trim().isNotEmpty) ...[
+                    const SizedBox(height: AppSpacings.xs),
+                    Text(description, style: descriptionStyle),
+                  ],
+                ],
+              ),
+            ),
+            if (firstTrailingItem != null)
+              Text.rich(
+                TextSpan(
+                  style: firstTrailingStyle,
+                  children: [
+                    TextSpan(text: firstTrailingItem),
+                    if (secondTrailingItem != null)
+                      TextSpan(
+                        style: secondTrailingStyle,
+                        text: '/$secondTrailingItem',
+                      ),
+                  ],
+                ),
+              ),
+          ],
+        ),
+        const SizedBox(height: AppSpacings.m),
+        for (var item in checkpoints) ...[
+          const SizedBox(height: AppSpacings.xs),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Icon(Icons.check, color: style.resolveIconColor(scheme)),
+              const SizedBox(width: AppSpacings.xs),
+              Text(
+                item,
+                style: body4Light.copyWith(color: brandStyle.titleTextColor),
+              ),
+            ],
+          ),
+        ],
+        if (ctaText != null && onTapCTA != null) ...[
+          const SizedBox(height: AppSpacings.xl2),
+          PrimaryButton(
+            brand: style.buttonBrand,
+            label: ctaText!,
+            isExpanded: true,
+            action: onTapCTA! as VoidCallback,
+          ),
+        ],
+        if (footerText != null) ...[
+          const SizedBox(height: AppSpacings.l),
+          Text(footerText!, style: body6Light),
+        ],
+      ],
+    );
+  }
+}
+
 /// Card shell around a [ListItemInput]; dispatches layout by input type via
 /// [ListItemInput.buildContent].
 class ListItem extends StatelessWidget {

@@ -21,6 +21,7 @@ class DsNavigationBar extends StatelessWidget implements PreferredSizeWidget {
     this.trailingIconColor,
     this.leadingIconSize = 32,
     this.trailingIconSize = 32,
+    this.onLeadingTap,
     this.onTap,
   });
 
@@ -40,6 +41,10 @@ class DsNavigationBar extends StatelessWidget implements PreferredSizeWidget {
 
   final double leadingIconSize;
   final double trailingIconSize;
+
+  /// When set with [leadingIcon], the icon is wrapped in a tappable control.
+  final VoidCallback? onLeadingTap;
+
   final VoidCallback? onTap;
 
   /// Matches the vertical space used by [build] (max lines for title/description).
@@ -93,7 +98,24 @@ class DsNavigationBar extends StatelessWidget implements PreferredSizeWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 if (leadingIcon != null) ...[
-                  Icon(leadingIcon, size: leadingIconSize, color: leadColor),
+                  onLeadingTap == null
+                      ? Icon(
+                          leadingIcon,
+                          size: leadingIconSize,
+                          color: leadColor,
+                        )
+                      : InkWell(
+                          onTap: onLeadingTap,
+                          borderRadius: BorderRadius.circular(AppSpacings.s),
+                          child: Padding(
+                            padding: const EdgeInsets.all(AppSpacings.xs2),
+                            child: Icon(
+                              leadingIcon,
+                              size: leadingIconSize,
+                              color: leadColor,
+                            ),
+                          ),
+                        ),
                   const SizedBox(height: AppSpacings.s),
                 ],
                 Text(

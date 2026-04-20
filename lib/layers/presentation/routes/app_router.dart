@@ -26,5 +26,6 @@ class AppRouter extends RootStackRouter {
     AutoRoute(page: OnboardingGuidedRoutesRoute.page),
     AutoRoute(page: OnboardingLearningSectionRoute.page),
     AutoRoute(page: OnboardingRealExampleRoute.page),
+    AutoRoute(page: SubscriptionUpgradeRoute.page),
   ];
 }

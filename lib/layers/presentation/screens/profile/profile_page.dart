@@ -131,7 +131,9 @@ class _ProfileScaffold extends StatelessWidget {
                               ? profilePlanSubscribedDescription
                               : profilePlanFreeDescription,
                         ),
-                        onTap: () {},
+                        onTap: () {
+                          context.router.push(const SubscriptionUpgradeRoute());
+                        },
                       ),
                       const SizedBox(height: AppSpacings.xl2),
                       _SectionLabel(text: profileSectionNavigation),
