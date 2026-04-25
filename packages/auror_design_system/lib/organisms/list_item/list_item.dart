@@ -482,9 +482,11 @@ class TitleDescriptionCheckpointsInput extends ListItemInput {
     required this.checkpoints,
     this.firstTrailingItem,
     this.secondTrailingItem,
-    this.ctaText,
+    this.primaryCtaText,
+    this.tertiaryCTAText,
     this.footerText,
-    this.onTapCTA,
+    this.onTapPrimaryCTA,
+    this.onTapTertiaryCTA,
   });
 
   final TitleDescriptionCheckpointsInputStyle style;
@@ -493,9 +495,11 @@ class TitleDescriptionCheckpointsInput extends ListItemInput {
   final List<String> checkpoints;
   final String? firstTrailingItem;
   final String? secondTrailingItem;
-  final String? ctaText;
+  final String? primaryCtaText;
+  final String? tertiaryCTAText;
   final String? footerText;
-  final Function? onTapCTA;
+  final Function? onTapPrimaryCTA;
+  final Function? onTapTertiaryCTA;
 
   @override
   Widget buildContent(BuildContext context) {
@@ -570,13 +574,22 @@ class TitleDescriptionCheckpointsInput extends ListItemInput {
             ],
           ),
         ],
-        if (ctaText != null && onTapCTA != null) ...[
+        if (primaryCtaText != null && onTapPrimaryCTA != null) ...[
           const SizedBox(height: AppSpacings.xl2),
           PrimaryButton(
             brand: style.buttonBrand,
-            label: ctaText!,
+            label: primaryCtaText!,
             isExpanded: true,
-            action: onTapCTA! as VoidCallback,
+            action: onTapPrimaryCTA! as VoidCallback,
+          ),
+        ],
+        if (tertiaryCTAText != null && onTapTertiaryCTA != null) ...[
+          const SizedBox(height: AppSpacings.xl2),
+          TertiaryButton(
+            brand: .error,
+            label: tertiaryCTAText!,
+            isExpanded: true,
+            action: onTapTertiaryCTA! as VoidCallback,
           ),
         ],
         if (footerText != null) ...[

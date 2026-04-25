@@ -1,3 +1,4 @@
+import 'package:auror/common/strings/subscription_upgrade_strings.dart';
 import 'package:auror/layers/domain/models/subscription_domain.dart';
 
 class SubscriptionUI {
@@ -9,7 +10,8 @@ class SubscriptionUI {
     required this.benefits,
     this.price,
     this.period,
-    this.ctaText,
+    this.primaryCtaText,
+    this.tertiaryCtaText,
     this.footerText,
   });
 
@@ -20,7 +22,8 @@ class SubscriptionUI {
   final String? price;
   final String? period;
   final List<String> benefits;
-  final String? ctaText;
+  final String? primaryCtaText;
+  final String? tertiaryCtaText;
   final String? footerText;
 
   factory SubscriptionUI.fromDomain(SubscriptionDomain domain) {
@@ -32,9 +35,12 @@ class SubscriptionUI {
       period: domain.period,
       description: domain.description,
       benefits: domain.benefits,
-      ctaText: domain.isPaid ? 'Assinar agora' : null,
-      footerText: domain.isPaid
-          ? 'Cancele quando quiser. Sem compromisso'
+      primaryCtaText: domain.isPaid && !domain.isCurrent
+          ? subscriptionUpgradeCtaSubscribeNow
+          : null,
+      tertiaryCtaText: domain.isPaid && domain.isCurrent ? cancel : null,
+      footerText: domain.isPaid && !domain.isCurrent
+          ? subscriptionUpgradeFooterCancelAnytime
           : null,
     );
   }

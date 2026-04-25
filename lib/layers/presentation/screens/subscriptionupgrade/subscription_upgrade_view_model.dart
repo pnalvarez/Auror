@@ -1,3 +1,4 @@
+import 'package:auror/common/strings/subscription_upgrade_strings.dart';
 import 'package:auror/layers/domain/usecases/get_subscriptions.dart';
 import 'package:auror/layers/domain/usecases/select_subscription.dart';
 import 'package:auror/layers/presentation/screens/subscriptionupgrade/subscription_ui.dart';
@@ -50,14 +51,14 @@ class SubscriptionUpgradeViewModel
     required String subscriptionId,
   }) {
     switch (subscriptionId) {
-      case 'standard':
-        return .standard;
-      case 'pro':
-        return .tertiary;
-      case 'ultra':
-        return .quaternary;
+      case subscriptionUpgradeIdStandard:
+        return TitleDescriptionCheckpointsInputStyle.standard;
+      case subscriptionUpgradeIdPro:
+        return TitleDescriptionCheckpointsInputStyle.tertiary;
+      case subscriptionUpgradeIdUltra:
+        return TitleDescriptionCheckpointsInputStyle.quaternary;
       default:
-        return .standard;
+        return TitleDescriptionCheckpointsInputStyle.standard;
     }
   }
 }

@@ -20,7 +20,7 @@ class GetSubscriptions implements IGetSubscriptions {
           'Rastreamento básico de ideias',
           'Temas da comunidade',
         ],
-        isCurrent: true,
+        isCurrent: false,
       ),
       SubscriptionDomain(
         id: 'pro',
@@ -34,7 +34,7 @@ class GetSubscriptions implements IGetSubscriptions {
           'Análises avançadas',
           'Suporte prioritário',
         ],
-        isCurrent: false,
+        isCurrent: true,
         price: r'R$ 4,99',
         period: 'mês',
       ),

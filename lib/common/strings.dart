@@ -13,3 +13,4 @@ export 'strings/onboarding_real_example_strings.dart';
 export 'strings/guided_routes_strings.dart';
 export 'strings/explore_strings.dart';
 export 'strings/recall_card_strings.dart';
+export 'strings/subscription_upgrade_strings.dart';

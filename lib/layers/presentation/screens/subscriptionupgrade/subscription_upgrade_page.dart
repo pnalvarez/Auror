@@ -1,3 +1,4 @@
+import 'package:auror/common/strings/subscription_upgrade_strings.dart';
 import 'package:auror/core/di/di.dart';
 import 'package:auror/layers/presentation/screens/subscriptionupgrade/subscription_upgrade_event.dart';
 import 'package:auror/layers/presentation/screens/subscriptionupgrade/subscription_upgrade_state.dart';
@@ -35,15 +36,18 @@ class _SubscriptionUpgradeContent extends StatefulWidget {
 
 class _SubscriptionUpgradeContentState
     extends State<_SubscriptionUpgradeContent> {
-  static const String _kUltraSubscriptionId = 'ultra';
-
   final GlobalKey _ultraCellKey = GlobalKey();
+  final GlobalKey _proCellKey = GlobalKey();
+  final GlobalKey _standardCellKey = GlobalKey();
+
   bool _didAutoScrollToUltra = false;
 
   void _scheduleScrollToUltraOnce(SubscriptionUpgradeState state) {
     if (_didAutoScrollToUltra) return;
     if (state.isLoading || state.errorMessage != null) return;
-    if (!state.subscriptions.any((s) => s.id == _kUltraSubscriptionId)) return;
+    if (!state.subscriptions.any((s) => s.id == subscriptionUpgradeIdUltra)) {
+      return;
+    }
 
     _didAutoScrollToUltra = true;
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -73,9 +77,9 @@ class _SubscriptionUpgradeContentState
           child: Scaffold(
             appBar: DsNavigationBar(
               leadingIcon: Icons.arrow_back,
-              onLeadingTap: () => context.router.maybePop(),
-              title: 'Desbloqueio o Auror completo',
-              description: 'Aprenda sem limites',
+              onLeadingTap: () => _popSubscriptionUpgrade(context),
+              title: subscriptionUpgradeNavTitle,
+              description: subscriptionUpgradeNavDescription,
             ),
             body: Padding(
               padding: const EdgeInsets.only(top: AppSpacings.m),
@@ -89,9 +93,8 @@ class _SubscriptionUpgradeContentState
                 itemBuilder: (context, index) {
                   final item = viewModel.state.subscriptions[index];
                   return ListItem(
-                    key: item.id == _kUltraSubscriptionId
-                        ? _ultraCellKey
-                        : null,
+                    key: getKeyBySubscriptionId(item.id),
+                    isSelected: item.isSelected,
                     input: TitleDescriptionCheckpointsInput(
                       style: viewModel.getStyle(subscriptionId: item.id),
                       title: item.title,
@@ -99,8 +102,12 @@ class _SubscriptionUpgradeContentState
                       secondTrailingItem: item.period,
                       description: item.description,
                       checkpoints: item.benefits,
-                      ctaText: item.ctaText,
-                      onTapCTA: () => viewModel.add(
+                      primaryCtaText: item.primaryCtaText,
+                      tertiaryCTAText: item.tertiaryCtaText,
+                      onTapPrimaryCTA: () => viewModel.add(
+                        SubscriptionUpgradeEvent.selected(id: item.id),
+                      ),
+                      onTapTertiaryCTA: () => viewModel.add(
                         SubscriptionUpgradeEvent.selected(id: item.id),
                       ),
                       footerText: item.footerText,
@@ -117,5 +124,27 @@ class _SubscriptionUpgradeContentState
         ),
       ),
     );
+  }
+
+  GlobalKey? getKeyBySubscriptionId(String subscriptionId) {
+    switch (subscriptionId) {
+      case subscriptionUpgradeIdStandard:
+        return _standardCellKey;
+      case subscriptionUpgradeIdPro:
+        return _proCellKey;
+      case subscriptionUpgradeIdUltra:
+        return _ultraCellKey;
+      default:
+        return null;
+    }
+  }
+}
+
+void _popSubscriptionUpgrade(BuildContext context) {
+  final scope = StackRouterScope.of(context);
+  if (scope != null && scope.controller.canPop()) {
+    scope.controller.maybePop();
+  } else {
+    Navigator.of(context).maybePop();
   }
 }
