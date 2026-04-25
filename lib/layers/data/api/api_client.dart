@@ -1,5 +1,7 @@
 import 'package:auror/common/environment/auror_supabase_constants.dart';
+import 'package:auror/core/http/supabase_http_logging.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
 
 abstract class IApiClient {
@@ -18,18 +20,34 @@ abstract class IApiClient {
 
 @LazySingleton(as: IApiClient)
 class ApiClient implements IApiClient {
-  ApiClient()
-    : _dio = Dio(
-        BaseOptions(
-          baseUrl: '${AurorSupabaseConstants.supabaseUrl}/rest/v1/',
-          headers: const {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-          },
-        ),
-      );
+  ApiClient() : _dio = _createDio();
 
   final Dio _dio;
+
+  static Dio _createDio() {
+    final dio = Dio(
+      BaseOptions(
+        baseUrl: '${AurorSupabaseConstants.supabaseUrl}/rest/v1/',
+        headers: const {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+      ),
+    );
+    if (shouldLogSupabaseHttp()) {
+      dio.interceptors.add(
+        LogInterceptor(
+          requestHeader: true,
+          requestBody: true,
+          responseHeader: true,
+          responseBody: true,
+          error: true,
+          logPrint: (message) => debugPrint('[Dio] $message'),
+        ),
+      );
+    }
+    return dio;
+  }
 
   @override
   Future<dynamic> get({
