@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:auror_design_system/atoms/colors/colors.dart';
+import 'package:auror/common/environment/auror_supabase_constants.dart';
 import 'package:auror/core/di/di.dart';
 import 'package:auror/layers/presentation/routes/app_router.dart';
 import 'package:flutter/foundation.dart';
@@ -32,8 +33,8 @@ Future<void> main() async {
 
 Future<void> _setUpSupabase() async {
   await Supabase.initialize(
-    url: 'https://medeadsoqdzauixvqlcr.supabase.co',
-    anonKey: 'sb_publishable_ALnsBT12AEDvbgnwD6eJXw_d4gmPYQs',
+    url: AurorSupabaseConstants.supabaseUrl,
+    anonKey: AurorSupabaseConstants.anonKey,
   );
 }
 
