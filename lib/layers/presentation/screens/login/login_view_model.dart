@@ -1,3 +1,7 @@
+import 'package:auror/layers/domain/usecases/sign_in.dart';
+import 'package:auror/layers/domain/usecases/sign_out.dart';
+import 'package:auror/layers/domain/usecases/sign_up.dart';
+import 'package:auror/layers/presentation/screens/login/login_auth_error_mapper.dart';
 import 'package:auror/layers/presentation/screens/login/login_context.dart';
 import 'package:auror/layers/presentation/screens/login/login_event.dart';
 import 'package:auror/layers/presentation/screens/login/login_state.dart';
@@ -6,8 +10,16 @@ import 'package:injectable/injectable.dart';
 
 @injectable
 class LoginViewModel extends Bloc<LoginEvent, LoginState> {
-  LoginViewModel(@factoryParam LoginContext loginContext)
-    : super(LoginState(loginContext: loginContext)) {
+  final ISignIn _signIn;
+  final ISignOut _signOut;
+  final ISignUp _signUp;
+
+  LoginViewModel(
+    @factoryParam LoginContext loginContext,
+    this._signIn,
+    this._signOut,
+    this._signUp,
+  ) : super(LoginState(loginContext: loginContext)) {
     on<LoginNameChanged>(_onNameChanged);
     on<LoginEmailChanged>(_onEmailChanged);
     on<LoginPasswordChanged>(_onPasswordChanged);
@@ -18,6 +30,7 @@ class LoginViewModel extends Bloc<LoginEvent, LoginState> {
     );
     on<LoginSubmitTapped>(_onSubmitTapped);
     on<LoginDashboardNavigationConsumed>(_onDashboardNavigationConsumed);
+    on<LoginSnackBarConsumed>(_onSnackBarConsumed);
     on<LoginContextChanged>(_onLoginContextChanged);
   }
 
@@ -32,6 +45,7 @@ class LoginViewModel extends Bloc<LoginEvent, LoginState> {
         confirmPassword: '',
         obscureConfirm: true,
         pendingDashboardNavigation: false,
+        snackBarMessage: null,
       ),
     );
   }
@@ -72,10 +86,55 @@ class LoginViewModel extends Bloc<LoginEvent, LoginState> {
     emit(state.copyWith(obscureConfirm: !state.obscureConfirm));
   }
 
-  void _onSubmitTapped(LoginSubmitTapped event, Emitter<LoginState> emit) {
+  Future<void> _onSubmitTapped(
+    LoginSubmitTapped event,
+    Emitter<LoginState> emit,
+  ) async {
     if (!state.canSubmit) return;
-    // TODO: wire auth repository / session.
-    emit(state.copyWith(pendingDashboardNavigation: true));
+    emit(
+      state.copyWith(
+        isLoading: true,
+        errorMessage: null,
+        snackBarMessage: null,
+      ),
+    );
+    try {
+      switch (state.loginContext) {
+        case LoginContext.signIn:
+          await _signIn(email: state.email, password: state.password);
+          break;
+        case LoginContext.signUp:
+          await _signUp(
+            email: state.email,
+            password: state.password,
+            displayName: state.name,
+          );
+          break;
+      }
+      emit(
+        state.copyWith(
+          isLoading: false,
+          pendingDashboardNavigation: true,
+        ),
+      );
+    } catch (e) {
+      emit(
+        state.copyWith(
+          isLoading: false,
+          snackBarMessage: mapLoginAuthErrorToPortuguese(
+            e,
+            loginContext: state.loginContext,
+          ),
+        ),
+      );
+    }
+  }
+
+  void _onSnackBarConsumed(
+    LoginSnackBarConsumed event,
+    Emitter<LoginState> emit,
+  ) {
+    emit(state.copyWith(snackBarMessage: null));
   }
 
   void _onDashboardNavigationConsumed(

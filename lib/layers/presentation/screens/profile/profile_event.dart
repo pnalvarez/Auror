@@ -5,4 +5,7 @@ part 'profile_event.freezed.dart';
 @freezed
 sealed class ProfileEvent with _$ProfileEvent {
   const factory ProfileEvent.loadRequested() = ProfileLoadRequested;
+  const factory ProfileEvent.logoutTapped() = ProfileLogoutTapped;
+  const factory ProfileEvent.mainLaunchNavigationConsumed() =
+      ProfileMainLaunchNavigationConsumed;
 }

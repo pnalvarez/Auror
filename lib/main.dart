@@ -32,7 +32,7 @@ Future<void> main() async {
 
 Future<void> _setUpSupabase() async {
   await Supabase.initialize(
-    url: 'https://medeadsoqdzauixvqlcr.supabase.co/rest/v1/',
+    url: 'https://medeadsoqdzauixvqlcr.supabase.co',
     anonKey: 'sb_publishable_ALnsBT12AEDvbgnwD6eJXw_d4gmPYQs',
   );
 }

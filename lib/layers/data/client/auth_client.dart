@@ -16,11 +16,13 @@ abstract class IAuthService {
 }
 
 @Injectable(as: IAuthService)
-class AuthService {
+class AuthService implements IAuthService {
   SupabaseClient get _client => Supabase.instance.client;
 
+  @override
   User? get currentUser => _client.auth.currentUser;
 
+  @override
   Future<void> signUp({
     required String email,
     required String password,
@@ -33,9 +35,11 @@ class AuthService {
     );
   }
 
+  @override
   Future<void> signIn({required String email, required String password}) async {
     await _client.auth.signInWithPassword(email: email, password: password);
   }
 
+  @override
   Future<void> signOut() => _client.auth.signOut();
 }
