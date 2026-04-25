@@ -6,6 +6,7 @@ enum ButtonBrand {
   primary,
   secondary,
   tertiary,
+  quaternary,
   error,
 }
 
@@ -36,6 +37,10 @@ class BrandButtonColors {
       ButtonBrand.tertiary => BrandButtonColors(
           fill: AppColors.Tertiary.tertiary,
           onFill: AppColors.Tertiary.onTertiary,
+        ),
+      ButtonBrand.quaternary => BrandButtonColors(
+          fill: AppColors.Quaternary.quaternary,
+          onFill: AppColors.Quaternary.onQuaternary,
         ),
       ButtonBrand.error => BrandButtonColors(
           fill: AppColors.Error.error,

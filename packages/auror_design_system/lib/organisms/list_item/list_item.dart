@@ -1,3 +1,4 @@
+import 'package:auror_design_system/atoms/colors/colors.dart';
 import 'package:auror_design_system/atoms/spacing/radius.dart';
 import 'package:auror_design_system/atoms/spacing/spacings.dart';
 import 'package:auror_design_system/atoms/typography/typography.dart';
@@ -412,6 +413,192 @@ class GenericListItemInput extends ListItemInput {
 
   @override
   Widget buildContent(BuildContext context) => child;
+}
+
+/// Tier for [TitleDescriptionCheckpointsInput]. Colors are resolved from
+/// [ColorScheme] in [TitleDescriptionCheckpointsInput.buildContent] so titles
+/// and icons stay legible on neutral [ListItem] surfaces.
+enum TitleDescriptionCheckpointsTier {
+  /// Plan title uses [ColorScheme.onSurface]; checkpoints use [ColorScheme.primary].
+  standard,
+  tertiary,
+  quaternary,
+}
+
+/// Style presets for [TitleDescriptionCheckpointsInput].
+///
+/// Presets are [static const] (not [static final]) so hot reload does not leave
+/// stale instances across class layout changes.
+@immutable
+class TitleDescriptionCheckpointsInputStyle {
+  const TitleDescriptionCheckpointsInputStyle._({
+    required this.tier,
+    required this.buttonBrand,
+  });
+
+  final TitleDescriptionCheckpointsTier tier;
+  final ButtonBrand buttonBrand;
+
+  Color resolveTitleColor(ColorScheme scheme) => switch (tier) {
+    .standard => scheme.onSurface,
+    .tertiary => scheme.tertiary,
+    .quaternary => AppColors.Quaternary.quaternary,
+  };
+
+  Color resolveIconColor(ColorScheme scheme) => switch (tier) {
+    .standard => scheme.primary,
+    .tertiary => scheme.tertiary,
+    .quaternary => AppColors.Quaternary.quaternary,
+  };
+
+  static const standardStyle = TitleDescriptionCheckpointsInputStyle._(
+    tier: TitleDescriptionCheckpointsTier.standard,
+    buttonBrand: ButtonBrand.primary,
+  );
+
+  /// Premium styling (e.g. Pro plan). Prefer [tertiary]; [tertirary] is a legacy alias.
+  static const tertiaryStyle = TitleDescriptionCheckpointsInputStyle._(
+    tier: TitleDescriptionCheckpointsTier.tertiary,
+    buttonBrand: ButtonBrand.tertiary,
+  );
+
+  static const quaternaryStyle = TitleDescriptionCheckpointsInputStyle._(
+    tier: .quaternary,
+    buttonBrand: .quaternary,
+  );
+
+  static const standard = standardStyle;
+
+  static const tertiary = tertiaryStyle;
+
+  static const quaternary = quaternaryStyle;
+}
+
+class TitleDescriptionCheckpointsInput extends ListItemInput {
+  TitleDescriptionCheckpointsInput({
+    required this.style,
+    required this.title,
+    required this.description,
+    required this.checkpoints,
+    this.firstTrailingItem,
+    this.secondTrailingItem,
+    this.primaryCtaText,
+    this.tertiaryCTAText,
+    this.footerText,
+    this.onTapPrimaryCTA,
+    this.onTapTertiaryCTA,
+  });
+
+  final TitleDescriptionCheckpointsInputStyle style;
+  final String title;
+  final String description;
+  final List<String> checkpoints;
+  final String? firstTrailingItem;
+  final String? secondTrailingItem;
+  final String? primaryCtaText;
+  final String? tertiaryCTAText;
+  final String? footerText;
+  final Function? onTapPrimaryCTA;
+  final Function? onTapTertiaryCTA;
+
+  @override
+  Widget buildContent(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final brandStyle = ListItemBrandScope.of(context);
+    final maxTitleDescriptionWidth = MediaQuery.sizeOf(context).width * 0.55;
+
+    final titleStyle = headingH6.copyWith(
+      color: style.resolveTitleColor(scheme),
+      height: 1.2,
+    );
+    final descriptionStyle = body4Light.copyWith(
+      color: brandStyle.bodyTextColor,
+      height: 1.25,
+    );
+    final firstTrailingStyle = body3Semibold.copyWith(
+      color: brandStyle.titleTextColor,
+      height: 1.2,
+    );
+    final secondTrailingStyle = body3Light.copyWith(
+      color: brandStyle.bodyTextColor,
+      height: 1.25,
+    );
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: maxTitleDescriptionWidth),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(title, style: titleStyle),
+                  if (description.trim().isNotEmpty) ...[
+                    const SizedBox(height: AppSpacings.xs),
+                    Text(description, style: descriptionStyle),
+                  ],
+                ],
+              ),
+            ),
+            if (firstTrailingItem != null)
+              Text.rich(
+                TextSpan(
+                  style: firstTrailingStyle,
+                  children: [
+                    TextSpan(text: firstTrailingItem),
+                    if (secondTrailingItem != null)
+                      TextSpan(
+                        style: secondTrailingStyle,
+                        text: '/$secondTrailingItem',
+                      ),
+                  ],
+                ),
+              ),
+          ],
+        ),
+        const SizedBox(height: AppSpacings.m),
+        for (var item in checkpoints) ...[
+          const SizedBox(height: AppSpacings.xs),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Icon(Icons.check, color: style.resolveIconColor(scheme)),
+              const SizedBox(width: AppSpacings.xs),
+              Text(
+                item,
+                style: body4Light.copyWith(color: brandStyle.titleTextColor),
+              ),
+            ],
+          ),
+        ],
+        if (primaryCtaText != null && onTapPrimaryCTA != null) ...[
+          const SizedBox(height: AppSpacings.xl2),
+          PrimaryButton(
+            brand: style.buttonBrand,
+            label: primaryCtaText!,
+            isExpanded: true,
+            action: onTapPrimaryCTA! as VoidCallback,
+          ),
+        ],
+        if (tertiaryCTAText != null && onTapTertiaryCTA != null) ...[
+          const SizedBox(height: AppSpacings.xl2),
+          TertiaryButton(
+            brand: .error,
+            label: tertiaryCTAText!,
+            isExpanded: true,
+            action: onTapTertiaryCTA! as VoidCallback,
+          ),
+        ],
+        if (footerText != null) ...[
+          const SizedBox(height: AppSpacings.l),
+          Center(child: Text(footerText!, style: body6Light)),
+        ],
+      ],
+    );
+  }
 }
 
 /// Card shell around a [ListItemInput]; dispatches layout by input type via

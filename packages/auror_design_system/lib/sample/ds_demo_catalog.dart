@@ -11,6 +11,7 @@ import 'package:auror_design_system/sample/demos/input_field_demo.dart';
 import 'package:auror_design_system/sample/demos/list_item_brands_demo.dart';
 import 'package:auror_design_system/sample/demos/list_item_demo.dart';
 import 'package:auror_design_system/sample/demos/list_item_icon_title_paragraph_demo.dart';
+import 'package:auror_design_system/sample/demos/list_item_title_description_checkpoints_demo.dart';
 import 'package:auror_design_system/sample/demos/list_item_title_description_cta_progress_demo.dart';
 import 'package:auror_design_system/sample/demos/media_backdrop_card_demo.dart';
 import 'package:auror_design_system/sample/demos/navigation_bar_demo.dart';
@@ -103,6 +104,10 @@ abstract final class DsDemoCatalog {
       'list_item_title_description_cta_progress' => const DsDemoEntry(
         title: 'List item · title description CTA progress',
         demo: ListItemTitleDescriptionCtaProgressDemo(),
+      ),
+      'list_item_title_description_checkpoints' => const DsDemoEntry(
+        title: 'List item · title description checkpoints',
+        demo: ListItemTitleDescriptionCheckpointsDemo(),
       ),
       'media_backdrop_card' => const DsDemoEntry(
         title: 'Media backdrop card',

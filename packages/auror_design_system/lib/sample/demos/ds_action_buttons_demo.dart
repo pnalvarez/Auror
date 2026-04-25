@@ -5,8 +5,9 @@ import 'package:auror_design_system/molecules/buttons/button_brand.dart';
 import 'package:flutter/material.dart';
 
 /// Demo list for [PrimaryButton], [SecondaryButton], and [TertiaryButton]:
-/// Default sections list brands × enabled / disabled; the Loading section shows
-/// each variant with `loading: true` (label hidden, spinner centered).
+/// Default sections list brands (primary, secondary, tertiary, quaternary, error)
+/// × enabled / disabled; the Loading section shows each variant with
+/// `loading: true` (label hidden, spinner centered).
 class ActionButtonsDemo extends StatelessWidget {
   const ActionButtonsDemo({super.key});
 
@@ -147,6 +148,18 @@ class ActionButtonsDemo extends StatelessWidget {
               action: () {},
             ),
             PrimaryButton(
+              label: 'Primary · quaternary · enabled',
+              brand: ButtonBrand.quaternary,
+              enabled: true,
+              action: () {},
+            ),
+            PrimaryButton(
+              label: 'Primary · quaternary · disabled',
+              brand: ButtonBrand.quaternary,
+              enabled: false,
+              action: () {},
+            ),
+            PrimaryButton(
               label: 'Primary · error · enabled',
               brand: ButtonBrand.error,
               enabled: true,
@@ -196,6 +209,18 @@ class ActionButtonsDemo extends StatelessWidget {
             SecondaryButton(
               label: 'Secondary · tertiary · disabled',
               brand: ButtonBrand.tertiary,
+              enabled: false,
+              action: () {},
+            ),
+            SecondaryButton(
+              label: 'Secondary · quaternary · enabled',
+              brand: ButtonBrand.quaternary,
+              enabled: true,
+              action: () {},
+            ),
+            SecondaryButton(
+              label: 'Secondary · quaternary · disabled',
+              brand: ButtonBrand.quaternary,
               enabled: false,
               action: () {},
             ),
@@ -253,6 +278,18 @@ class ActionButtonsDemo extends StatelessWidget {
               action: () {},
             ),
             TertiaryButton(
+              label: 'Tertiary · quaternary · enabled',
+              brand: ButtonBrand.quaternary,
+              enabled: true,
+              action: () {},
+            ),
+            TertiaryButton(
+              label: 'Tertiary · quaternary · disabled',
+              brand: ButtonBrand.quaternary,
+              enabled: false,
+              action: () {},
+            ),
+            TertiaryButton(
               label: 'Tertiary · error · enabled',
               brand: ButtonBrand.error,
               enabled: true,
@@ -291,6 +328,13 @@ class ActionButtonsDemo extends StatelessWidget {
               action: () {},
             ),
             PrimaryButton(
+              label: 'Primary · quaternary · loading',
+              brand: ButtonBrand.quaternary,
+              enabled: true,
+              loading: true,
+              action: () {},
+            ),
+            PrimaryButton(
               label: 'Primary · error · loading',
               brand: ButtonBrand.error,
               enabled: true,
@@ -319,6 +363,13 @@ class ActionButtonsDemo extends StatelessWidget {
               action: () {},
             ),
             SecondaryButton(
+              label: 'Secondary · quaternary · loading',
+              brand: ButtonBrand.quaternary,
+              enabled: true,
+              loading: true,
+              action: () {},
+            ),
+            SecondaryButton(
               label: 'Secondary · error · loading',
               brand: ButtonBrand.error,
               enabled: true,
@@ -342,6 +393,13 @@ class ActionButtonsDemo extends StatelessWidget {
             TertiaryButton(
               label: 'Tertiary · tertiary · loading',
               brand: ButtonBrand.tertiary,
+              enabled: true,
+              loading: true,
+              action: () {},
+            ),
+            TertiaryButton(
+              label: 'Tertiary · quaternary · loading',
+              brand: ButtonBrand.quaternary,
               enabled: true,
               loading: true,
               action: () {},

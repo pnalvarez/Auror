@@ -1,0 +1,7 @@
+{
+  "terminal.integrated.env.osx": {
+    "ANDROID_HOME": "/Users/pedroalvarez/Library/Android/sdk",
+    "ANDROID_SDK_ROOT": "/Users/pedroalvarez/Library/Android/sdk",
+    "PATH": "${env:PATH}:/Users/pedroalvarez/Library/Android/sdk/platform-tools"
+  }
+}

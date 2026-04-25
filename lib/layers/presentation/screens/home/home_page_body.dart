@@ -26,60 +26,57 @@ class HomePageBody extends StatelessWidget {
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
     return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(AppSpacings.xl2),
-          child: Builder(
-            builder: (context) {
-              if (state.isLoading) {
-                return Center(child: CircularLoader(color: scheme.primary));
-              }
-              return SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _HomeHeader(
-                      userName: state.userName ?? '',
-                      totalRevisionTime: state.totalRevisionTime ?? 0,
-                      totalTimeToLearnDailyIdea:
-                          state.totalTimeToLearnDailyIdea ?? 0,
-                    ),
-                    const SizedBox(height: AppSpacings.xl3),
-                    _SectionHeader(
-                      title: homeSectionPendingRevisions,
-                      icon: Icons.psychology_rounded,
-                      badgeText: state.revisions.length.toString(),
-                    ),
-                    const SizedBox(height: AppSpacings.l),
-                    _HomeRevisionSection(
-                      state.revisions,
-                      state.tomorrowRevisions ?? 0,
-                      onSeeMoreRevisions: onSeeMoreRevisions,
-                    ),
-                    const SizedBox(height: AppSpacings.xl3),
-                    const _SectionHeader(
-                      title: homeSectionNewIdeas,
-                      icon: Icons.info_outline,
-                    ),
-                    const SizedBox(height: AppSpacings.l),
-                    ListItem(
-                      input: TitleDescriptionCTAProgressInput(
-                        title: homeDailyIdeaTitle,
-                        description: homeDailyIdeaDescription(
-                          state.dailyIdea?.cards ?? 0,
-                        ),
-                        ctaText: homeDailyIdeaCta,
-                        onCtaTap: () {},
-                        currentProgress:
-                            state.dailyIdea?.progress ?? 0,
-                        totalProgress: state.dailyIdea?.total ?? 0,
+      body: Padding(
+        padding: const EdgeInsets.all(AppSpacings.xl2),
+        child: Builder(
+          builder: (context) {
+            if (state.isLoading) {
+              return Center(child: CircularLoader(color: scheme.primary));
+            }
+            return SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _HomeHeader(
+                    userName: state.userName ?? '',
+                    totalRevisionTime: state.totalRevisionTime ?? 0,
+                    totalTimeToLearnDailyIdea:
+                        state.totalTimeToLearnDailyIdea ?? 0,
+                  ),
+                  const SizedBox(height: AppSpacings.xl3),
+                  _SectionHeader(
+                    title: homeSectionPendingRevisions,
+                    icon: Icons.psychology_rounded,
+                    badgeText: state.revisions.length.toString(),
+                  ),
+                  const SizedBox(height: AppSpacings.l),
+                  _HomeRevisionSection(
+                    state.revisions,
+                    state.tomorrowRevisions ?? 0,
+                    onSeeMoreRevisions: onSeeMoreRevisions,
+                  ),
+                  const SizedBox(height: AppSpacings.xl3),
+                  const _SectionHeader(
+                    title: homeSectionNewIdeas,
+                    icon: Icons.info_outline,
+                  ),
+                  const SizedBox(height: AppSpacings.l),
+                  ListItem(
+                    input: TitleDescriptionCTAProgressInput(
+                      title: homeDailyIdeaTitle,
+                      description: homeDailyIdeaDescription(
+                        state.dailyIdea?.cards ?? 0,
                       ),
+                      ctaText: homeDailyIdeaCta,
+                      onCtaTap: () {},
+                      currentProgress: state.dailyIdea?.progress ?? 0,
+                      totalProgress: state.dailyIdea?.total ?? 0,
                     ),
-                  ],
-                ),
-              );
-            },
-          ),
+                  ),
+                ],
+              ),
+            );
+          },
         ),
       ),
     );

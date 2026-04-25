@@ -21,6 +21,7 @@ abstract final class AppColors {
   static const Primary = _PrimaryPalette();
   static const Secondary = _SecondaryPalette();
   static const Tertiary = _TertiaryPalette();
+  static const Quaternary = _QuaternaryPalette();
   static const Surface = _SurfacePalette();
   static const Inverse = _InversePalette();
   static const Outline = _OutlinePalette();
@@ -135,6 +136,22 @@ class _TertiaryPalette {
   final Color onTertiaryFixed = const Color(0xFF3D2608);
   final Color tertiaryFixedDim = const Color(0xFFE8D0B3);
   final Color onTertiaryFixedVariant = const Color(0xFF7A5A28);
+}
+
+@immutable
+class _QuaternaryPalette {
+  const _QuaternaryPalette();
+
+  /// Violet accent: additional brand axis beyond [Tertiary] (opaque 0xFF6C3BAA).
+  final Color quaternary = const Color(0xFF6C3BAA);
+  final Color onQuaternary = const Color(0xFFFFFFFF);
+  final Color quaternaryContainer = const Color(0xFFF0E4F8);
+  final Color onQuaternaryContainer = const Color(0xFF240840);
+
+  final Color quaternaryFixed = const Color(0xFFF0E4F8);
+  final Color onQuaternaryFixed = const Color(0xFF240840);
+  final Color quaternaryFixedDim = const Color(0xFFE2D0F0);
+  final Color onQuaternaryFixedVariant = const Color(0xFF5C4580);
 }
 
 // --- Dark content (navy + gold) ---------------------------------------------
