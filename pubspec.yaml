@@ -2,7 +2,7 @@ name: auror
 description: "A new Flutter project."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -60,6 +60,7 @@ dependencies:
   path_provider: ^2.1.5
   video_player: ^2.10.0
   fvp: ^0.35.2
+  supabase_flutter: ^2.9.1
 
 dev_dependencies:
   flutter_test:
@@ -92,7 +93,6 @@ targets:
 
 # The following section is specific to Flutter packages.
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
@@ -132,7 +132,7 @@ flutter_launcher_icons:
   android: true
   ios: true
   min_sdk_android: 21
-  adaptive_icon_background: '#000000'
+  adaptive_icon_background: "#000000"
   adaptive_icon_foreground: assets/branding/app_icon.png
   macos:
     generate: true
