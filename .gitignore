@@ -26,6 +26,7 @@ migrate_working_dir/
 # Generated (build_runner / auto_route / injectable)
 *.gr.dart
 *.freezed.dart
+*.g.dart
 **/di.config.dart
 
 # Flutter/Dart/Pub related

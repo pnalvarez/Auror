@@ -1,4 +1,5 @@
 import 'package:auror/layers/domain/models/profile_domain.dart';
+import 'package:auror/layers/domain/repository/profile_repository.dart';
 import 'package:injectable/injectable.dart';
 
 abstract class IGetProfile {
@@ -7,16 +8,10 @@ abstract class IGetProfile {
 
 @Injectable(as: IGetProfile)
 class GetProfile implements IGetProfile {
+  GetProfile(this._profileRepository);
+
+  final IProfileRepository _profileRepository;
+
   @override
-  Future<ProfileDomain> call() async {
-    return const ProfileDomain(
-      username: 'auror_learner',
-      email: 'learner@example.com',
-      profileImage: 'https://picsum.photos/seed/auror-profile/256/256',
-      learnedCards: 42,
-      revisionsDone: 128,
-      followedDays: 7,
-      isSubscribed: false,
-    );
-  }
+  Future<ProfileDomain> call() => _profileRepository.getProfile();
 }
