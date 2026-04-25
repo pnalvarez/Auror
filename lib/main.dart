@@ -7,6 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fvp/fvp.dart' as fvp;
 import 'package:google_fonts/google_fonts.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,8 +25,16 @@ Future<void> main() async {
   }
   // Use Poppins from [pubspec.yaml] instead of fetching from fonts.gstatic.com.
   GoogleFonts.config.allowRuntimeFetching = false;
+  await _setUpSupabase();
   await configureDependencies();
   runApp(const AurorApp());
+}
+
+Future<void> _setUpSupabase() async {
+  await Supabase.initialize(
+    url: 'https://medeadsoqdzauixvqlcr.supabase.co',
+    anonKey: 'sb_publishable_ALnsBT12AEDvbgnwD6eJXw_d4gmPYQs',
+  );
 }
 
 class AurorApp extends StatefulWidget {

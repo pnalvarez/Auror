@@ -15,6 +15,9 @@ abstract class LoginState with _$LoginState {
     @Default(true) bool obscurePassword,
     @Default(true) bool obscureConfirm,
     @Default(false) bool pendingDashboardNavigation,
+    @Default(null) String? errorMessage,
+    @Default(null) String? snackBarMessage,
+    @Default(false) bool isLoading,
   }) = _LoginState;
 }
 

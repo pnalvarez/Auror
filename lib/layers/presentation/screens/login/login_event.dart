@@ -27,4 +27,6 @@ sealed class LoginEvent with _$LoginEvent {
 
   const factory LoginEvent.dashboardNavigationConsumed() =
       LoginDashboardNavigationConsumed;
+
+  const factory LoginEvent.snackBarConsumed() = LoginSnackBarConsumed;
 }
