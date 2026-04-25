@@ -8,9 +8,9 @@ class ProfileData {
   const ProfileData({
     required this.userId,
     this.avatarUrl,
-    this.followedDays = 0,
-    this.learnedCards = 0,
-    this.revisionsDone = 0,
+    required this.followedDays,
+    required this.learnedCards,
+    required this.revisionsDone,
     this.updatedAt,
     this.isSubscribed = false,
   });
@@ -18,13 +18,13 @@ class ProfileData {
   final String userId;
   final String? avatarUrl;
 
-  @JsonKey(defaultValue: 0)
+  /// Sempre enviados pelo PostgREST a partir de `public.profiles`.
   final int followedDays;
 
-  @JsonKey(defaultValue: 0)
+  /// Sempre enviados pelo PostgREST a partir de `public.profiles`.
   final int learnedCards;
 
-  @JsonKey(defaultValue: 0)
+  /// Sempre enviados pelo PostgREST a partir de `public.profiles`.
   final int revisionsDone;
 
   final DateTime? updatedAt;
