@@ -1,3 +1,4 @@
+import 'package:auror/layers/data/datasource/auth_data_source.dart';
 import 'package:auror/layers/domain/usecases/sign_in.dart';
 import 'package:auror/layers/domain/usecases/sign_out.dart';
 import 'package:auror/layers/domain/usecases/sign_up.dart';
@@ -7,17 +8,16 @@ import 'package:auror/layers/presentation/screens/login/login_event.dart';
 import 'package:auror/layers/presentation/screens/login/login_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 @injectable
 class LoginViewModel extends Bloc<LoginEvent, LoginState> {
   final ISignIn _signIn;
-  final ISignOut _signOut;
   final ISignUp _signUp;
 
   LoginViewModel(
     @factoryParam LoginContext loginContext,
     this._signIn,
-    this._signOut,
     this._signUp,
   ) : super(LoginState(loginContext: loginContext)) {
     on<LoginNameChanged>(_onNameChanged);
@@ -32,6 +32,9 @@ class LoginViewModel extends Bloc<LoginEvent, LoginState> {
     on<LoginDashboardNavigationConsumed>(_onDashboardNavigationConsumed);
     on<LoginSnackBarConsumed>(_onSnackBarConsumed);
     on<LoginContextChanged>(_onLoginContextChanged);
+    on<LoginEmailConfirmationNavigationConsumed>(
+      _onEmailConfirmationNavigationConsumed,
+    );
   }
 
   void _onLoginContextChanged(
@@ -102,6 +105,7 @@ class LoginViewModel extends Bloc<LoginEvent, LoginState> {
       switch (state.loginContext) {
         case LoginContext.signIn:
           await _signIn(email: state.email, password: state.password);
+          emit(state.copyWith(pendingDashboardNavigation: true));
           break;
         case LoginContext.signUp:
           await _signUp(
@@ -109,24 +113,13 @@ class LoginViewModel extends Bloc<LoginEvent, LoginState> {
             password: state.password,
             displayName: state.name,
           );
+          emit(state.copyWith(pendingEmailConfirmationNavigation: true));
           break;
       }
-      emit(
-        state.copyWith(
-          isLoading: false,
-          pendingDashboardNavigation: true,
-        ),
-      );
     } catch (e) {
-      emit(
-        state.copyWith(
-          isLoading: false,
-          snackBarMessage: mapLoginAuthErrorToPortuguese(
-            e,
-            loginContext: state.loginContext,
-          ),
-        ),
-      );
+      emit(state.copyWith(pendingEmailConfirmationNavigation: true));
+    } finally {
+      emit(state.copyWith(isLoading: false));
     }
   }
 
@@ -142,5 +135,12 @@ class LoginViewModel extends Bloc<LoginEvent, LoginState> {
     Emitter<LoginState> emit,
   ) {
     emit(state.copyWith(pendingDashboardNavigation: false));
+  }
+
+  void _onEmailConfirmationNavigationConsumed(
+    LoginEmailConfirmationNavigationConsumed event,
+    Emitter<LoginState> emit,
+  ) {
+    emit(state.copyWith(pendingEmailConfirmationNavigation: false));
   }
 }

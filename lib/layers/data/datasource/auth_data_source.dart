@@ -6,10 +6,7 @@ class AuthDataSourceException implements Exception {
   final String operation;
   final Object cause;
 
-  const AuthDataSourceException({
-    required this.operation,
-    required this.cause,
-  });
+  const AuthDataSourceException({required this.operation, required this.cause});
 
   @override
   String toString() => 'AuthDataSourceException($operation): $cause';
@@ -51,19 +48,7 @@ class AuthDataSource implements IAuthDataSource {
         displayName: displayName,
       );
     } catch (exception) {
-      throw AuthDataSourceException(
-        operation: 'signUp',
-        cause: exception,
-      );
-    }
-
-    try {
-      await _authService.signIn(email: email, password: password);
-    } catch (exception) {
-      throw AuthDataSourceException(
-        operation: 'signInAfterSignUp',
-        cause: exception,
-      );
+      throw AuthDataSourceException(operation: 'signUp', cause: exception);
     }
   }
 
