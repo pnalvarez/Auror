@@ -1,4 +1,5 @@
 import 'package:auror/common/utils/app_themed_page.dart';
+import 'package:auror/core/utils/email_provider_manager.dart';
 import 'package:auror_design_system/atoms/spacing/spacings.dart';
 import 'package:auror_design_system/molecules/buttons/action_buttons.dart';
 import 'package:auror_design_system/organisms/navigation_bar/ds_navigation_bar.dart';
@@ -12,60 +13,13 @@ class EmailConfirmationPage extends StatelessWidget {
 
   final String email;
 
-  String get _providerDomain {
-    final normalized = email.trim().toLowerCase();
-    final atIndex = normalized.lastIndexOf('@');
-    if (atIndex < 0 || atIndex == normalized.length - 1) {
-      return '';
-    }
-    return normalized.substring(atIndex + 1);
-  }
-
-  _EmailProviderTarget get _providerTarget {
-    final domain = _providerDomain;
-    if (domain.contains('gmail.com')) {
-      return _EmailProviderTarget(
-        ctaLabel: 'Abrir Gmail',
-        launchUri: Uri.parse('googlegmail://'),
-        fallbackUri: Uri.parse('https://mail.google.com/'),
-      );
-    }
-    if (domain.contains('outlook.') ||
-        domain.contains('hotmail.') ||
-        domain.contains('live.')) {
-      return _EmailProviderTarget(
-        ctaLabel: 'Abrir Outlook',
-        launchUri: Uri.parse('ms-outlook://'),
-        fallbackUri: Uri.parse('https://outlook.live.com/mail/'),
-      );
-    }
-    if (domain.contains('yahoo.')) {
-      return _EmailProviderTarget(
-        ctaLabel: 'Abrir Yahoo Mail',
-        launchUri: Uri.parse('ymail://'),
-        fallbackUri: Uri.parse('https://mail.yahoo.com/'),
-      );
-    }
-
-    return _EmailProviderTarget(
-      ctaLabel: 'Abrir e-mail',
-      launchUri: Uri.parse('message://'),
-      fallbackUri: Uri.parse('mailto:'),
-    );
-  }
-
   Future<void> _openEmailProvider(BuildContext context) async {
-    final target = _providerTarget;
-    if (await canLaunchUrl(target.launchUri)) {
-      await launchUrl(target.launchUri, mode: LaunchMode.externalApplication);
-      return;
-    }
-    await launchUrl(target.fallbackUri, mode: LaunchMode.externalApplication);
+    await EmailProviderManager.openEmailProvider(email);
   }
 
   @override
   Widget build(BuildContext context) {
-    final target = _providerTarget;
+    final target = EmailProviderManager.targetForEmail(email);
 
     return AppThemedPage(
       child: Scaffold(
@@ -97,16 +51,4 @@ class EmailConfirmationPage extends StatelessWidget {
       ),
     );
   }
-}
-
-class _EmailProviderTarget {
-  const _EmailProviderTarget({
-    required this.ctaLabel,
-    required this.launchUri,
-    required this.fallbackUri,
-  });
-
-  final String ctaLabel;
-  final Uri launchUri;
-  final Uri fallbackUri;
 }
