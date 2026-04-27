@@ -20,7 +20,7 @@ String mapLoginAuthErrorToPortuguese(
 
   if (current is AuthWeakPasswordException) {
     if (current.reasons.isNotEmpty) {
-      return '${loginAuthErrorWeakPassword} (${current.reasons.join(', ')})';
+      return '$loginAuthErrorWeakPassword (${current.reasons.join(', ')})';
     }
     return loginAuthErrorWeakPassword;
   }

@@ -189,13 +189,26 @@ class _LoginScaffoldState extends State<_LoginScaffold> {
         },
         child: BlocListener<LoginViewModel, LoginState>(
           listenWhen: (previous, current) =>
-              !previous.pendingDashboardNavigation &&
-              current.pendingDashboardNavigation,
+              (!previous.pendingDashboardNavigation &&
+                  current.pendingDashboardNavigation) ||
+              (!previous.pendingEmailConfirmationNavigation &&
+                  current.pendingEmailConfirmationNavigation),
           listener: (context, state) {
-            context.router.replace(DashboardRoute());
-            context.read<LoginViewModel>().add(
-              const LoginEvent.dashboardNavigationConsumed(),
-            );
+            if (mounted) {
+              if (state.pendingDashboardNavigation) {
+                context.router.replace(DashboardRoute());
+                context.read<LoginViewModel>().add(
+                  const LoginEvent.dashboardNavigationConsumed(),
+                );
+              } else {
+                context.router.push(
+                  EmailConfirmationRoute(email: state.email),
+                );
+                context.read<LoginViewModel>().add(
+                  const LoginEvent.emailConfirmationNavigationConsumed(),
+                );
+              }
+            }
           },
           child: Scaffold(
             backgroundColor: scheme.surface,

@@ -29,4 +29,6 @@ sealed class LoginEvent with _$LoginEvent {
       LoginDashboardNavigationConsumed;
 
   const factory LoginEvent.snackBarConsumed() = LoginSnackBarConsumed;
+  const factory LoginEvent.emailConfirmationNavigationConsumed() =
+      LoginEmailConfirmationNavigationConsumed;
 }

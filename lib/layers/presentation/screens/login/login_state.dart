@@ -18,6 +18,7 @@ abstract class LoginState with _$LoginState {
     @Default(null) String? errorMessage,
     @Default(null) String? snackBarMessage,
     @Default(false) bool isLoading,
+    @Default(false) bool pendingEmailConfirmationNavigation,
   }) = _LoginState;
 }
 
