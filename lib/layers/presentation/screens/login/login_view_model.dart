@@ -1,6 +1,5 @@
 import 'package:auror/layers/data/datasource/auth_data_source.dart';
 import 'package:auror/layers/domain/usecases/sign_in.dart';
-import 'package:auror/layers/domain/usecases/sign_out.dart';
 import 'package:auror/layers/domain/usecases/sign_up.dart';
 import 'package:auror/layers/presentation/screens/login/login_auth_error_mapper.dart';
 import 'package:auror/layers/presentation/screens/login/login_context.dart';
@@ -8,7 +7,6 @@ import 'package:auror/layers/presentation/screens/login/login_event.dart';
 import 'package:auror/layers/presentation/screens/login/login_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 @injectable
 class LoginViewModel extends Bloc<LoginEvent, LoginState> {
@@ -117,7 +115,18 @@ class LoginViewModel extends Bloc<LoginEvent, LoginState> {
           break;
       }
     } catch (e) {
-      emit(state.copyWith(pendingEmailConfirmationNavigation: true));
+      if (e is AuthEmailConfirmationRequiredException) {
+        emit(state.copyWith(pendingEmailConfirmationNavigation: true));
+        return;
+      }
+      emit(
+        state.copyWith(
+          snackBarMessage: mapLoginAuthErrorToPortuguese(
+            e,
+            loginContext: state.loginContext,
+          ),
+        ),
+      );
     } finally {
       emit(state.copyWith(isLoading: false));
     }

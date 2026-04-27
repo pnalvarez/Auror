@@ -12,6 +12,13 @@ class AuthDataSourceException implements Exception {
   String toString() => 'AuthDataSourceException($operation): $cause';
 }
 
+class AuthEmailConfirmationRequiredException extends AuthDataSourceException {
+  const AuthEmailConfirmationRequiredException({
+    required super.operation,
+    required super.cause,
+  });
+}
+
 abstract class IAuthDataSource {
   User? get currentUser;
 
@@ -53,9 +60,30 @@ class AuthDataSource implements IAuthDataSource {
   }
 
   @override
-  Future<void> signIn({required String email, required String password}) =>
-      _authService.signIn(email: email, password: password);
+  Future<void> signIn({required String email, required String password}) async {
+    try {
+      await _authService.signIn(email: email, password: password);
+    } on AuthException catch (exception) {
+      if (_requiresEmailConfirmation(exception)) {
+        throw AuthEmailConfirmationRequiredException(
+          operation: 'signIn',
+          cause: exception,
+        );
+      }
+      throw AuthDataSourceException(operation: 'signIn', cause: exception);
+    } catch (exception) {
+      throw AuthDataSourceException(operation: 'signIn', cause: exception);
+    }
+  }
 
   @override
   Future<void> signOut() => _authService.signOut();
+
+  bool _requiresEmailConfirmation(AuthException exception) {
+    final code = exception.code;
+    final message = exception.message.toLowerCase();
+    return code == 'email_not_confirmed' ||
+        code == 'phone_not_confirmed' ||
+        message.contains('email not confirmed');
+  }
 }
