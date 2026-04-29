@@ -20,3 +20,4 @@ const subscriptionUpgradeErrorGeneric =
 const month = 'mês';
 const year = 'ano';
 const day = 'dia';
+const downgrade = 'Fazer downgrade';

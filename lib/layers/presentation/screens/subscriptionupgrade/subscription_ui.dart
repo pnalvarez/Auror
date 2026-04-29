@@ -9,6 +9,7 @@ class SubscriptionUI {
     required this.title,
     required this.description,
     required this.benefits,
+    required this.hasDowngradeOption,
     this.price,
     this.period,
     this.primaryCtaText,
@@ -27,8 +28,12 @@ class SubscriptionUI {
   final String? primaryCtaText;
   final String? tertiaryCtaText;
   final String? footerText;
+  final bool hasDowngradeOption;
 
-  factory SubscriptionUI.fromDomain(SubscriptionDomain domain) {
+  factory SubscriptionUI.fromDomain(
+    SubscriptionDomain domain, {
+    bool greaterThanCurrent = false,
+  }) {
     return SubscriptionUI(
       id: domain.id,
       title: domain.subscriptionName,
@@ -38,13 +43,18 @@ class SubscriptionUI {
       period: domain.isPaid ? domain.period.toPeriod() : null,
       description: domain.description,
       benefits: domain.benefits,
-      primaryCtaText: domain.isPaid && !domain.isCurrent
+      primaryCtaText: domain.isPaid && !domain.isCurrent && greaterThanCurrent
           ? subscriptionUpgradeCtaSubscribeNow
           : null,
-      tertiaryCtaText: domain.isPaid && domain.isCurrent ? cancel : null,
-      footerText: domain.isPaid && !domain.isCurrent
+      tertiaryCtaText: (domain.isPaid && domain.isCurrent)
+          ? cancel
+          : !greaterThanCurrent && domain.isPaid
+          ? downgrade
+          : null,
+      footerText: domain.isPaid && greaterThanCurrent && !domain.isCurrent
           ? subscriptionUpgradeFooterCancelAnytime
           : null,
+      hasDowngradeOption: !greaterThanCurrent && domain.isPaid,
     );
   }
 

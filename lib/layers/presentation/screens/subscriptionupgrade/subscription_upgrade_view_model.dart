@@ -37,11 +37,19 @@ class SubscriptionUpgradeViewModel
       final response = await _getSubscriptions();
       final sortedByPrice = List<SubscriptionDomain>.from(response)
         ..sort((a, b) => a.price.compareTo(b.price));
+      final currentSubscriptionPrice = sortedByPrice
+          .firstWhere((s) => s.isCurrent)
+          .price;
       emit(
         state.copyWith(
           isLoading: false,
           subscriptions: sortedByPrice
-              .map((elem) => SubscriptionUI.fromDomain(elem))
+              .map(
+                (elem) => SubscriptionUI.fromDomain(
+                  elem,
+                  greaterThanCurrent: elem.price >= currentSubscriptionPrice,
+                ),
+              )
               .toList(),
         ),
       );

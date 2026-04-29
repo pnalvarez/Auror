@@ -147,14 +147,26 @@ class _SubscriptionUpgradeContentState
                                         checkpoints: item.benefits,
                                         primaryCtaText: item.primaryCtaText,
                                         tertiaryCTAText: item.tertiaryCtaText,
+                                        tertiaryCTAHasErrorBrandFixed:
+                                            !item.hasDowngradeOption,
                                         onTapPrimaryCTA: () => viewModel.add(
                                           SubscriptionUpgradeEvent.selected(
                                             id: item.id,
                                           ),
                                         ),
-                                        onTapTertiaryCTA: () => viewModel.add(
-                                          const SubscriptionUpgradeEvent.cancel(),
-                                        ),
+                                        onTapTertiaryCTA: () {
+                                          if (item.hasDowngradeOption) {
+                                            viewModel.add(
+                                              SubscriptionUpgradeEvent.selected(
+                                                id: item.id,
+                                              ),
+                                            );
+                                          } else {
+                                            viewModel.add(
+                                              SubscriptionUpgradeEvent.cancel(),
+                                            );
+                                          }
+                                        },
                                         footerText: item.footerText,
                                       ),
                                     );
