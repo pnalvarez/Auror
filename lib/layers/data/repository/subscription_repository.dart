@@ -14,4 +14,12 @@ class SubscriptionRepository implements ISubscriptionRepository {
     final subscriptionData = await _apiDataSource.fetchSubscriptions();
     return subscriptionData.map((data) => data.toDomain()).toList();
   }
+
+  @override
+  Future<void> selectSubscription({required String id}) async =>
+      await _apiDataSource.selectSubscription(subscriptionId: id);
+
+  @override
+  Future<void> cancelSubscription() async =>
+      await _apiDataSource.cancelSubscription();
 }

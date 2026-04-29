@@ -7,4 +7,7 @@ sealed class SubscriptionUpgradeEvent with _$SubscriptionUpgradeEvent {
   const factory SubscriptionUpgradeEvent.started() = SubscriptionUpgradeStarted;
   const factory SubscriptionUpgradeEvent.selected({required String id}) =
       SubscriptionUpgradeSelected;
+  const factory SubscriptionUpgradeEvent.cancel() = SubscriptionUpgradeCancel;
+  const factory SubscriptionUpgradeEvent.snackBarConsumed() =
+      SubscriptionUpgradeSnackBarConsumed;
 }

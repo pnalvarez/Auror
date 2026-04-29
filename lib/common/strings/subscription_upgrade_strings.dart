@@ -12,6 +12,11 @@ const subscriptionUpgradeCtaSubscribeNow = 'Assinar agora';
 const subscriptionUpgradeFooterCancelAnytime =
     'Cancele quando quiser. Sem compromisso';
 const cancel = 'Cancelar';
+const subscriptionUpgradeSuccessChanged = 'Assinatura atualizada com sucesso.';
+const subscriptionUpgradeSuccessCancelled =
+    'Assinatura cancelada. Plano padrão restaurado.';
+const subscriptionUpgradeErrorGeneric =
+    'Não foi possível atualizar a assinatura. Tente novamente.';
 const month = 'mês';
 const year = 'ano';
 const day = 'dia';

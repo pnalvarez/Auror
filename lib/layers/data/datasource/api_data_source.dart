@@ -21,7 +21,23 @@ abstract class IApiDataSource {
   ///
   /// Sem query string: PostgREST devolve todas as colunas (equivalente a `select=*`).
   Future<List<SubscriptionData>> fetchSubscriptions({
-    String resourceName = 'subscription_plans_with_checkpoint_texts',
+    String resourceName = 'full_subscriptions',
+  });
+
+  /// Atualiza a assinatura atual do usuário autenticado.
+  ///
+  /// Espera um RPC no PostgREST em `/rest/v1/rpc/{rpcName}` com payload:
+  /// `{ "p_subscription_id": "<id>" }`.
+  Future<void> selectSubscription({
+    required String subscriptionId,
+    String rpcName = 'set_user_subscription',
+  });
+
+  /// Cancela a assinatura atual e retorna ao plano padrão.
+  ///
+  /// Espera um RPC em `/rest/v1/rpc/{rpcName}` sem payload.
+  Future<void> cancelSubscription({
+    String rpcName = 'cancel_user_subscription',
   });
 }
 
@@ -73,6 +89,50 @@ class ApiDataSource implements IApiDataSource {
     final data = await _apiClient.get(endpoint: resourceName, headers: headers);
 
     return _rowsAsSubscriptionData(data);
+  }
+
+  @override
+  Future<void> selectSubscription({
+    required String subscriptionId,
+    String rpcName = 'set_user_subscription',
+  }) async {
+    final session = Supabase.instance.client.auth.currentSession;
+    if (session == null) {
+      throw StateError('Sessão ausente para selecionar assinatura.');
+    }
+    final headers = <String, String>{
+      'apikey': AurorSupabaseConstants.anonKey,
+      'Authorization': 'Bearer ${session.accessToken}',
+      // RPC de update: não precisamos de payload de retorno.
+      'Prefer': 'return=minimal',
+    };
+
+    await _apiClient.post(
+      endpoint: 'rpc/$rpcName',
+      body: <String, dynamic>{'p_subscription_id': subscriptionId},
+      headers: headers,
+    );
+  }
+
+  @override
+  Future<void> cancelSubscription({
+    String rpcName = 'cancel_user_subscription',
+  }) async {
+    final session = Supabase.instance.client.auth.currentSession;
+    if (session == null) {
+      throw StateError('Sessão ausente para cancelar assinatura.');
+    }
+    final headers = <String, String>{
+      'apikey': AurorSupabaseConstants.anonKey,
+      'Authorization': 'Bearer ${session.accessToken}',
+      'Prefer': 'return=minimal',
+    };
+
+    await _apiClient.post(
+      endpoint: 'rpc/$rpcName',
+      body: const <String, dynamic>{},
+      headers: headers,
+    );
   }
 
   List<SubscriptionData> _rowsAsSubscriptionData(dynamic data) {

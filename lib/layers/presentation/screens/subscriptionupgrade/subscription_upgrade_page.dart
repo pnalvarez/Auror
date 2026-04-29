@@ -4,6 +4,7 @@ import 'package:auror/layers/presentation/screens/subscriptionupgrade/subscripti
 import 'package:auror/layers/presentation/screens/subscriptionupgrade/subscription_upgrade_state.dart';
 import 'package:auror/layers/presentation/screens/subscriptionupgrade/subscription_upgrade_view_model.dart';
 import 'package:auror_design_system/atoms/spacing/spacings.dart';
+import 'package:auror_design_system/organisms/feedback/ds_snackbar.dart';
 import 'package:auror_design_system/organisms/list_item/list_item.dart';
 import 'package:auror_design_system/organisms/navigation_bar/ds_navigation_bar.dart';
 import 'package:auror_design_system/theme/main_launch_dark_theme.dart';
@@ -81,47 +82,95 @@ class _SubscriptionUpgradeContentState
               title: subscriptionUpgradeNavTitle,
               description: subscriptionUpgradeNavDescription,
             ),
-            body: Padding(
-              padding: const EdgeInsets.only(top: AppSpacings.m),
-              child: viewModel.state.isLoading
-                  ? const Center(child: CircularProgressIndicator())
-                  : ListView.separated(
-                      padding: const EdgeInsets.fromLTRB(
-                        AppSpacings.l,
-                        AppSpacings.m,
-                        AppSpacings.l,
-                        AppSpacings.xl2,
+            body:
+                BlocListener<
+                  SubscriptionUpgradeViewModel,
+                  SubscriptionUpgradeState
+                >(
+                  listenWhen: (previous, current) =>
+                      current.snackBarMessage != null &&
+                      current.snackBarMessage != previous.snackBarMessage,
+                  listener: (context, state) {
+                    final message = state.snackBarMessage;
+                    if (message == null) return;
+                    showSnackbar(
+                      context,
+                      message: message,
+                      state: state.snackBarIsError
+                          ? DsSnackbarState.error
+                          : DsSnackbarState.success,
+                      hasCloseButton: true,
+                    );
+                    context.read<SubscriptionUpgradeViewModel>().add(
+                      const SubscriptionUpgradeEvent.snackBarConsumed(),
+                    );
+                  },
+                  child:
+                      BlocListener<
+                        SubscriptionUpgradeViewModel,
+                        SubscriptionUpgradeState
+                      >(
+                        listenWhen: (previous, current) =>
+                            previous.shouldNavigateBack !=
+                            current.shouldNavigateBack,
+                        listener: (context, state) {
+                          if (state.shouldNavigateBack) {
+                            context.router.maybePop();
+                          }
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: AppSpacings.m),
+                          child: viewModel.state.isLoading
+                              ? const Center(child: CircularProgressIndicator())
+                              : ListView.separated(
+                                  padding: const EdgeInsets.fromLTRB(
+                                    AppSpacings.l,
+                                    AppSpacings.m,
+                                    AppSpacings.l,
+                                    AppSpacings.xl2,
+                                  ),
+                                  itemBuilder: (context, index) {
+                                    final item =
+                                        viewModel.state.subscriptions[index];
+                                    return ListItem(
+                                      key: getKeyBySubscriptionId(item.id),
+                                      isSelected: item.isSelected,
+                                      isEnabled: !item.disabled,
+                                      input: TitleDescriptionCheckpointsInput(
+                                        style: viewModel.getStyle(
+                                          subscriptionId: item.id,
+                                        ),
+                                        title: item.title,
+                                        firstTrailingItem: item.price,
+                                        secondTrailingItem: item.period,
+                                        description: item.description,
+                                        checkpoints: item.benefits,
+                                        primaryCtaText: item.primaryCtaText,
+                                        tertiaryCTAText: item.tertiaryCtaText,
+                                        onTapPrimaryCTA: () => viewModel.add(
+                                          SubscriptionUpgradeEvent.selected(
+                                            id: item.id,
+                                          ),
+                                        ),
+                                        onTapTertiaryCTA: () => viewModel.add(
+                                          const SubscriptionUpgradeEvent.cancel(),
+                                        ),
+                                        footerText: item.footerText,
+                                      ),
+                                    );
+                                  },
+                                  separatorBuilder:
+                                      (BuildContext context, int index) {
+                                        return const SizedBox(
+                                          height: AppSpacings.xl2,
+                                        );
+                                      },
+                                  itemCount:
+                                      viewModel.state.subscriptions.length,
+                                ),
+                        ),
                       ),
-                      itemBuilder: (context, index) {
-                        final item = viewModel.state.subscriptions[index];
-                        return ListItem(
-                          key: getKeyBySubscriptionId(item.id),
-                          isSelected: item.isSelected,
-                          input: TitleDescriptionCheckpointsInput(
-                            style: viewModel.getStyle(subscriptionId: item.id),
-                            title: item.title,
-                            firstTrailingItem: item.price,
-                            secondTrailingItem: item.period,
-                            description: item.description,
-                            checkpoints: item.benefits,
-                            primaryCtaText: item.primaryCtaText,
-                            tertiaryCTAText: item.tertiaryCtaText,
-                            onTapPrimaryCTA: () => viewModel.add(
-                              SubscriptionUpgradeEvent.selected(id: item.id),
-                            ),
-                            onTapTertiaryCTA: () => viewModel.add(
-                              SubscriptionUpgradeEvent.selected(id: item.id),
-                            ),
-                            footerText: item.footerText,
-                          ),
-                        );
-                      },
-                      separatorBuilder: (BuildContext context, int index) {
-                        return const SizedBox(height: AppSpacings.xl2);
-                      },
-                      itemCount: viewModel.state.subscriptions.length,
-                    ),
-            ),
+                ),
           ),
         ),
       ),

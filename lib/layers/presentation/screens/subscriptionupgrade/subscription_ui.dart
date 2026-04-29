@@ -5,6 +5,7 @@ class SubscriptionUI {
   SubscriptionUI({
     required this.id,
     required this.isSelected,
+    required this.disabled,
     required this.title,
     required this.description,
     required this.benefits,
@@ -17,6 +18,7 @@ class SubscriptionUI {
 
   final String id;
   final bool isSelected;
+  final bool disabled;
   final String title;
   final String description;
   final String? price;
@@ -31,6 +33,7 @@ class SubscriptionUI {
       id: domain.id,
       title: domain.subscriptionName,
       isSelected: domain.isCurrent,
+      disabled: !domain.isCurrent && !domain.isPaid,
       price: domain.isPaid ? domain.price.toCurrency() : null,
       period: domain.isPaid ? domain.period.toPeriod() : null,
       description: domain.description,
