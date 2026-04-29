@@ -3,11 +3,13 @@ import 'dart:async';
 import 'package:auror_design_system/atoms/colors/colors.dart';
 import 'package:auror/common/environment/auror_supabase_constants.dart';
 import 'package:auror/core/di/di.dart';
+import 'package:auror/core/http/supabase_http_logging.dart';
 import 'package:auror/layers/presentation/routes/app_router.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fvp/fvp.dart' as fvp;
 import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart' as http;
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 Future<void> main() async {
@@ -32,9 +34,12 @@ Future<void> main() async {
 }
 
 Future<void> _setUpSupabase() async {
+  final logHttp = shouldLogSupabaseHttp();
   await Supabase.initialize(
     url: AurorSupabaseConstants.supabaseUrl,
     anonKey: AurorSupabaseConstants.anonKey,
+    debug: logHttp,
+    httpClient: logHttp ? SupabaseLoggingHttpClient(http.Client()) : null,
   );
 }
 

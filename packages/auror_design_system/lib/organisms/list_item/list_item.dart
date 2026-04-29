@@ -484,6 +484,7 @@ class TitleDescriptionCheckpointsInput extends ListItemInput {
     this.secondTrailingItem,
     this.primaryCtaText,
     this.tertiaryCTAText,
+    this.tertiaryCTAHasErrorBrandFixed = true,
     this.footerText,
     this.onTapPrimaryCTA,
     this.onTapTertiaryCTA,
@@ -497,6 +498,7 @@ class TitleDescriptionCheckpointsInput extends ListItemInput {
   final String? secondTrailingItem;
   final String? primaryCtaText;
   final String? tertiaryCTAText;
+  final bool tertiaryCTAHasErrorBrandFixed;
   final String? footerText;
   final Function? onTapPrimaryCTA;
   final Function? onTapTertiaryCTA;
@@ -586,7 +588,9 @@ class TitleDescriptionCheckpointsInput extends ListItemInput {
         if (tertiaryCTAText != null && onTapTertiaryCTA != null) ...[
           const SizedBox(height: AppSpacings.xl2),
           TertiaryButton(
-            brand: .error,
+            brand: tertiaryCTAHasErrorBrandFixed
+                ? ButtonBrand.error
+                : style.buttonBrand,
             label: tertiaryCTAText!,
             isExpanded: true,
             action: onTapTertiaryCTA! as VoidCallback,

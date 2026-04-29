@@ -8,6 +8,9 @@ sealed class SubscriptionUpgradeState with _$SubscriptionUpgradeState {
   const factory SubscriptionUpgradeState({
     @Default(true) bool isLoading,
     @Default([]) List<SubscriptionUI> subscriptions,
+    @Default(false) bool shouldNavigateBack,
+    String? snackBarMessage,
+    @Default(false) bool snackBarIsError,
     String? errorMessage,
   }) = _SubscriptionUpgradeState;
 }

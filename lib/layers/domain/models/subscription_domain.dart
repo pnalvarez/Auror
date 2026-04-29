@@ -6,8 +6,8 @@ class SubscriptionDomain {
     required this.isPaid,
     required this.benefits,
     required this.isCurrent,
-    this.price,
-    this.period,
+    required this.price,
+    required this.period,
   });
 
   final String id;
@@ -16,6 +16,6 @@ class SubscriptionDomain {
   final bool isPaid;
   final List<String> benefits;
   final bool isCurrent;
-  final String? price;
-  final String? period;
+  final int price;
+  final int period;
 }
