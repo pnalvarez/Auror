@@ -83,42 +83,44 @@ class _SubscriptionUpgradeContentState
             ),
             body: Padding(
               padding: const EdgeInsets.only(top: AppSpacings.m),
-              child: ListView.separated(
-                padding: const EdgeInsets.fromLTRB(
-                  AppSpacings.l,
-                  AppSpacings.m,
-                  AppSpacings.l,
-                  AppSpacings.xl2,
-                ),
-                itemBuilder: (context, index) {
-                  final item = viewModel.state.subscriptions[index];
-                  return ListItem(
-                    key: getKeyBySubscriptionId(item.id),
-                    isSelected: item.isSelected,
-                    input: TitleDescriptionCheckpointsInput(
-                      style: viewModel.getStyle(subscriptionId: item.id),
-                      title: item.title,
-                      firstTrailingItem: item.price,
-                      secondTrailingItem: item.period,
-                      description: item.description,
-                      checkpoints: item.benefits,
-                      primaryCtaText: item.primaryCtaText,
-                      tertiaryCTAText: item.tertiaryCtaText,
-                      onTapPrimaryCTA: () => viewModel.add(
-                        SubscriptionUpgradeEvent.selected(id: item.id),
+              child: viewModel.state.isLoading
+                  ? const Center(child: CircularProgressIndicator())
+                  : ListView.separated(
+                      padding: const EdgeInsets.fromLTRB(
+                        AppSpacings.l,
+                        AppSpacings.m,
+                        AppSpacings.l,
+                        AppSpacings.xl2,
                       ),
-                      onTapTertiaryCTA: () => viewModel.add(
-                        SubscriptionUpgradeEvent.selected(id: item.id),
-                      ),
-                      footerText: item.footerText,
+                      itemBuilder: (context, index) {
+                        final item = viewModel.state.subscriptions[index];
+                        return ListItem(
+                          key: getKeyBySubscriptionId(item.id),
+                          isSelected: item.isSelected,
+                          input: TitleDescriptionCheckpointsInput(
+                            style: viewModel.getStyle(subscriptionId: item.id),
+                            title: item.title,
+                            firstTrailingItem: item.price,
+                            secondTrailingItem: item.period,
+                            description: item.description,
+                            checkpoints: item.benefits,
+                            primaryCtaText: item.primaryCtaText,
+                            tertiaryCTAText: item.tertiaryCtaText,
+                            onTapPrimaryCTA: () => viewModel.add(
+                              SubscriptionUpgradeEvent.selected(id: item.id),
+                            ),
+                            onTapTertiaryCTA: () => viewModel.add(
+                              SubscriptionUpgradeEvent.selected(id: item.id),
+                            ),
+                            footerText: item.footerText,
+                          ),
+                        );
+                      },
+                      separatorBuilder: (BuildContext context, int index) {
+                        return const SizedBox(height: AppSpacings.xl2);
+                      },
+                      itemCount: viewModel.state.subscriptions.length,
                     ),
-                  );
-                },
-                separatorBuilder: (BuildContext context, int index) {
-                  return const SizedBox(height: AppSpacings.xl2);
-                },
-                itemCount: viewModel.state.subscriptions.length,
-              ),
             ),
           ),
         ),

@@ -12,3 +12,6 @@ const subscriptionUpgradeCtaSubscribeNow = 'Assinar agora';
 const subscriptionUpgradeFooterCancelAnytime =
     'Cancele quando quiser. Sem compromisso';
 const cancel = 'Cancelar';
+const month = 'mês';
+const year = 'ano';
+const day = 'dia';

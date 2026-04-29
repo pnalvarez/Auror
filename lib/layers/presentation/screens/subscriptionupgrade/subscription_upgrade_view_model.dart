@@ -1,4 +1,5 @@
 import 'package:auror/common/strings/subscription_upgrade_strings.dart';
+import 'package:auror/layers/domain/models/subscription_domain.dart';
 import 'package:auror/layers/domain/usecases/get_subscriptions.dart';
 import 'package:auror/layers/domain/usecases/select_subscription.dart';
 import 'package:auror/layers/presentation/screens/subscriptionupgrade/subscription_ui.dart';
@@ -27,10 +28,12 @@ class SubscriptionUpgradeViewModel
     emit(state.copyWith(isLoading: true, errorMessage: null));
     try {
       final response = await _getSubscriptions();
+      final sortedByPrice = List<SubscriptionDomain>.from(response)
+        ..sort((a, b) => a.price.compareTo(b.price));
       emit(
         state.copyWith(
           isLoading: false,
-          subscriptions: response
+          subscriptions: sortedByPrice
               .map((elem) => SubscriptionUI.fromDomain(elem))
               .toList(),
         ),

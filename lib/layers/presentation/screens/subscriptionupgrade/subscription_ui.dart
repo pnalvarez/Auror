@@ -31,8 +31,8 @@ class SubscriptionUI {
       id: domain.id,
       title: domain.subscriptionName,
       isSelected: domain.isCurrent,
-      price: domain.price,
-      period: domain.period,
+      price: domain.isPaid ? domain.price.toCurrency() : null,
+      period: domain.isPaid ? domain.period.toPeriod() : null,
       description: domain.description,
       benefits: domain.benefits,
       primaryCtaText: domain.isPaid && !domain.isCurrent
@@ -44,4 +44,26 @@ class SubscriptionUI {
           : null,
     );
   }
+
+  static String _periodFromDays(int days) {
+    if (days >= 365) return year;
+    if (days >= 30) return month;
+    return day;
+  }
+
+  /// [priceCents] em centavos (ex. API `price_cents`). Ex.: `1990` → `R$ 19,90`.
+  static String _toCurrency(int priceCents) {
+    final reais = priceCents ~/ 100;
+    final centavos = priceCents.abs() % 100;
+    final centStr = centavos.toString().padLeft(2, '0');
+    return 'R\$ $reais,$centStr';
+  }
+}
+
+extension _PeriodFromDays on int {
+  String toPeriod() => SubscriptionUI._periodFromDays(this);
+}
+
+extension _ToCurrency on int {
+  String toCurrency() => SubscriptionUI._toCurrency(this);
 }
