@@ -24,6 +24,13 @@ abstract class IApiDataSource {
     String resourceName = 'full_subscriptions',
   });
 
+  /// Busca apenas a assinatura atual do usuário autenticado.
+  ///
+  /// Espera uma view com coluna booleana `is_current`.
+  Future<SubscriptionData> fetchCurrentSubscription({
+    String resourceName = 'full_subscriptions',
+  });
+
   /// Atualiza a assinatura atual do usuário autenticado.
   ///
   /// Espera um RPC no PostgREST em `/rest/v1/rpc/{rpcName}` com payload:
@@ -89,6 +96,34 @@ class ApiDataSource implements IApiDataSource {
     final data = await _apiClient.get(endpoint: resourceName, headers: headers);
 
     return _rowsAsSubscriptionData(data);
+  }
+
+  @override
+  Future<SubscriptionData> fetchCurrentSubscription({
+    String resourceName = 'full_subscriptions',
+  }) async {
+    final session = Supabase.instance.client.auth.currentSession;
+    if (session == null) {
+      throw StateError('Sessão ausente para carregar assinatura atual.');
+    }
+    final headers = <String, String>{
+      'apikey': AurorSupabaseConstants.anonKey,
+      'Authorization': 'Bearer ${session.accessToken}',
+    };
+
+    final data = await _apiClient.get(
+      endpoint: resourceName,
+      queryParameters: const <String, dynamic>{
+        'is_current': 'eq.true',
+        'limit': '1',
+      },
+      headers: headers,
+    );
+    final rows = _rowsAsSubscriptionData(data);
+    if (rows.isEmpty) {
+      throw StateError('Nenhuma assinatura atual encontrada para o usuário.');
+    }
+    return rows.first;
   }
 
   @override

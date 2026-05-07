@@ -18,3 +18,4 @@ const profileNavMyRoutes = 'Ver minhas rotas';
 const profileLogoutLabel = 'Sair da conta';
 
 const profileLoadErrorMessage = 'Não foi possível carregar o perfil.';
+const upgrade = 'Fazer upgrade';

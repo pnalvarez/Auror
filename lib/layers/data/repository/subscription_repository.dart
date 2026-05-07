@@ -22,4 +22,10 @@ class SubscriptionRepository implements ISubscriptionRepository {
   @override
   Future<void> cancelSubscription() async =>
       await _apiDataSource.cancelSubscription();
+
+  @override
+  Future<SubscriptionDomain> getCurrentSubscription() async {
+    final subscriptionData = await _apiDataSource.fetchCurrentSubscription();
+    return subscriptionData.toDomain();
+  }
 }

@@ -8,6 +8,7 @@ class SubscriptionDomain {
     required this.isCurrent,
     required this.price,
     required this.period,
+    this.nextSubscriptionId,
   });
 
   final String id;
@@ -18,4 +19,7 @@ class SubscriptionDomain {
   final bool isCurrent;
   final int price;
   final int period;
+  final String? nextSubscriptionId;
+
+  bool get hasUpgrade => nextSubscriptionId != null;
 }
