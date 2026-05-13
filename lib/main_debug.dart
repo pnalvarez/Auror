@@ -1,7 +1,6 @@
 import 'package:auror/app_bootstrap.dart';
 import 'package:auror/core/http/supabase_http_logging.dart';
 
-/// Default entrypoint (same behavior as [main_debug.dart]).
 Future<void> main() => bootstrapAuror(
       enableSupabaseVerboseLogging: shouldLogSupabaseHttp(),
     );
