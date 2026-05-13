@@ -24,15 +24,39 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) =>
-          getIt<ProfileViewModel>()..add(const ProfileEvent.loadRequested()),
+      create: (_) => getIt<ProfileViewModel>(),
       child: const _ProfileScaffold(),
     );
   }
 }
 
-class _ProfileScaffold extends StatelessWidget {
+class _ProfileScaffold extends StatefulWidget {
   const _ProfileScaffold();
+
+  @override
+  State<_ProfileScaffold> createState() => _ProfileScaffoldState();
+}
+
+class _ProfileScaffoldState extends State<_ProfileScaffold>
+    with AutoRouteAwareStateMixin<_ProfileScaffold> {
+  void _dispatchLoadRequested() {
+    context.read<ProfileViewModel>().add(const ProfileEvent.loadRequested());
+  }
+
+  @override
+  void didInitTabRoute(TabPageRoute? previousRoute) {
+    _dispatchLoadRequested();
+  }
+
+  @override
+  void didChangeTabRoute(TabPageRoute previousRoute) {
+    _dispatchLoadRequested();
+  }
+
+  @override
+  void didPopNext() {
+    _dispatchLoadRequested();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -152,16 +176,16 @@ class _ProfileScaffold extends StatelessWidget {
                             isExpanded: true,
                             input: IconTitleDescriptionInput(
                               leadingIcon: Icons.workspace_premium_outlined,
-                              title: profile.isSubscribed
-                                  ? profilePlanSubscribedTitle
-                                  : profilePlanFreeTitle,
-                              description: profile.isSubscribed
-                                  ? profilePlanSubscribedDescription
-                                  : profilePlanFreeDescription,
+                              title: profile.subscriptionPlan,
+                              description: profile.hasUpgrade ? upgrade : null,
                             ),
-                            onTap: () {
-                              context.router.push(
+                            onTap: () async {
+                              await context.router.push(
                                 const SubscriptionUpgradeRoute(),
+                              );
+                              if (!mounted) return;
+                              context.read<ProfileViewModel>().add(
+                                const ProfileEvent.loadRequested(),
                               );
                             },
                           ),

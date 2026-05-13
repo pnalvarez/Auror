@@ -33,6 +33,7 @@ class SubscriptionData {
     required this.isCurrent,
     required this.price,
     required this.period,
+    this.nextSubscriptionId,
     this.checkpointTexts = const [],
     this.checkpoints = const [],
   });
@@ -57,6 +58,8 @@ class SubscriptionData {
 
   @JsonKey(readValue: _readPeriod)
   final int period;
+
+  final String? nextSubscriptionId;
 
   @JsonKey(name: 'checkpoint_texts')
   final List<String> checkpointTexts;
@@ -128,6 +131,7 @@ class SubscriptionData {
     isCurrent: isCurrent,
     price: price,
     period: period,
+    nextSubscriptionId: nextSubscriptionId,
     benefits: benefitLines,
   );
 }

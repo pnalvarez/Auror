@@ -1,4 +1,5 @@
 import 'package:auror/layers/domain/models/profile_domain.dart';
+import 'package:auror/layers/domain/models/subscription_domain.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'profile_ui.freezed.dart';
@@ -15,18 +16,23 @@ sealed class ProfileUI with _$ProfileUI {
     required int learnedCards,
     required int revisionsDone,
     required int followedDays,
-    required bool isSubscribed,
+    required String subscriptionPlan,
+    required bool hasUpgrade,
   }) = _ProfileUI;
 
-  factory ProfileUI.fromDomain(ProfileDomain domain) {
+  factory ProfileUI.fromDomain(
+    ProfileDomain profileDomain,
+    SubscriptionDomain subscriptionDomain,
+  ) {
     return ProfileUI(
-      username: domain.username,
-      email: domain.email,
-      profileImageUrl: domain.profileImage,
-      learnedCards: domain.learnedCards,
-      revisionsDone: domain.revisionsDone,
-      followedDays: domain.followedDays,
-      isSubscribed: domain.isSubscribed,
+      username: profileDomain.username,
+      email: profileDomain.email,
+      profileImageUrl: profileDomain.profileImage,
+      learnedCards: profileDomain.learnedCards,
+      revisionsDone: profileDomain.revisionsDone,
+      followedDays: profileDomain.followedDays,
+      subscriptionPlan: 'Plano ${subscriptionDomain.subscriptionName}',
+      hasUpgrade: subscriptionDomain.hasUpgrade,
     );
   }
 }

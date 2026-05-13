@@ -37,9 +37,9 @@ class SubscriptionUpgradeViewModel
       final response = await _getSubscriptions();
       final sortedByPrice = List<SubscriptionDomain>.from(response)
         ..sort((a, b) => a.price.compareTo(b.price));
-      final currentSubscriptionPrice = sortedByPrice
-          .firstWhere((s) => s.isCurrent)
-          .price;
+      final currentSubscription = sortedByPrice.where((s) => s.isCurrent);
+      final currentSubscriptionPrice =
+          currentSubscription.isEmpty ? 0 : currentSubscription.first.price;
       emit(
         state.copyWith(
           isLoading: false,

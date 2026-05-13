@@ -1,0 +1,79 @@
+import 'dart:async';
+
+import 'package:auror_design_system/atoms/colors/colors.dart';
+import 'package:auror/common/environment/auror_supabase_constants.dart';
+import 'package:auror/core/di/di.dart';
+import 'package:auror/core/http/supabase_http_logging.dart';
+import 'package:auror/layers/presentation/routes/app_router.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:fvp/fvp.dart' as fvp;
+import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart' as http;
+import 'package:supabase_flutter/supabase_flutter.dart';
+
+/// Shared startup for [main_debug.dart], [main_release.dart], and [main.dart].
+///
+/// [enableSupabaseVerboseLogging] should follow [main_debug] vs [main_release]
+/// entrypoint intent: debug uses [shouldLogSupabaseHttp]; release forces `false`.
+Future<void> bootstrapAuror({
+  required bool enableSupabaseVerboseLogging,
+}) async {
+  WidgetsFlutterBinding.ensureInitialized();
+  // [video_player] has no first-party Windows/Linux implementation. [fvp] supplies
+  // those. macOS uses stock AVFoundation (do not register [fvp] there: it expects
+  // fvp.framework to be embedded and will crash at load if missing).
+  if (!kIsWeb &&
+      (defaultTargetPlatform == TargetPlatform.windows ||
+          defaultTargetPlatform == TargetPlatform.linux)) {
+    fvp.registerWith(
+      options: <String, dynamic>{
+        'platforms': <String>['windows', 'linux'],
+      },
+    );
+  }
+  // Use Poppins from [pubspec.yaml] instead of fetching from fonts.gstatic.com.
+  GoogleFonts.config.allowRuntimeFetching = false;
+  await _setUpSupabase(enableSupabaseVerboseLogging);
+  await configureDependencies();
+  runApp(const AurorApp());
+}
+
+Future<void> _setUpSupabase(bool enableVerboseLogging) async {
+  await Supabase.initialize(
+    url: AurorSupabaseConstants.supabaseUrl,
+    anonKey: AurorSupabaseConstants.anonKey,
+    debug: enableVerboseLogging,
+    httpClient:
+        enableVerboseLogging ? SupabaseLoggingHttpClient(http.Client()) : null,
+  );
+}
+
+class AurorApp extends StatefulWidget {
+  const AurorApp({super.key});
+
+  @override
+  State<AurorApp> createState() => _AurorAppState();
+}
+
+class _AurorAppState extends State<AurorApp> {
+  static final _appRouter = AppRouter();
+
+  @override
+  void reassemble() {
+    super.reassemble();
+    unawaited(configureDependencies());
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp.router(
+      routerConfig: _appRouter.config(),
+      title: 'Auror',
+      theme: ThemeData(
+        colorScheme: AppColors.lightColorScheme,
+        useMaterial3: true,
+      ),
+    );
+  }
+}
