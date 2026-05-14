@@ -12,6 +12,7 @@ import 'package:auror/core/di/di.dart';
 import 'package:auror/layers/domain/models/knowledge_card_domain.dart';
 import 'package:auror/layers/presentation/screens/explore/explore_event.dart';
 import 'package:auror/layers/presentation/screens/explore/explore_state.dart';
+import 'package:auror/layers/presentation/screens/explore/explore_empty_states_body.dart';
 import 'package:auror/layers/presentation/screens/explore/explore_video_background.dart';
 import 'package:auror/layers/presentation/routes/app_router.gr.dart';
 import 'package:auror/layers/presentation/screens/explore/explore_view_model.dart';
@@ -51,27 +52,10 @@ class _ExploreScaffold extends StatelessWidget {
       child: BlocBuilder<ExploreViewModel, ExploreState>(
         builder: (context, state) {
           if (state.isLoadingInitial) {
-            return Center(
-              child: CircularLoader(
-                color: Theme.of(context).colorScheme.primary,
-                size: 40,
-                strokeWidth: 2,
-              ),
-            );
+            return const ExploreLoadingBody();
           }
           if (state.chipLabels.isEmpty || state.cardSlots.isEmpty) {
-            return Center(
-              child: Padding(
-                padding: const EdgeInsets.all(AppSpacings.xl2),
-                child: Text(
-                  exploreLoadError,
-                  textAlign: TextAlign.center,
-                  style: body2Medium.copyWith(
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  ),
-                ),
-              ),
-            );
+            return const ExploreErrorBody();
           }
           return _ExploreFeed(state: state);
         },

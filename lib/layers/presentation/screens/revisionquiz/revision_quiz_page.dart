@@ -6,7 +6,6 @@ import 'package:auror_design_system/molecules/buttons/button_brand.dart';
 import 'package:auror_design_system/molecules/cards/feedback_tile.dart';
 import 'package:auror_design_system/molecules/inputfields/input_field.dart';
 import 'package:auror_design_system/molecules/progress/step_progress_bar.dart';
-import 'package:auror_design_system/organisms/feedback/circular_loader.dart';
 import 'package:auror_design_system/organisms/list_item/list_item.dart';
 import 'package:auror_design_system/theme/main_launch_dark_theme.dart';
 import 'package:auror/common/strings/revision_quiz_strings.dart';
@@ -20,6 +19,7 @@ import 'package:auror/layers/presentation/screens/revisionquiz/revision_quiz_fac
 import 'package:auror/layers/presentation/screens/revisionquiz/revision_quiz_view_model.dart';
 import 'package:auror/layers/presentation/screens/revisionquiz/revision_quiz_event.dart';
 import 'package:auror/layers/presentation/screens/revisionquiz/revision_quiz_state.dart';
+import 'package:auror/layers/presentation/screens/revisionquiz/revision_quiz_status_body.dart';
 import 'package:auror/layers/presentation/screens/revisionquiz/revision_quiz_video.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart' hide Badge;
@@ -74,15 +74,10 @@ class _RevisionQuizScaffold extends StatelessWidget {
         child: _BlocBuilder(
           builder: (context, state) {
             if (state.isLoading) {
-              return Center(child: CircularLoader(color: scheme.primary));
+              return const RevisionQuizLoadingBody();
             }
             if (state.allRevisions.isEmpty) {
-              return Center(
-                child: Text(
-                  'Nenhuma revisão disponível.',
-                  style: body2Medium.copyWith(color: scheme.onSurfaceVariant),
-                ),
-              );
+              return const RevisionQuizEmptyBody();
             }
             return const _RevisionQuizBody();
           },

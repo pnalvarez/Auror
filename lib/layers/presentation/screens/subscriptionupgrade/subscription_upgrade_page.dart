@@ -1,11 +1,11 @@
 import 'package:auror/common/strings/subscription_upgrade_strings.dart';
 import 'package:auror/core/di/di.dart';
 import 'package:auror/layers/presentation/screens/subscriptionupgrade/subscription_upgrade_event.dart';
+import 'package:auror/layers/presentation/screens/subscriptionupgrade/subscription_upgrade_plans_body.dart';
 import 'package:auror/layers/presentation/screens/subscriptionupgrade/subscription_upgrade_state.dart';
 import 'package:auror/layers/presentation/screens/subscriptionupgrade/subscription_upgrade_view_model.dart';
 import 'package:auror_design_system/atoms/spacing/spacings.dart';
 import 'package:auror_design_system/organisms/feedback/ds_snackbar.dart';
-import 'package:auror_design_system/organisms/list_item/list_item.dart';
 import 'package:auror_design_system/organisms/navigation_bar/ds_navigation_bar.dart';
 import 'package:auror_design_system/theme/main_launch_dark_theme.dart';
 import 'package:auto_route/auto_route.dart';
@@ -122,63 +122,30 @@ class _SubscriptionUpgradeContentState
                           padding: const EdgeInsets.only(top: AppSpacings.m),
                           child: viewModel.state.isLoading
                               ? const Center(child: CircularProgressIndicator())
-                              : ListView.separated(
-                                  padding: const EdgeInsets.fromLTRB(
-                                    AppSpacings.l,
-                                    AppSpacings.m,
-                                    AppSpacings.l,
-                                    AppSpacings.xl2,
+                              : SubscriptionUpgradePlansBody(
+                                  subscriptions: viewModel.state.subscriptions,
+                                  itemKeyForId: getKeyBySubscriptionId,
+                                  styleForId: (id) => viewModel.getStyle(
+                                    subscriptionId: id,
                                   ),
-                                  itemBuilder: (context, index) {
-                                    final item =
-                                        viewModel.state.subscriptions[index];
-                                    return ListItem(
-                                      key: getKeyBySubscriptionId(item.id),
-                                      isSelected: item.isSelected,
-                                      isEnabled: !item.disabled,
-                                      input: TitleDescriptionCheckpointsInput(
-                                        style: viewModel.getStyle(
-                                          subscriptionId: item.id,
+                                  onPrimaryCta: (item) => viewModel.add(
+                                    SubscriptionUpgradeEvent.selected(
+                                      id: item.id,
+                                    ),
+                                  ),
+                                  onTertiaryCta: (item) {
+                                    if (item.hasDowngradeOption) {
+                                      viewModel.add(
+                                        SubscriptionUpgradeEvent.selected(
+                                          id: item.id,
                                         ),
-                                        title: item.title,
-                                        firstTrailingItem: item.price,
-                                        secondTrailingItem: item.period,
-                                        description: item.description,
-                                        checkpoints: item.benefits,
-                                        primaryCtaText: item.primaryCtaText,
-                                        tertiaryCTAText: item.tertiaryCtaText,
-                                        tertiaryCTAHasErrorBrandFixed:
-                                            !item.hasDowngradeOption,
-                                        onTapPrimaryCTA: () => viewModel.add(
-                                          SubscriptionUpgradeEvent.selected(
-                                            id: item.id,
-                                          ),
-                                        ),
-                                        onTapTertiaryCTA: () {
-                                          if (item.hasDowngradeOption) {
-                                            viewModel.add(
-                                              SubscriptionUpgradeEvent.selected(
-                                                id: item.id,
-                                              ),
-                                            );
-                                          } else {
-                                            viewModel.add(
-                                              SubscriptionUpgradeEvent.cancel(),
-                                            );
-                                          }
-                                        },
-                                        footerText: item.footerText,
-                                      ),
-                                    );
+                                      );
+                                    } else {
+                                      viewModel.add(
+                                        const SubscriptionUpgradeEvent.cancel(),
+                                      );
+                                    }
                                   },
-                                  separatorBuilder:
-                                      (BuildContext context, int index) {
-                                        return const SizedBox(
-                                          height: AppSpacings.xl2,
-                                        );
-                                      },
-                                  itemCount:
-                                      viewModel.state.subscriptions.length,
                                 ),
                         ),
                       ),
