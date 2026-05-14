@@ -1,16 +1,11 @@
-import 'package:auror_design_system/atoms/colors/colors.dart';
 import 'package:auror_design_system/atoms/spacing/spacings.dart';
 import 'package:auror_design_system/atoms/typography/typography.dart';
-import 'package:auror_design_system/molecules/buttons/action_buttons.dart';
-import 'package:auror_design_system/molecules/buttons/button_brand.dart';
-import 'package:auror_design_system/molecules/cards/score_tile.dart';
 import 'package:auror_design_system/organisms/feedback/ds_snackbar.dart';
-import 'package:auror_design_system/organisms/list_item/list_item.dart';
-import 'package:auror_design_system/organisms/profile/profile_header.dart';
 import 'package:auror/common/strings/profile_strings.dart';
 import 'package:auror/core/di/di.dart';
 import 'package:auror/layers/presentation/routes/app_router.gr.dart';
 import 'package:auror/layers/presentation/screens/profile/profile_event.dart';
+import 'package:auror/layers/presentation/screens/profile/profile_loaded_body.dart';
 import 'package:auror/layers/presentation/screens/profile/profile_state.dart';
 import 'package:auror/layers/presentation/screens/profile/profile_view_model.dart';
 import 'package:auto_route/auto_route.dart';
@@ -61,7 +56,6 @@ class _ProfileScaffoldState extends State<_ProfileScaffold>
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
-    final accent = AppColors.DarkContent.accent;
 
     return SafeArea(
       bottom: false,
@@ -117,143 +111,30 @@ class _ProfileScaffoldState extends State<_ProfileScaffold>
                 return const SizedBox.shrink();
               }
 
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Expanded(
-                    child: SingleChildScrollView(
-                      padding: const EdgeInsets.fromLTRB(
-                        AppSpacings.xl2,
-                        AppSpacings.xl4,
-                        AppSpacings.xl2,
-                        AppSpacings.m,
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          ProfileHeader(
-                            imageUrl: profile.profileImageUrl,
-                            name: profile.username,
-                            email: profile.email,
-                            avatarRingColor: accent,
-                            emailIconColor: accent,
-                          ),
-                          const SizedBox(height: AppSpacings.xl2),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: ScoreTile(
-                                  icon: Icons.menu_book_outlined,
-                                  score: profile.learnedCards,
-                                  label: profileStatLearnedCards,
-                                  iconColor: accent,
-                                ),
-                              ),
-                              const SizedBox(width: AppSpacings.m),
-                              Expanded(
-                                child: ScoreTile(
-                                  icon: Icons.psychology_outlined,
-                                  score: profile.revisionsDone,
-                                  label: profileStatRevisionsDone,
-                                  iconColor: accent,
-                                ),
-                              ),
-                              const SizedBox(width: AppSpacings.m),
-                              Expanded(
-                                child: ScoreTile(
-                                  icon: Icons.local_fire_department_outlined,
-                                  score: profile.followedDays,
-                                  label: profileStatFollowedDays,
-                                  iconColor: accent,
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: AppSpacings.xl2),
-                          _SectionLabel(text: profileSectionPlan),
-                          const SizedBox(height: AppSpacings.m),
-                          ListItem(
-                            isExpanded: true,
-                            input: IconTitleDescriptionInput(
-                              leadingIcon: Icons.workspace_premium_outlined,
-                              title: profile.subscriptionPlan,
-                              description: profile.hasUpgrade ? upgrade : null,
-                            ),
-                            onTap: () async {
-                              await context.router.push(
-                                const SubscriptionUpgradeRoute(),
-                              );
-                              if (!mounted) return;
-                              context.read<ProfileViewModel>().add(
-                                const ProfileEvent.loadRequested(),
-                              );
-                            },
-                          ),
-                          const SizedBox(height: AppSpacings.xl2),
-                          _SectionLabel(text: profileSectionNavigation),
-                          const SizedBox(height: AppSpacings.m),
-                          ListItem(
-                            isExpanded: true,
-                            input: IconDescriptionInput(
-                              leadingIcon: Icons.route_outlined,
-                              title: profileNavMyRoutes,
-                            ),
-                            onTap: () {
-                              context.tabsRouter.setActiveIndex(3);
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  SafeArea(
-                    top: false,
-                    bottom: false,
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(
-                        AppSpacings.xl2,
-                        AppSpacings.xl2,
-                        AppSpacings.xl2,
-                        AppSpacings.m,
-                      ),
-                      child: SecondaryButton(
-                        label: profileLogoutLabel,
-                        brand: ButtonBrand.error,
-                        leadingIcon: Icons.logout_rounded,
-                        isExpanded: true,
-                        loading: state.pendingLogoutNavigation,
-                        action: () {
-                          context.read<ProfileViewModel>().add(
-                            const ProfileEvent.logoutTapped(),
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-                ],
+              return ProfileLoadedBody(
+                profile: profile,
+                logoutLoading: state.pendingLogoutNavigation,
+                onPlanRowTap: () async {
+                  await context.router.push(
+                    const SubscriptionUpgradeRoute(),
+                  );
+                  if (!context.mounted) return;
+                  context.read<ProfileViewModel>().add(
+                    const ProfileEvent.loadRequested(),
+                  );
+                },
+                onMyRoutesTap: () {
+                  context.tabsRouter.setActiveIndex(3);
+                },
+                onLogoutTap: () {
+                  context.read<ProfileViewModel>().add(
+                    const ProfileEvent.logoutTapped(),
+                  );
+                },
               );
             },
           ),
         ),
-      ),
-    );
-  }
-}
-
-class _SectionLabel extends StatelessWidget {
-  const _SectionLabel({required this.text});
-
-  final String text;
-
-  @override
-  Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
-    return Text(
-      text,
-      style: labelS.copyWith(
-        color: scheme.onSurfaceVariant,
-        fontWeight: FontWeight.w700,
-        letterSpacing: 0.8,
       ),
     );
   }

@@ -17,9 +17,6 @@ jobs:
   unit-tests-and-coverage:
     runs-on: ubuntu-latest
     steps:
-      - name: Generate code
-        run: dart run build_runner build --delete-conflicting-outputs
-
       - name: Checkout
         uses: actions/checkout@v4
 
@@ -32,7 +29,9 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
-      # Fails on analyzer *errors* (e.g. type/syntax). Warnings/infos still print but do not fail the job.
+      - name: Generate code
+        run: dart run build_runner build --delete-conflicting-outputs
+
       - name: Analyze
         run: flutter analyze --no-fatal-warnings --no-fatal-infos
 
@@ -49,14 +48,10 @@ jobs:
             **/*.freezed.dart
             **/*.gr.dart
             **/generated_plugin_registrant.dart
-            
 
   ui-tests:
     runs-on: ubuntu-latest
     steps:
-      - name: Generate code
-        run: dart run build_runner build --delete-conflicting-outputs
-
       - name: Checkout
         uses: actions/checkout@v4
 
@@ -66,8 +61,19 @@ jobs:
           channel: stable
           cache: true
 
-      - name: Install dependencies
+      - name: Install dependencies (app)
         run: flutter pub get
 
-      - name: Run UI (widget) tests
+      - name: Generate code (app)
+        run: dart run build_runner build --delete-conflicting-outputs
+
+      - name: Run app UI (widget) tests
         run: flutter test test/ui
+
+      - name: Install dependencies (design system)
+        working-directory: packages/auror_design_system
+        run: flutter pub get
+
+      - name: Run design system widget tests
+        working-directory: packages/auror_design_system
+        run: flutter test
