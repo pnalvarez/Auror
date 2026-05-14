@@ -1,3 +1,9 @@
+# Runs on every PR. To block merging until this workflow is green, enable branch
+# protection (or a ruleset): Repository Settings → Branches → edit the default
+# rule → enable "Require status checks to pass before merging" → add the check
+# named "All checks passed" (the final job below). Rulesets: Settings → Rules →
+# Rulesets → target branches → Require status checks → same check name.
+
 name: CI
 
 on:
@@ -77,3 +83,25 @@ jobs:
       - name: Run design system widget tests
         working-directory: packages/auror_design_system
         run: flutter test
+
+  # Single green check for branch protection. Without `if: always()`, this job
+  # would be skipped when a needed job fails, and GitHub might still allow merge
+  # if only this check were required—so we re-verify results explicitly.
+  ci-required:
+    name: All checks passed
+    runs-on: ubuntu-latest
+    needs: [unit-tests-and-coverage, ui-tests]
+    if: always()
+    steps:
+      - name: Enforce job results
+        env:
+          UNIT: ${{ needs.unit-tests-and-coverage.result }}
+          UI: ${{ needs.ui-tests.result }}
+        run: |
+          echo "unit-tests-and-coverage: $UNIT"
+          echo "ui-tests: $UI"
+          if [[ "$UNIT" != "success" || "$UI" != "success" ]]; then
+            echo "::error::CI did not complete successfully; do not merge."
+            exit 1
+          fi
+          echo "All CI jobs succeeded."
