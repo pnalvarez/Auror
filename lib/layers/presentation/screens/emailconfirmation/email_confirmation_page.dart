@@ -5,7 +5,6 @@ import 'package:auror_design_system/molecules/buttons/action_buttons.dart';
 import 'package:auror_design_system/organisms/navigation_bar/ds_navigation_bar.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 @RoutePage()
 class EmailConfirmationPage extends StatelessWidget {

@@ -88,8 +88,8 @@ class MediaBackdropCard extends StatelessWidget {
                       imageUrl: trimmedUrl,
                       fit: BoxFit.cover,
                       fadeInDuration: const Duration(milliseconds: 200),
-                      placeholder: (_, __) => ColoredBox(color: fallbackBg),
-                      errorWidget: (_, __, ___) => ColoredBox(color: fallbackBg),
+                      placeholder: (_, _) => ColoredBox(color: fallbackBg),
+                      errorWidget: (_, _, _) => ColoredBox(color: fallbackBg),
                     ),
             ),
             Positioned.fill(
