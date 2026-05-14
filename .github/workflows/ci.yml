@@ -54,6 +54,7 @@ jobs:
             **/*.freezed.dart
             **/*.gr.dart
             **/generated_plugin_registrant.dart
+            **/widgetbook_workspace/**
 
   ui-tests:
     runs-on: ubuntu-latest
