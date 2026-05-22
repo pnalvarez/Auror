@@ -23,6 +23,7 @@ import 'package:auror/layers/domain/usecases/save_recall_card.dart';
 import 'package:auror/layers/domain/usecases/select_subscription.dart';
 import 'package:auror/layers/domain/usecases/send_answer.dart';
 import 'package:auror/layers/domain/usecases/sign_in.dart';
+import 'package:auror/layers/domain/usecases/has_active_session.dart';
 import 'package:auror/layers/domain/usecases/sign_out.dart';
 import 'package:auror/layers/domain/usecases/sign_up.dart';
 import 'package:mockito/annotations.dart';
@@ -45,6 +46,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
   ISignIn,
   ISignUp,
   ISignOut,
+  IHasActiveSession,
   IGetProfile,
   IGetCurrentSubscription,
   IGetSubscriptions,

@@ -5,6 +5,8 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 abstract class IAuthService {
   User? get currentUser;
 
+  bool get hasActiveSession;
+
   Future<void> signUp({
     required String email,
     required String password,
@@ -33,6 +35,9 @@ class AuthService implements IAuthService {
 
   @override
   User? get currentUser => _client.auth.currentUser;
+
+  @override
+  bool get hasActiveSession => _client.auth.currentSession != null;
 
   @override
   Future<void> signUp({

@@ -22,6 +22,9 @@ class AuthRepository implements IAuthRepository {
   }
 
   @override
+  bool get hasActiveSession => _dataSource.hasActiveSession;
+
+  @override
   Future<void> signUp({
     required String email,
     required String password,

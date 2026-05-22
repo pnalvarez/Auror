@@ -9,4 +9,7 @@ sealed class MainLaunchEvent with _$MainLaunchEvent {
   const factory MainLaunchEvent.enterAppTapped() = MainLaunchEnterAppTapped;
 
   const factory MainLaunchEvent.howItWorksTapped() = MainLaunchHowItWorksTapped;
+
+  const factory MainLaunchEvent.dashboardNavigationConsumed() =
+      MainLaunchDashboardNavigationConsumed;
 }

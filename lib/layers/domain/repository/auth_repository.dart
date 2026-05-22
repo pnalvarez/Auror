@@ -2,6 +2,9 @@ import 'package:auror/layers/domain/models/user_domain.dart';
 
 abstract class IAuthRepository {
   UserDomain? get currentUser;
+
+  bool get hasActiveSession;
+
   Future<void> signUp({
     required String email,
     required String password,

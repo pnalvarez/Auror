@@ -19,6 +19,12 @@ void main() {
     expect(sut.currentUser, isNull);
   });
 
+  test('hasActiveSession forwards data source', () {
+    when(dataSource.hasActiveSession).thenReturn(true);
+    expect(sut.hasActiveSession, isTrue);
+    verify(dataSource.hasActiveSession).called(1);
+  });
+
   test('currentUser maps Supabase user to UserDomain', () {
     final mockUser = MockUser();
     when(mockUser.email).thenReturn('u@example.com');
