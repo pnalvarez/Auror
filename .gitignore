@@ -23,11 +23,14 @@ migrate_working_dir/
 # is commented out by default.
 #.vscode/
 
-# Generated (build_runner / auto_route / injectable / mockito)
-*.gr.dart
+# Generated Dart (build_runner). Regenerate after clone/CI:
+#   dart run build_runner build --delete-conflicting-outputs
+# freezed, json_serializable, auto_route, injectable, mockito, widgetbook, etc.
 *.freezed.dart
-*.mocks.dart
 *.g.dart
+*.gr.dart
+*.mocks.dart
+*.gen.dart
 **/di.config.dart
 
 # Flutter/Dart/Pub related
