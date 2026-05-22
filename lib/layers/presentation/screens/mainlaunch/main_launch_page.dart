@@ -33,35 +33,65 @@ class _MainLaunchView extends StatelessWidget {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
       body: SafeArea(
-        child: BlocBuilder<MainLaunchViewModel, MainLaunchState>(
-          builder: (context, state) {
-            return state.when(
-              initial: () => const MainLaunchLoadingBody(),
-              loading: () => const MainLaunchLoadingBody(),
-              ready: (hasActiveSession) => MainLaunchReadyBody(
-                hasActiveSession: hasActiveSession,
-                showDesignSystemCatalog: AppEnvironment.showDesignSystemCatalog,
-                onEnterApp: () {
-                  context.read<MainLaunchViewModel>().add(
-                    const MainLaunchEvent.enterAppTapped(),
-                  );
-                  if (!hasActiveSession) {
-                    context.router.push(
-                      LoginRoute(loginContext: LoginContext.signIn),
-                    );
-                  }
-                },
-                onHowItWorks: () {
-                  context.read<MainLaunchViewModel>().add(
-                    const MainLaunchEvent.howItWorksTapped(),
-                  );
-                  context.router.push(OnboardingLearningLoopRoute());
-                },
-                onOpenDesignSystem: () =>
-                    context.router.push(const DsMenuSampleRoute()),
-              ),
+        child: BlocListener<MainLaunchViewModel, MainLaunchState>(
+          listenWhen: (previous, current) {
+            final wasPending = switch (previous) {
+              MainLaunchStateReady(:final pendingDashboardNavigation) =>
+                pendingDashboardNavigation,
+              _ => false,
+            };
+            final isPending = switch (current) {
+              MainLaunchStateReady(:final pendingDashboardNavigation) =>
+                pendingDashboardNavigation,
+              _ => false,
+            };
+            return !wasPending && isPending;
+          },
+          listener: (context, state) {
+            context.router.replace(const DashboardRoute());
+            context.read<MainLaunchViewModel>().add(
+              const MainLaunchEvent.dashboardNavigationConsumed(),
             );
           },
+          child: BlocBuilder<MainLaunchViewModel, MainLaunchState>(
+            builder: (context, state) {
+              return state.when(
+                initial: () => const MainLaunchLoadingBody(),
+                loading: () => const MainLaunchLoadingBody(),
+                ready: (hasActiveSession, pendingDashboardNavigation) {
+                  if (pendingDashboardNavigation) {
+                    return const MainLaunchLoadingBody();
+                  }
+                  return MainLaunchReadyBody(
+                          hasActiveSession: hasActiveSession,
+                          showDesignSystemCatalog:
+                              AppEnvironment.showDesignSystemCatalog,
+                          onEnterApp: () {
+                            context.read<MainLaunchViewModel>().add(
+                              const MainLaunchEvent.enterAppTapped(),
+                            );
+                            if (!hasActiveSession) {
+                              context.router.push(
+                                LoginRoute(loginContext: LoginContext.signIn),
+                              );
+                            }
+                          },
+                          onHowItWorks: () {
+                            context.read<MainLaunchViewModel>().add(
+                              const MainLaunchEvent.howItWorksTapped(),
+                            );
+                            context.router.push(
+                              OnboardingLearningLoopRoute(),
+                            );
+                          },
+                          onOpenDesignSystem: () => context.router.push(
+                            const DsMenuSampleRoute(),
+                          ),
+                  );
+                },
+              );
+            },
+          ),
         ),
       ),
     );

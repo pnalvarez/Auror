@@ -12,5 +12,6 @@ class MainLaunchState with _$MainLaunchState {
   /// Interactive landing; [hasActiveSession] drives primary CTA copy.
   const factory MainLaunchState.ready({
     @Default(false) bool hasActiveSession,
+    @Default(false) bool pendingDashboardNavigation,
   }) = MainLaunchStateReady;
 }

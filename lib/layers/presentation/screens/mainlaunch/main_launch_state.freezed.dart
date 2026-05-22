@@ -125,12 +125,12 @@ return ready(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( bool hasActiveSession)?  ready,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( bool hasActiveSession,  bool pendingDashboardNavigation)?  ready,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case MainLaunchStateInitial() when initial != null:
 return initial();case MainLaunchStateLoading() when loading != null:
 return loading();case MainLaunchStateReady() when ready != null:
-return ready(_that.hasActiveSession);case _:
+return ready(_that.hasActiveSession,_that.pendingDashboardNavigation);case _:
   return orElse();
 
 }
@@ -148,12 +148,12 @@ return ready(_that.hasActiveSession);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( bool hasActiveSession)  ready,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( bool hasActiveSession,  bool pendingDashboardNavigation)  ready,}) {final _that = this;
 switch (_that) {
 case MainLaunchStateInitial():
 return initial();case MainLaunchStateLoading():
 return loading();case MainLaunchStateReady():
-return ready(_that.hasActiveSession);case _:
+return ready(_that.hasActiveSession,_that.pendingDashboardNavigation);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -170,12 +170,12 @@ return ready(_that.hasActiveSession);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( bool hasActiveSession)?  ready,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( bool hasActiveSession,  bool pendingDashboardNavigation)?  ready,}) {final _that = this;
 switch (_that) {
 case MainLaunchStateInitial() when initial != null:
 return initial();case MainLaunchStateLoading() when loading != null:
 return loading();case MainLaunchStateReady() when ready != null:
-return ready(_that.hasActiveSession);case _:
+return ready(_that.hasActiveSession,_that.pendingDashboardNavigation);case _:
   return null;
 
 }
@@ -251,10 +251,11 @@ String toString() {
 
 
 class MainLaunchStateReady implements MainLaunchState {
-  const MainLaunchStateReady({this.hasActiveSession = false});
+  const MainLaunchStateReady({this.hasActiveSession = false, this.pendingDashboardNavigation = false});
   
 
 @JsonKey() final  bool hasActiveSession;
+@JsonKey() final  bool pendingDashboardNavigation;
 
 /// Create a copy of MainLaunchState
 /// with the given fields replaced by the non-null parameter values.
@@ -266,16 +267,16 @@ $MainLaunchStateReadyCopyWith<MainLaunchStateReady> get copyWith => _$MainLaunch
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is MainLaunchStateReady&&(identical(other.hasActiveSession, hasActiveSession) || other.hasActiveSession == hasActiveSession));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is MainLaunchStateReady&&(identical(other.hasActiveSession, hasActiveSession) || other.hasActiveSession == hasActiveSession)&&(identical(other.pendingDashboardNavigation, pendingDashboardNavigation) || other.pendingDashboardNavigation == pendingDashboardNavigation));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,hasActiveSession);
+int get hashCode => Object.hash(runtimeType,hasActiveSession,pendingDashboardNavigation);
 
 @override
 String toString() {
-  return 'MainLaunchState.ready(hasActiveSession: $hasActiveSession)';
+  return 'MainLaunchState.ready(hasActiveSession: $hasActiveSession, pendingDashboardNavigation: $pendingDashboardNavigation)';
 }
 
 
@@ -286,7 +287,7 @@ abstract mixin class $MainLaunchStateReadyCopyWith<$Res> implements $MainLaunchS
   factory $MainLaunchStateReadyCopyWith(MainLaunchStateReady value, $Res Function(MainLaunchStateReady) _then) = _$MainLaunchStateReadyCopyWithImpl;
 @useResult
 $Res call({
- bool hasActiveSession
+ bool hasActiveSession, bool pendingDashboardNavigation
 });
 
 
@@ -303,9 +304,10 @@ class _$MainLaunchStateReadyCopyWithImpl<$Res>
 
 /// Create a copy of MainLaunchState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? hasActiveSession = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? hasActiveSession = null,Object? pendingDashboardNavigation = null,}) {
   return _then(MainLaunchStateReady(
 hasActiveSession: null == hasActiveSession ? _self.hasActiveSession : hasActiveSession // ignore: cast_nullable_to_non_nullable
+as bool,pendingDashboardNavigation: null == pendingDashboardNavigation ? _self.pendingDashboardNavigation : pendingDashboardNavigation // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
 }

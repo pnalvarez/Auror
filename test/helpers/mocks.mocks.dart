@@ -11,9 +11,9 @@ import 'package:auror/layers/data/datasource/api_data_source.dart' as _i19;
 import 'package:auror/layers/data/datasource/auth_data_source.dart' as _i18;
 import 'package:auror/layers/data/models/profile_data.dart' as _i4;
 import 'package:auror/layers/data/models/subscription_data.dart' as _i5;
-import 'package:auror/layers/domain/models/category_domain.dart' as _i35;
+import 'package:auror/layers/domain/models/category_domain.dart' as _i36;
 import 'package:auror/layers/domain/models/guided_route_intro_domain.dart'
-    as _i38;
+    as _i39;
 import 'package:auror/layers/domain/models/idea_domain.dart' as _i10;
 import 'package:auror/layers/domain/models/knowledge_card_domain.dart' as _i11;
 import 'package:auror/layers/domain/models/membership_domain.dart' as _i12;
@@ -26,23 +26,24 @@ import 'package:auror/layers/domain/repository/auth_repository.dart' as _i20;
 import 'package:auror/layers/domain/repository/profile_repository.dart' as _i21;
 import 'package:auror/layers/domain/repository/subscription_repository.dart'
     as _i22;
-import 'package:auror/layers/domain/usecases/cancel_subscription.dart' as _i33;
-import 'package:auror/layers/domain/usecases/get_card_revision.dart' as _i42;
-import 'package:auror/layers/domain/usecases/get_categories.dart' as _i34;
+import 'package:auror/layers/domain/usecases/cancel_subscription.dart' as _i34;
+import 'package:auror/layers/domain/usecases/get_card_revision.dart' as _i43;
+import 'package:auror/layers/domain/usecases/get_categories.dart' as _i35;
 import 'package:auror/layers/domain/usecases/get_current_subscription.dart'
-    as _i30;
+    as _i31;
 import 'package:auror/layers/domain/usecases/get_daily_idea.dart' as _i25;
 import 'package:auror/layers/domain/usecases/get_guided_route_intros.dart'
-    as _i37;
-import 'package:auror/layers/domain/usecases/get_membership.dart' as _i39;
-import 'package:auror/layers/domain/usecases/get_next_card.dart' as _i36;
-import 'package:auror/layers/domain/usecases/get_profile.dart' as _i29;
+    as _i38;
+import 'package:auror/layers/domain/usecases/get_membership.dart' as _i40;
+import 'package:auror/layers/domain/usecases/get_next_card.dart' as _i37;
+import 'package:auror/layers/domain/usecases/get_profile.dart' as _i30;
 import 'package:auror/layers/domain/usecases/get_revisions.dart' as _i24;
-import 'package:auror/layers/domain/usecases/get_subscriptions.dart' as _i31;
+import 'package:auror/layers/domain/usecases/get_subscriptions.dart' as _i32;
 import 'package:auror/layers/domain/usecases/get_user.dart' as _i23;
-import 'package:auror/layers/domain/usecases/save_recall_card.dart' as _i40;
-import 'package:auror/layers/domain/usecases/select_subscription.dart' as _i32;
-import 'package:auror/layers/domain/usecases/send_answer.dart' as _i41;
+import 'package:auror/layers/domain/usecases/has_active_session.dart' as _i29;
+import 'package:auror/layers/domain/usecases/save_recall_card.dart' as _i41;
+import 'package:auror/layers/domain/usecases/select_subscription.dart' as _i33;
+import 'package:auror/layers/domain/usecases/send_answer.dart' as _i42;
 import 'package:auror/layers/domain/usecases/sign_in.dart' as _i26;
 import 'package:auror/layers/domain/usecases/sign_out.dart' as _i28;
 import 'package:auror/layers/domain/usecases/sign_up.dart' as _i27;
@@ -1102,6 +1103,14 @@ class MockIAuthService extends _i1.Mock implements _i17.IAuthService {
   }
 
   @override
+  bool get hasActiveSession =>
+      (super.noSuchMethod(
+            Invocation.getter(#hasActiveSession),
+            returnValue: false,
+          )
+          as bool);
+
+  @override
   _i14.Future<void> signUp({
     required String? email,
     required String? password,
@@ -1150,6 +1159,14 @@ class MockIAuthDataSource extends _i1.Mock implements _i18.IAuthDataSource {
   MockIAuthDataSource() {
     _i1.throwOnMissingStub(this);
   }
+
+  @override
+  bool get hasActiveSession =>
+      (super.noSuchMethod(
+            Invocation.getter(#hasActiveSession),
+            returnValue: false,
+          )
+          as bool);
 
   @override
   _i14.Future<void> signUp({
@@ -1281,6 +1298,14 @@ class MockIAuthRepository extends _i1.Mock implements _i20.IAuthRepository {
   MockIAuthRepository() {
     _i1.throwOnMissingStub(this);
   }
+
+  @override
+  bool get hasActiveSession =>
+      (super.noSuchMethod(
+            Invocation.getter(#hasActiveSession),
+            returnValue: false,
+          )
+          as bool);
 
   @override
   _i14.Future<void> signUp({
@@ -1514,10 +1539,24 @@ class MockISignOut extends _i1.Mock implements _i28.ISignOut {
           as _i14.Future<void>);
 }
 
+/// A class which mocks [IHasActiveSession].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockIHasActiveSession extends _i1.Mock implements _i29.IHasActiveSession {
+  MockIHasActiveSession() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  bool call() =>
+      (super.noSuchMethod(Invocation.method(#call, []), returnValue: false)
+          as bool);
+}
+
 /// A class which mocks [IGetProfile].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockIGetProfile extends _i1.Mock implements _i29.IGetProfile {
+class MockIGetProfile extends _i1.Mock implements _i30.IGetProfile {
   MockIGetProfile() {
     _i1.throwOnMissingStub(this);
   }
@@ -1537,7 +1576,7 @@ class MockIGetProfile extends _i1.Mock implements _i29.IGetProfile {
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockIGetCurrentSubscription extends _i1.Mock
-    implements _i30.IGetCurrentSubscription {
+    implements _i31.IGetCurrentSubscription {
   MockIGetCurrentSubscription() {
     _i1.throwOnMissingStub(this);
   }
@@ -1556,7 +1595,7 @@ class MockIGetCurrentSubscription extends _i1.Mock
 /// A class which mocks [IGetSubscriptions].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockIGetSubscriptions extends _i1.Mock implements _i31.IGetSubscriptions {
+class MockIGetSubscriptions extends _i1.Mock implements _i32.IGetSubscriptions {
   MockIGetSubscriptions() {
     _i1.throwOnMissingStub(this);
   }
@@ -1576,7 +1615,7 @@ class MockIGetSubscriptions extends _i1.Mock implements _i31.IGetSubscriptions {
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockISelectSubscription extends _i1.Mock
-    implements _i32.ISelectSubscription {
+    implements _i33.ISelectSubscription {
   MockISelectSubscription() {
     _i1.throwOnMissingStub(this);
   }
@@ -1595,7 +1634,7 @@ class MockISelectSubscription extends _i1.Mock
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockICancelSubscription extends _i1.Mock
-    implements _i33.ICancelSubscription {
+    implements _i34.ICancelSubscription {
   MockICancelSubscription() {
     _i1.throwOnMissingStub(this);
   }
@@ -1613,26 +1652,26 @@ class MockICancelSubscription extends _i1.Mock
 /// A class which mocks [IGetCategories].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockIGetCategories extends _i1.Mock implements _i34.IGetCategories {
+class MockIGetCategories extends _i1.Mock implements _i35.IGetCategories {
   MockIGetCategories() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i14.Future<List<_i35.CategoryDomain>> call() =>
+  _i14.Future<List<_i36.CategoryDomain>> call() =>
       (super.noSuchMethod(
             Invocation.method(#call, []),
-            returnValue: _i14.Future<List<_i35.CategoryDomain>>.value(
-              <_i35.CategoryDomain>[],
+            returnValue: _i14.Future<List<_i36.CategoryDomain>>.value(
+              <_i36.CategoryDomain>[],
             ),
           )
-          as _i14.Future<List<_i35.CategoryDomain>>);
+          as _i14.Future<List<_i36.CategoryDomain>>);
 }
 
 /// A class which mocks [IGetNextCard].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockIGetNextCard extends _i1.Mock implements _i36.IGetNextCard {
+class MockIGetNextCard extends _i1.Mock implements _i37.IGetNextCard {
   MockIGetNextCard() {
     _i1.throwOnMissingStub(this);
   }
@@ -1652,26 +1691,26 @@ class MockIGetNextCard extends _i1.Mock implements _i36.IGetNextCard {
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockIGetGuidedRouteIntros extends _i1.Mock
-    implements _i37.IGetGuidedRouteIntros {
+    implements _i38.IGetGuidedRouteIntros {
   MockIGetGuidedRouteIntros() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i14.Future<List<_i38.GuidedRouteIntroDomain>> call() =>
+  _i14.Future<List<_i39.GuidedRouteIntroDomain>> call() =>
       (super.noSuchMethod(
             Invocation.method(#call, []),
-            returnValue: _i14.Future<List<_i38.GuidedRouteIntroDomain>>.value(
-              <_i38.GuidedRouteIntroDomain>[],
+            returnValue: _i14.Future<List<_i39.GuidedRouteIntroDomain>>.value(
+              <_i39.GuidedRouteIntroDomain>[],
             ),
           )
-          as _i14.Future<List<_i38.GuidedRouteIntroDomain>>);
+          as _i14.Future<List<_i39.GuidedRouteIntroDomain>>);
 }
 
 /// A class which mocks [IGetMembership].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockIGetMembership extends _i1.Mock implements _i39.IGetMembership {
+class MockIGetMembership extends _i1.Mock implements _i40.IGetMembership {
   MockIGetMembership() {
     _i1.throwOnMissingStub(this);
   }
@@ -1690,7 +1729,7 @@ class MockIGetMembership extends _i1.Mock implements _i39.IGetMembership {
 /// A class which mocks [ISaveRecallCard].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockISaveRecallCard extends _i1.Mock implements _i40.ISaveRecallCard {
+class MockISaveRecallCard extends _i1.Mock implements _i41.ISaveRecallCard {
   MockISaveRecallCard() {
     _i1.throwOnMissingStub(this);
   }
@@ -1708,7 +1747,7 @@ class MockISaveRecallCard extends _i1.Mock implements _i40.ISaveRecallCard {
 /// A class which mocks [ISendAnswer].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockISendAnswer extends _i1.Mock implements _i41.ISendAnswer {
+class MockISendAnswer extends _i1.Mock implements _i42.ISendAnswer {
   MockISendAnswer() {
     _i1.throwOnMissingStub(this);
   }
@@ -1732,7 +1771,7 @@ class MockISendAnswer extends _i1.Mock implements _i41.ISendAnswer {
 /// A class which mocks [IGetCardRevision].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockIGetCardRevision extends _i1.Mock implements _i42.IGetCardRevision {
+class MockIGetCardRevision extends _i1.Mock implements _i43.IGetCardRevision {
   MockIGetCardRevision() {
     _i1.throwOnMissingStub(this);
   }

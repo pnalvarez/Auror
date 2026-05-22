@@ -22,6 +22,8 @@ class AuthEmailConfirmationRequiredException extends AuthDataSourceException {
 abstract class IAuthDataSource {
   User? get currentUser;
 
+  bool get hasActiveSession;
+
   Future<void> signUp({
     required String email,
     required String password,
@@ -41,6 +43,9 @@ class AuthDataSource implements IAuthDataSource {
 
   @override
   User? get currentUser => _authService.currentUser;
+
+  @override
+  bool get hasActiveSession => _authService.hasActiveSession;
 
   @override
   Future<void> signUp({

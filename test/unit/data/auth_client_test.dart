@@ -17,6 +17,29 @@ void main() {
     sut = AuthService.withClient(supabaseClient);
   });
 
+  test('hasActiveSession is true when GoTrue has a session', () {
+    when(auth.currentSession).thenReturn(
+      Session(
+        accessToken: 'token',
+        tokenType: 'bearer',
+        user: User(
+          id: 'uid',
+          appMetadata: const {},
+          userMetadata: const {},
+          aud: 'authenticated',
+          createdAt: DateTime.utc(2024).toIso8601String(),
+        ),
+      ),
+    );
+
+    expect(sut.hasActiveSession, isTrue);
+  });
+
+  test('hasActiveSession is false when GoTrue has no session', () {
+    when(auth.currentSession).thenReturn(null);
+    expect(sut.hasActiveSession, isFalse);
+  });
+
   test('currentUser forwards Supabase auth', () {
     final user = User(
       id: 'uid',
