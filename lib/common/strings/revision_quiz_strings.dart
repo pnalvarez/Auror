@@ -1,6 +1,8 @@
 /// Revision quiz (video + recall + self-rating).
 const revisionQuizNavLabel = 'Revisões';
 
+const revisionQuizEmptyMessage = 'Nenhuma revisão disponível.';
+
 const revisionQuizInstruction = 'Tente lembrar antes de ver a resposta.';
 
 const revisionQuizDeepMode = 'Modo profundo';

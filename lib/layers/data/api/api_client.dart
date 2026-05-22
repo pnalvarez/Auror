@@ -1,7 +1,7 @@
 import 'package:auror/common/environment/auror_supabase_constants.dart';
 import 'package:auror/core/http/supabase_http_logging.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/foundation.dart' show debugPrint, kDebugMode, visibleForTesting;
 import 'package:injectable/injectable.dart';
 
 abstract class IApiClient {
@@ -20,7 +20,12 @@ abstract class IApiClient {
 
 @LazySingleton(as: IApiClient)
 class ApiClient implements IApiClient {
-  ApiClient() : _dio = _createDio();
+  factory ApiClient() => ApiClient._(_createDio());
+
+  @visibleForTesting
+  factory ApiClient.withDio(Dio dio) => ApiClient._(dio);
+
+  ApiClient._(this._dio);
 
   final Dio _dio;
 

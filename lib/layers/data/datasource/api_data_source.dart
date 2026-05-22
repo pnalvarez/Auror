@@ -3,6 +3,7 @@ import 'package:auror/layers/data/api/api_client.dart';
 import 'package:auror/layers/data/models/profile_data.dart';
 import 'package:auror/layers/data/models/subscription_data.dart';
 import 'package:injectable/injectable.dart';
+import 'package:meta/meta.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 /// Contrato da camada de dados para chamadas HTTP à API (PostgREST / REST v1).
@@ -48,17 +49,37 @@ abstract class IApiDataSource {
   });
 }
 
+typedef CurrentSessionProvider = Session? Function();
+
 @Injectable(as: IApiDataSource)
 class ApiDataSource implements IApiDataSource {
-  ApiDataSource(this._apiClient);
+  factory ApiDataSource(IApiClient apiClient) =>
+      ApiDataSource._(apiClient);
+
+  @visibleForTesting
+  factory ApiDataSource.withSession(
+    IApiClient apiClient,
+    CurrentSessionProvider currentSession,
+  ) =>
+      ApiDataSource._(apiClient, currentSession: currentSession);
+
+  ApiDataSource._(
+    this._apiClient, {
+    CurrentSessionProvider? currentSession,
+  }) : _currentSession =
+           currentSession ?? _defaultCurrentSession;
+
+  static Session? _defaultCurrentSession() =>
+      Supabase.instance.client.auth.currentSession;
 
   final IApiClient _apiClient;
+  final CurrentSessionProvider _currentSession;
 
   static const String _profilesResource = 'profiles';
 
   @override
   Future<ProfileData> fetchProfile({required String userId}) async {
-    final session = Supabase.instance.client.auth.currentSession;
+    final session = _currentSession();
     if (session == null) {
       throw StateError('Sessão ausente para carregar o perfil.');
     }
@@ -85,7 +106,7 @@ class ApiDataSource implements IApiDataSource {
   Future<List<SubscriptionData>> fetchSubscriptions({
     String resourceName = 'full_subscriptions',
   }) async {
-    final session = Supabase.instance.client.auth.currentSession;
+    final session = _currentSession();
     final headers = <String, String>{
       'apikey': AurorSupabaseConstants.anonKey,
       if (session != null) 'Authorization': 'Bearer ${session.accessToken}',
@@ -102,7 +123,7 @@ class ApiDataSource implements IApiDataSource {
   Future<SubscriptionData> fetchCurrentSubscription({
     String resourceName = 'full_subscriptions',
   }) async {
-    final session = Supabase.instance.client.auth.currentSession;
+    final session = _currentSession();
     if (session == null) {
       throw StateError('Sessão ausente para carregar assinatura atual.');
     }
@@ -131,7 +152,7 @@ class ApiDataSource implements IApiDataSource {
     required String subscriptionId,
     String rpcName = 'set_user_subscription',
   }) async {
-    final session = Supabase.instance.client.auth.currentSession;
+    final session = _currentSession();
     if (session == null) {
       throw StateError('Sessão ausente para selecionar assinatura.');
     }
@@ -153,7 +174,7 @@ class ApiDataSource implements IApiDataSource {
   Future<void> cancelSubscription({
     String rpcName = 'cancel_user_subscription',
   }) async {
-    final session = Supabase.instance.client.auth.currentSession;
+    final session = _currentSession();
     if (session == null) {
       throw StateError('Sessão ausente para cancelar assinatura.');
     }

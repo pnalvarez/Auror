@@ -1,0 +1,108 @@
+# Runs on every PR. To block merging until this workflow is green, enable branch
+# protection (or a ruleset): Repository Settings → Branches → edit the default
+# rule → enable "Require status checks to pass before merging" → add the check
+# named "All checks passed" (the final job below). Rulesets: Settings → Rules →
+# Rulesets → target branches → Require status checks → same check name.
+
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  unit-tests-and-coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Generate code
+        run: dart run build_runner build --delete-conflicting-outputs
+
+      - name: Analyze
+        run: flutter analyze --no-fatal-warnings --no-fatal-infos
+
+      - name: Run unit tests with coverage
+        run: flutter test test/unit --coverage
+
+      - name: Enforce minimum line coverage (80%)
+        uses: VeryGoodOpenSource/very_good_coverage@v2
+        with:
+          path: ${{ github.workspace }}/coverage/lcov.info
+          min_coverage: 80
+          exclude: >-
+            **/*.g.dart
+            **/*.freezed.dart
+            **/*.gr.dart
+            **/generated_plugin_registrant.dart
+            **/widgetbook_workspace/**
+
+  ui-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Install dependencies (app)
+        run: flutter pub get
+
+      - name: Generate code (app)
+        run: dart run build_runner build --delete-conflicting-outputs
+
+      - name: Run app UI (widget) tests
+        run: flutter test test/ui
+
+      - name: Install dependencies (design system)
+        working-directory: packages/auror_design_system
+        run: flutter pub get
+
+      - name: Run design system widget tests
+        working-directory: packages/auror_design_system
+        run: flutter test
+
+  # Single green check for branch protection. Without `if: always()`, this job
+  # would be skipped when a needed job fails, and GitHub might still allow merge
+  # if only this check were required—so we re-verify results explicitly.
+  ci-required:
+    name: All checks passed
+    runs-on: ubuntu-latest
+    needs: [unit-tests-and-coverage, ui-tests]
+    if: always()
+    steps:
+      - name: Enforce job results
+        env:
+          UNIT: ${{ needs.unit-tests-and-coverage.result }}
+          UI: ${{ needs.ui-tests.result }}
+        run: |
+          echo "unit-tests-and-coverage: $UNIT"
+          echo "ui-tests: $UI"
+          if [[ "$UNIT" != "success" || "$UI" != "success" ]]; then
+            echo "::error::CI did not complete successfully; do not merge."
+            exit 1
+          fi
+          echo "All CI jobs succeeded."
