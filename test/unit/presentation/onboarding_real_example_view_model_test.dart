@@ -13,4 +13,14 @@ void main() {
       expect(bloc.state.recallCardRevealed, isTrue);
     },
   );
+
+  blocTest<OnboardingRealExampleViewModel, OnboardingRealExampleState>(
+    'started resets to initial state',
+    build: OnboardingRealExampleViewModel.new,
+    seed: () => OnboardingRealExampleState.recallCardRevealed(true),
+    act: (bloc) => bloc.add(const OnboardingRealExampleStarted()),
+    verify: (bloc) {
+      expect(bloc.state.recallCardRevealed, isFalse);
+    },
+  );
 }

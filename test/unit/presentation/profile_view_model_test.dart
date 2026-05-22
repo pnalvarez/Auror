@@ -48,4 +48,40 @@ void main() {
       expect(bloc.state.pendingMainLaunchNavigation, isTrue);
     },
   );
+
+  blocTest<ProfileViewModel, ProfileState>(
+    'load failure keeps profile and sets error',
+    build: () {
+      when(getProfile()).thenThrow(Exception('load failed'));
+      return ProfileViewModel(getProfile, signOut, getCurrent);
+    },
+    act: (bloc) => bloc.add(const ProfileLoadRequested()),
+    verify: (bloc) {
+      expect(bloc.state.errorMessage, contains('load failed'));
+      expect(bloc.state.isLoadingData, isFalse);
+    },
+  );
+
+  blocTest<ProfileViewModel, ProfileState>(
+    'logout failure maps error message',
+    build: () {
+      when(signOut()).thenThrow(Exception('sign out failed'));
+      return ProfileViewModel(getProfile, signOut, getCurrent);
+    },
+    act: (bloc) => bloc.add(const ProfileLogoutTapped()),
+    verify: (bloc) {
+      expect(bloc.state.errorMessage, isNotNull);
+      expect(bloc.state.pendingMainLaunchNavigation, isFalse);
+    },
+  );
+
+  blocTest<ProfileViewModel, ProfileState>(
+    'main launch navigation consumed clears flag',
+    build: () => ProfileViewModel(getProfile, signOut, getCurrent),
+    seed: () => const ProfileState(pendingMainLaunchNavigation: true),
+    act: (bloc) => bloc.add(const ProfileMainLaunchNavigationConsumed()),
+    verify: (bloc) {
+      expect(bloc.state.pendingMainLaunchNavigation, isFalse);
+    },
+  );
 }

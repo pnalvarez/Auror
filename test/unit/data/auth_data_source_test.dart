@@ -77,4 +77,36 @@ void main() {
     await sut.signOut();
     verify(authService.signOut()).called(1);
   });
+
+  test('AuthDataSourceException toString includes operation and cause', () {
+    const ex = AuthDataSourceException(
+      operation: 'signUp',
+      cause: 'network',
+    );
+    expect(ex.toString(), 'AuthDataSourceException(signUp): network');
+  });
+
+  test('signIn wraps non-AuthException in AuthDataSourceException', () async {
+    when(
+      authService.signIn(email: anyNamed('email'), password: anyNamed('password')),
+    ).thenThrow(Exception('timeout'));
+
+    await expectLater(
+      sut.signIn(email: 'a@b.com', password: 'p'),
+      throwsA(isA<AuthDataSourceException>()),
+    );
+  });
+
+  test('signIn maps phone_not_confirmed to email confirmation', () async {
+    when(
+      authService.signIn(email: anyNamed('email'), password: anyNamed('password')),
+    ).thenThrow(
+      const AuthException('confirm', code: 'phone_not_confirmed'),
+    );
+
+    await expectLater(
+      sut.signIn(email: 'a@b.com', password: 'p'),
+      throwsA(isA<AuthEmailConfirmationRequiredException>()),
+    );
+  });
 }

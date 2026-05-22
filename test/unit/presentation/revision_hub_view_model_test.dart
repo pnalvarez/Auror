@@ -36,4 +36,17 @@ void main() {
       expect(bloc.revisions, hasLength(1));
     },
   );
+
+  blocTest<RevisionHubViewModel, RevisionHubState>(
+    'load failure clears revisions',
+    build: () {
+      when(getRevisions()).thenThrow(Exception('err'));
+      return RevisionHubViewModel(getRevisions);
+    },
+    act: (bloc) => bloc.add(const RevisionHubLoadRequested()),
+    verify: (bloc) {
+      expect(bloc.state.revisions, isEmpty);
+      expect(bloc.state.errorMessage, contains('err'));
+    },
+  );
 }

@@ -1,4 +1,5 @@
 import 'package:injectable/injectable.dart';
+import 'package:meta/meta.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 abstract class IAuthService {
@@ -17,7 +18,18 @@ abstract class IAuthService {
 
 @Injectable(as: IAuthService)
 class AuthService implements IAuthService {
-  SupabaseClient get _client => Supabase.instance.client;
+  factory AuthService() => AuthService._();
+
+  @visibleForTesting
+  factory AuthService.withClient(SupabaseClient client) =>
+      AuthService._(client: client);
+
+  AuthService._({SupabaseClient? client}) : _clientOverride = client;
+
+  final SupabaseClient? _clientOverride;
+
+  SupabaseClient get _client =>
+      _clientOverride ?? Supabase.instance.client;
 
   @override
   User? get currentUser => _client.auth.currentUser;

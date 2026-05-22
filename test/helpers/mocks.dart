@@ -26,9 +26,12 @@ import 'package:auror/layers/domain/usecases/sign_in.dart';
 import 'package:auror/layers/domain/usecases/sign_out.dart';
 import 'package:auror/layers/domain/usecases/sign_up.dart';
 import 'package:mockito/annotations.dart';
+import 'package:supabase/supabase.dart' show GoTrueClient;
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 @GenerateMocks([
+  GoTrueClient,
+  SupabaseClient,
   IApiClient,
   IAuthService,
   IAuthDataSource,

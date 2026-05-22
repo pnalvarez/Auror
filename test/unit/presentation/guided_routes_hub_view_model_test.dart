@@ -48,4 +48,17 @@ void main() {
       verify(getMembership()).called(1);
     },
   );
+
+  blocTest<GuidedRoutesHubViewModel, GuidedRoutesHubState>(
+    'load failure clears routes and sets error',
+    build: () {
+      when(getIntros()).thenThrow(Exception('fail'));
+      return GuidedRoutesHubViewModel(getIntros, getMembership);
+    },
+    act: (bloc) => bloc.add(const GuidedRoutesHubLoadRequested()),
+    verify: (bloc) {
+      expect(bloc.state.routes, isEmpty);
+      expect(bloc.state.errorMessage, contains('fail'));
+    },
+  );
 }

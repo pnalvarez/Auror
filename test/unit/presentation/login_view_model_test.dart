@@ -59,4 +59,71 @@ void main() {
       expect(bloc.state.isLoading, isFalse);
     },
   );
+
+  blocTest<LoginViewModel, LoginState>(
+    'successful sign up sets email confirmation navigation',
+    build: () {
+      when(
+        signUp.call(
+          email: anyNamed('email'),
+          password: anyNamed('password'),
+          displayName: anyNamed('displayName'),
+        ),
+      ).thenAnswer((_) async {});
+      return LoginViewModel(LoginContext.signUp, signIn, signUp);
+    },
+    act: (bloc) => bloc
+      ..add(const LoginNameChanged('Ada'))
+      ..add(const LoginEmailChanged('ada@example.com'))
+      ..add(const LoginPasswordChanged('Longenough1!'))
+      ..add(const LoginConfirmPasswordChanged('Longenough1!'))
+      ..add(const LoginSubmitTapped()),
+    verify: (bloc) {
+      expect(bloc.state.pendingEmailConfirmationNavigation, isTrue);
+      verify(
+        signUp.call(
+          email: 'ada@example.com',
+          password: 'Longenough1!',
+          displayName: 'Ada',
+        ),
+      ).called(1);
+    },
+  );
+
+  blocTest<LoginViewModel, LoginState>(
+    'field and navigation events update state',
+    build: () => LoginViewModel(LoginContext.signIn, signIn, signUp),
+    act: (bloc) => bloc
+      ..add(const LoginContextChanged(LoginContext.signUp))
+      ..add(const LoginPasswordVisibilityToggled())
+      ..add(const LoginConfirmPasswordVisibilityToggled())
+      ..add(const LoginDashboardNavigationConsumed())
+      ..add(const LoginSnackBarConsumed())
+      ..add(const LoginEmailConfirmationNavigationConsumed()),
+    verify: (bloc) {
+      expect(bloc.state.loginContext, LoginContext.signUp);
+      expect(bloc.state.obscurePassword, isFalse);
+      expect(bloc.state.obscureConfirm, isFalse);
+      expect(bloc.state.pendingDashboardNavigation, isFalse);
+      expect(bloc.state.pendingEmailConfirmationNavigation, isFalse);
+    },
+  );
+
+  blocTest<LoginViewModel, LoginState>(
+    'generic auth error sets snackBarMessage',
+    build: () {
+      when(
+        signIn.call(email: anyNamed('email'), password: anyNamed('password')),
+      ).thenThrow(Exception('fail'));
+      return LoginViewModel(LoginContext.signIn, signIn, signUp);
+    },
+    act: (bloc) => bloc
+      ..add(const LoginEmailChanged('user@example.com'))
+      ..add(const LoginPasswordChanged('any-password'))
+      ..add(const LoginSubmitTapped()),
+    verify: (bloc) {
+      expect(bloc.state.snackBarMessage, isNotNull);
+      expect(bloc.state.isLoading, isFalse);
+    },
+  );
 }

@@ -67,4 +67,70 @@ void main() {
       ).called(1);
     },
   );
+
+  blocTest<RevisionQuizViewModel, RevisionQuizState>(
+    'answer draft and deep mode events update CTA flags',
+    build: () {
+      final rev = kFixtureRevision(id: 'rid-1');
+      return RevisionQuizViewModel(
+        sendAnswer,
+        getCardRevision,
+        revisions: [rev],
+        extras: null,
+      );
+    },
+    act: (bloc) {
+      bloc.add(const RevisionQuizEvent.answerDraftChanged('hello'));
+      bloc.add(const RevisionQuizEvent.deepModeToggled());
+      bloc.add(const RevisionQuizEvent.revealAnswer());
+      bloc.add(const RevisionQuizEvent.clearAnswerDraft());
+    },
+    verify: (bloc) {
+      expect(bloc.state.isSendAnswerCTAEnabled, isFalse);
+      expect(bloc.state.answerRevealed, isTrue);
+      expect(bloc.answerDraftController.text, isEmpty);
+    },
+  );
+
+  blocTest<RevisionQuizViewModel, RevisionQuizState>(
+    'advance after feedback moves to next revision then pops',
+    build: () {
+      final r1 = kFixtureRevision(id: 'r1');
+      final r2 = kFixtureRevision(id: 'r2');
+      return RevisionQuizViewModel(
+        sendAnswer,
+        getCardRevision,
+        revisions: [r1, r2],
+        extras: null,
+      );
+    },
+    act: (bloc) {
+      bloc.add(const RevisionQuizEvent.advanceAfterFeedback());
+      bloc.add(const RevisionQuizEvent.advanceAfterFeedback());
+      bloc.add(const RevisionQuizEvent.shouldPopConsumed());
+    },
+    verify: (bloc) {
+      expect(bloc.state.currentIndex, 1);
+      expect(bloc.state.shouldPopRoute, isFalse);
+    },
+  );
+
+  blocTest<RevisionQuizViewModel, RevisionQuizState>(
+    'started handles getCardRevision failure',
+    build: () {
+      when(getCardRevision(cardId: anyNamed('cardId')))
+          .thenThrow(Exception('missing'));
+      return RevisionQuizViewModel(
+        sendAnswer,
+        getCardRevision,
+        revisions: const [],
+        extras: const RevisionQuizFactoryArgs(cardId: 'missing'),
+      );
+    },
+    act: (bloc) => bloc.add(const RevisionQuizEvent.started()),
+    verify: (bloc) {
+      expect(bloc.state.isLoading, isFalse);
+      expect(bloc.state.allRevisions, isEmpty);
+    },
+  );
 }

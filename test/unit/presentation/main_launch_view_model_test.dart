@@ -15,4 +15,13 @@ void main() {
       MainLaunchState.ready(hasActiveSession: false),
     ],
   );
+
+  blocTest<MainLaunchViewModel, MainLaunchState>(
+    'enter app and how it works events are handled',
+    build: MainLaunchViewModel.new,
+    act: (bloc) => bloc
+      ..add(const MainLaunchEvent.enterAppTapped())
+      ..add(const MainLaunchEvent.howItWorksTapped()),
+    expect: () => <MainLaunchState>[],
+  );
 }
