@@ -23,9 +23,10 @@ migrate_working_dir/
 # is commented out by default.
 #.vscode/
 
-# Generated (build_runner / auto_route / injectable)
+# Generated (build_runner / auto_route / injectable / mockito)
 *.gr.dart
 *.freezed.dart
+*.mocks.dart
 *.g.dart
 **/di.config.dart
 
