@@ -12,6 +12,7 @@ sealed class GuidedRouteIntroUI with _$GuidedRouteIntroUI {
     required String topic,
     required String title,
     required String description,
+    required bool isPremium,
   }) = _GuidedRouteIntroUI;
 
   factory GuidedRouteIntroUI.fromDomain(GuidedRouteIntroDomain domain) {
@@ -19,6 +20,7 @@ sealed class GuidedRouteIntroUI with _$GuidedRouteIntroUI {
       topic: domain.topic,
       title: domain.title,
       description: domain.description,
+      isPremium: domain.isPremiumMode,
     );
   }
 }

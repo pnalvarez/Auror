@@ -1,4 +1,5 @@
 import 'package:auror/layers/data/datasource/api_data_source.dart';
+import 'package:auror/layers/data/models/guided_route_intro_data.dart';
 import 'package:auror/layers/data/models/profile_data.dart';
 import 'package:auror/layers/data/models/subscription_data.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -213,6 +214,47 @@ void main() {
         sut.fetchSubscriptions(),
         throwsA(isA<FormatException>()),
       );
+    });
+  });
+
+  group('fetchGuidedRoutes', () {
+    test('parses list with embedded category', () async {
+      sut = ApiDataSource.withSession(apiClient, () => null);
+      when(
+        apiClient.get(
+          endpoint: anyNamed('endpoint'),
+          queryParameters: anyNamed('queryParameters'),
+          headers: anyNamed('headers'),
+        ),
+      ).thenAnswer(
+        (_) async => [
+          {
+            'id': kFixtureGuidedRouteIntroData.id,
+            'name': kFixtureGuidedRouteIntroData.name,
+            'category_id': kFixtureGuidedRouteIntroData.categoryId,
+            'description': kFixtureGuidedRouteIntroData.description,
+            'categories': {'name': 'Produtividade'},
+          },
+        ],
+      );
+
+      final routes = await sut.fetchGuidedRoutes();
+
+      expect(routes, hasLength(1));
+      expect(routes.first, isA<GuidedRouteIntroData>());
+      expect(routes.first.categories?.name, 'Produtividade');
+      verify(
+        apiClient.get(
+          endpoint: 'guided_routes',
+          queryParameters: const {
+            'select': 'id,name,description,category_id,categories(name)',
+          },
+          headers: argThat(
+            containsPair('apikey', isNotEmpty),
+            named: 'headers',
+          ),
+        ),
+      ).called(1);
     });
   });
 

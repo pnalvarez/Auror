@@ -6,6 +6,7 @@ import 'package:auror/layers/data/datasource/api_data_source.dart';
 import 'package:auror/layers/data/datasource/auth_data_source.dart';
 import 'package:auror/layers/domain/repository/auth_repository.dart';
 import 'package:auror/layers/domain/repository/profile_repository.dart';
+import 'package:auror/layers/domain/repository/guided_route_repository.dart';
 import 'package:auror/layers/domain/repository/subscription_repository.dart';
 import 'package:auror/layers/domain/usecases/cancel_subscription.dart';
 import 'package:auror/layers/domain/usecases/get_card_revision.dart';
@@ -13,7 +14,6 @@ import 'package:auror/layers/domain/usecases/get_categories.dart';
 import 'package:auror/layers/domain/usecases/get_current_subscription.dart';
 import 'package:auror/layers/domain/usecases/get_daily_idea.dart';
 import 'package:auror/layers/domain/usecases/get_guided_route_intros.dart';
-import 'package:auror/layers/domain/usecases/get_membership.dart';
 import 'package:auror/layers/domain/usecases/get_next_card.dart';
 import 'package:auror/layers/domain/usecases/get_profile.dart';
 import 'package:auror/layers/domain/usecases/get_revisions.dart';
@@ -40,6 +40,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
   IAuthRepository,
   IProfileRepository,
   ISubscriptionRepository,
+  IGuidedRouteRepository,
   IGetUser,
   IGetRevisions,
   IGetDailyIdea,
@@ -55,7 +56,6 @@ import 'package:supabase_flutter/supabase_flutter.dart';
   IGetCategories,
   IGetNextCard,
   IGetGuidedRouteIntros,
-  IGetMembership,
   ISaveRecallCard,
   ISendAnswer,
   IGetCardRevision,

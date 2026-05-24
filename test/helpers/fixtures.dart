@@ -1,3 +1,4 @@
+import 'package:auror/layers/data/models/guided_route_intro_data.dart';
 import 'package:auror/layers/data/models/profile_data.dart';
 import 'package:auror/layers/data/models/subscription_data.dart';
 import 'package:auror/layers/domain/models/knowledge_card_domain.dart';
@@ -42,6 +43,15 @@ ProfileDomain kExpectedProfileDomain(UserDomain user) {
     isSubscribed: kFixtureProfileData.isSubscribed,
   );
 }
+
+const GuidedRouteIntroData kFixtureGuidedRouteIntroData = GuidedRouteIntroData(
+  id: 'route-uuid-1',
+  name: 'Foco profundo',
+  categoryId: 'cat-uuid-1',
+  description: 'Técnicas para reduzir distrações.',
+  categories: GuidedRouteCategoryData(name: 'Produtividade'), 
+  isPremium: true,
+);
 
 SubscriptionData kFixtureSubscriptionData({bool isCurrent = false, int price = 100}) {
   return SubscriptionData(
