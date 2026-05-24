@@ -16,7 +16,7 @@ void main() {
           body: GuidedRoutesHubBody(
             isLoading: true,
             routes: const [],
-            isPremium: false,
+            isUserPremium: false,
             onRouteTap: () {},
           ),
         ),
@@ -35,7 +35,7 @@ void main() {
             isLoading: false,
             routes: const [],
             errorMessage: 'x',
-            isPremium: false,
+            isUserPremium: false,
             onRouteTap: () {},
           ),
         ),
@@ -53,6 +53,7 @@ void main() {
       topic: 'Tópico',
       title: 'Título',
       description: 'Descrição',
+      isPremium: false,
     );
 
     await tester.pumpWidget(
@@ -62,7 +63,7 @@ void main() {
           body: GuidedRoutesHubBody(
             isLoading: false,
             routes: const [route],
-            isPremium: false,
+            isUserPremium: false,
             onRouteTap: () => taps++,
           ),
         ),

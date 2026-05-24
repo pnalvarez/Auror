@@ -13,14 +13,14 @@ class GuidedRoutesHubBody extends StatelessWidget {
     required this.isLoading,
     required this.routes,
     this.errorMessage,
-    required this.isPremium,
+    required this.isUserPremium,
     required this.onRouteTap,
   });
 
   final bool isLoading;
   final List<GuidedRouteIntroUI> routes;
   final String? errorMessage;
-  final bool isPremium;
+  final bool isUserPremium;
   final VoidCallback onRouteTap;
 
   @override
@@ -73,7 +73,7 @@ class GuidedRoutesHubBody extends StatelessWidget {
             final route = routes[routeIndex];
             return _GuidedRouteCard(
               route: route,
-              isPremium: isPremium,
+              isUserPremium: isUserPremium,
               onTap: onRouteTap,
             );
           },
@@ -86,13 +86,13 @@ class GuidedRoutesHubBody extends StatelessWidget {
 class _GuidedRouteCard extends StatelessWidget {
   const _GuidedRouteCard({
     required this.route,
-    required this.isPremium,
+    required this.isUserPremium,
     required this.onTap,
   });
 
   final GuidedRouteIntroUI route;
   final VoidCallback onTap;
-  final bool isPremium;
+  final bool isUserPremium;
 
   @override
   Widget build(BuildContext context) {
@@ -101,10 +101,10 @@ class _GuidedRouteCard extends StatelessWidget {
       padding: const EdgeInsets.all(AppSpacings.xl2),
       input: BadgesTitleDescriptionInput(
         topMainBadgeText: route.topic,
-        topSecondBadgeText: isPremium ? 'Premium' : null,
+        topSecondBadgeText: route.isPremium ? 'Premium' : null,
         title: route.title,
         description: route.description,
-        trailingIcon: isPremium ? Icons.lock_outline_rounded : Icons.lock,
+        trailingIcon: route.isPremium && !isUserPremium ? Icons.lock_outline_rounded : Icons.chevron_right,
       ),
       onTap: onTap,
     );

@@ -1,4 +1,5 @@
 import 'package:auror/layers/domain/models/guided_route_intro_domain.dart';
+import 'package:auror/layers/domain/repository/guided_route_repository.dart';
 import 'package:injectable/injectable.dart';
 
 abstract class IGetGuidedRouteIntros {
@@ -7,33 +8,11 @@ abstract class IGetGuidedRouteIntros {
 
 @Injectable(as: IGetGuidedRouteIntros)
 class GetGuidedRouteIntros implements IGetGuidedRouteIntros {
+  GetGuidedRouteIntros(this._repository);
+
+  final IGuidedRouteRepository _repository;
+
   @override
-  Future<List<GuidedRouteIntroDomain>> call() async {
-    return const [
-      GuidedRouteIntroDomain(
-        topic: 'Desenvolvimento Pessoal',
-        isPremiumMode: true,
-        title: 'Autoliderança',
-        description:
-            'Desenvolva a capacidade de gerenciar a si mesmo, suas emoções '
-            'e seu tempo para alcançar metas pessoais e profissionais.',
-      ),
-      GuidedRouteIntroDomain(
-        topic: 'Produtividade',
-        isPremiumMode: false,
-        title: 'Foco profundo',
-        description:
-            'Técnicas para reduzir distrações e manter concentração em tarefas '
-            'que importam.',
-      ),
-      GuidedRouteIntroDomain(
-        topic: 'Comunicação',
-        isPremiumMode: true,
-        title: 'Feedback construtivo',
-        description:
-            'Aprenda a dar e receber feedback de forma clara, respeitosa e '
-            'orientada a resultados.',
-      ),
-    ];
-  }
+  Future<List<GuidedRouteIntroDomain>> call() =>
+      _repository.getGuidedRoutes();
 }

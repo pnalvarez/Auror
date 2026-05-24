@@ -1,5 +1,6 @@
 import 'package:auror/common/environment/auror_supabase_constants.dart';
 import 'package:auror/layers/data/api/api_client.dart';
+import 'package:auror/layers/data/models/guided_route_intro_data.dart';
 import 'package:auror/layers/data/models/profile_data.dart';
 import 'package:auror/layers/data/models/subscription_data.dart';
 import 'package:injectable/injectable.dart';
@@ -46,6 +47,14 @@ abstract class IApiDataSource {
   /// Espera um RPC em `/rest/v1/rpc/{rpcName}` sem payload.
   Future<void> cancelSubscription({
     String rpcName = 'cancel_user_subscription',
+  });
+
+  /// GET `guided_routes` com categoria embutida para o chip de tópico na UI.
+  ///
+  /// - Path: `guided_routes`
+  /// - Query: `select=id,name,description,category_id,categories(name),is_premium`
+  Future<List<GuidedRouteIntroData>> fetchGuidedRoutes({
+    String resourceName = 'guided_routes',
   });
 }
 
@@ -171,6 +180,27 @@ class ApiDataSource implements IApiDataSource {
   }
 
   @override
+  Future<List<GuidedRouteIntroData>> fetchGuidedRoutes({
+    String resourceName = 'guided_routes',
+  }) async {
+    final session = _currentSession();
+    final headers = <String, String>{
+      'apikey': AurorSupabaseConstants.anonKey,
+      if (session != null) 'Authorization': 'Bearer ${session.accessToken}',
+    };
+
+    final data = await _apiClient.get(
+      endpoint: resourceName,
+      queryParameters: const <String, dynamic>{
+        'select': 'id,name,description,category_id,categories(name),is_premium',
+      },
+      headers: headers,
+    );
+
+    return _rowsAsGuidedRouteIntroData(data);
+  }
+
+  @override
   Future<void> cancelSubscription({
     String rpcName = 'cancel_user_subscription',
   }) async {
@@ -188,6 +218,34 @@ class ApiDataSource implements IApiDataSource {
       endpoint: 'rpc/$rpcName',
       body: const <String, dynamic>{},
       headers: headers,
+    );
+  }
+
+  List<GuidedRouteIntroData> _rowsAsGuidedRouteIntroData(dynamic data) {
+    if (data is List<dynamic>) {
+      return data.map((row) {
+        if (row is Map<String, dynamic>) {
+          return GuidedRouteIntroData.fromJson(row);
+        }
+        if (row is Map) {
+          return GuidedRouteIntroData.fromJson(Map<String, dynamic>.from(row));
+        }
+        throw FormatException('Linha inesperada: $row');
+      }).toList();
+    }
+
+    if (data is Map) {
+      final map = Map<String, dynamic>.from(data);
+      if (map.containsKey('code') && map.containsKey('message')) {
+        throw FormatException(
+          'PostgREST: ${map['code']} — ${map['message']} '
+          '(hint: ${map['hint']}, details: ${map['details']})',
+        );
+      }
+    }
+
+    throw FormatException(
+      'Esperado lista JSON na raiz para guided_routes. Recebido: ${data.runtimeType}.',
     );
   }
 
