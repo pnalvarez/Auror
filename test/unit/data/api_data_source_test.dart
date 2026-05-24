@@ -233,6 +233,7 @@ void main() {
             'name': kFixtureGuidedRouteIntroData.name,
             'category_id': kFixtureGuidedRouteIntroData.categoryId,
             'description': kFixtureGuidedRouteIntroData.description,
+            'is_premium': kFixtureGuidedRouteIntroData.isPremium,
             'categories': {'name': 'Produtividade'},
           },
         ],
@@ -247,7 +248,8 @@ void main() {
         apiClient.get(
           endpoint: 'guided_routes',
           queryParameters: const {
-            'select': 'id,name,description,category_id,categories(name)',
+            'select':
+                'id,name,description,category_id,categories(name),is_premium',
           },
           headers: argThat(
             containsPair('apikey', isNotEmpty),

@@ -10,11 +10,13 @@ void main() {
       'name': 'Feedback construtivo',
       'category_id': 'cat-1',
       'description': 'Como dar feedback.',
+      'is_premium': true,
       'categories': {'name': 'Comunicação'},
     });
 
     expect(data.name, 'Feedback construtivo');
     expect(data.categories?.name, 'Comunicação');
+    expect(data.isPremium, isTrue);
   });
 
   test('toDomain maps name and category to title and topic', () {
@@ -22,6 +24,6 @@ void main() {
 
     expect(domain.title, 'Foco profundo');
     expect(domain.topic, 'Produtividade');
-    expect(domain.isPremiumMode, isFalse);
+    expect(domain.isPremiumMode, isTrue);
   });
 }

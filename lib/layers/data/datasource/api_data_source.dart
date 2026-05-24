@@ -52,7 +52,7 @@ abstract class IApiDataSource {
   /// GET `guided_routes` com categoria embutida para o chip de tópico na UI.
   ///
   /// - Path: `guided_routes`
-  /// - Query: `select=id,name,description,category_id,categories(name)`
+  /// - Query: `select=id,name,description,category_id,categories(name),is_premium`
   Future<List<GuidedRouteIntroData>> fetchGuidedRoutes({
     String resourceName = 'guided_routes',
   });
