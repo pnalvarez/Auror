@@ -40,6 +40,53 @@ class ListItemDemo extends StatelessWidget {
           onTap: () {},
         ),
         const SizedBox(height: AppSpacings.xl2),
+        Text('Step title + subtitle', style: headlineS),
+        const SizedBox(height: AppSpacings.m),
+        Text(
+          '[StepTitleSubtitleInput] — checked (green), standard (numbered, '
+          'yellow), locked (gray subtitle, [isEnabled]: false).',
+          style: body3Light.copyWith(
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
+          ),
+        ),
+        const SizedBox(height: AppSpacings.m),
+        ListItem(
+          input: StepTitleSubtitleInput(
+            state: StepTitleSubtitleState.checked,
+            title: 'Civilizações fundadoras',
+            subtitle: 'Concluído',
+          ),
+          isExpanded: true,
+          onTap: () {},
+        ),
+        const SizedBox(height: AppSpacings.m),
+        ListItem(
+          input: StepTitleSubtitleInput(
+            state: StepTitleSubtitleState.standard,
+            stepNumber: 2,
+            title: 'Açúcar, ouro e sangue',
+            subtitle: 'Disponível',
+          ),
+          isExpanded: true,
+          onTap: () {},
+        ),
+        const SizedBox(height: AppSpacings.m),
+        Builder(
+          builder: (context) {
+            final lockedInput = StepTitleSubtitleInput(
+              state: StepTitleSubtitleState.locked,
+              title: 'Guerras, golpes e a República',
+              subtitle: 'Complete o submódulo anterior',
+            );
+            return ListItem(
+              input: lockedInput,
+              isExpanded: true,
+              isEnabled: lockedInput.isListItemEnabled,
+              onTap: () {},
+            );
+          },
+        ),
+        const SizedBox(height: AppSpacings.xl2),
         Text('Título, descrição, CTA e progresso', style: headlineS),
         const SizedBox(height: AppSpacings.m),
         ListItem(

@@ -5,6 +5,7 @@ import 'package:auror_design_system/sample/demos/colors_catalog_demo.dart';
 import 'package:auror_design_system/sample/demos/disclaimer_card_demo.dart';
 import 'package:auror_design_system/sample/demos/dropdown_demo.dart';
 import 'package:auror_design_system/sample/demos/feedback_tile_demo.dart';
+import 'package:auror_design_system/sample/demos/icons_catalog_demo.dart';
 import 'package:auror_design_system/sample/demos/ds_action_buttons_demo.dart';
 import 'package:auror_design_system/sample/demos/ds_snackbar_demo.dart';
 import 'package:auror_design_system/sample/demos/input_field_demo.dart';
@@ -44,6 +45,10 @@ abstract final class DsDemoCatalog {
       'app_colors' => const DsDemoEntry(
         title: 'App colors',
         demo: ColorsCatalogDemo(),
+      ),
+      'app_icons' => const DsDemoEntry(
+        title: 'Icons',
+        demo: IconsCatalogDemo(),
       ),
       'badge' => const DsDemoEntry(
         title: 'Badge',
