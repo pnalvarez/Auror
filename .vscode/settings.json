@@ -1,4 +1,11 @@
 {
+  "editor.formatOnSave": true,
+  "[dart]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "Dart-Code.dart-code"
+  },
+  "dart.enableSdkFormatter": true,
+  "dart.lineLength": 80,
   "terminal.integrated.env.osx": {
     "ANDROID_HOME": "/Users/pedroalvarez/Library/Android/sdk",
     "ANDROID_SDK_ROOT": "/Users/pedroalvarez/Library/Android/sdk",

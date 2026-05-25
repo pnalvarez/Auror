@@ -87,6 +87,55 @@ class ListItemDemo extends StatelessWidget {
           },
         ),
         const SizedBox(height: AppSpacings.xl2),
+        Text('Módulo com progresso e steps', style: headlineS),
+        const SizedBox(height: AppSpacings.m),
+        Text(
+          '[TitleProgressStepsInput] — título, progresso/total, barra e lista '
+          'de [StepTitleSubtitleInput] aninhados.',
+          style: body3Light.copyWith(
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
+          ),
+        ),
+        const SizedBox(height: AppSpacings.m),
+        ListItem(
+          input: TitleProgressStepsInput(
+            title: 'História do Brasil',
+            progress: 1,
+            total: 5,
+            steps: [
+              StepTitleSubtitleInput(
+                state: StepTitleSubtitleState.checked,
+                title: 'O Brasil que a escola pula',
+                subtitle: 'Concluído',
+              ),
+              StepTitleSubtitleInput(
+                state: StepTitleSubtitleState.standard,
+                stepNumber: 2,
+                title: 'Açúcar, ouro e sangue',
+                subtitle: 'Disponível',
+              ),
+              StepTitleSubtitleInput(
+                state: StepTitleSubtitleState.locked,
+                title: 'A corte que fugiu e o Império improvável',
+                subtitle: 'Complete o submódulo anterior',
+              ),
+              StepTitleSubtitleInput(
+                state: StepTitleSubtitleState.locked,
+                title: 'As vozes que a história apagou',
+                subtitle: 'Complete o submódulo anterior',
+              ),
+              StepTitleSubtitleInput(
+                state: StepTitleSubtitleState.locked,
+                title: 'O Brasil que não acabou',
+                subtitle: 'Complete o submódulo anterior',
+              ),
+            ],
+            onStepTap: (_) {},
+          ),
+          padding: const EdgeInsets.all(AppSpacings.xl2),
+          isExpanded: true,
+        ),
+        const SizedBox(height: AppSpacings.xl2),
         Text('Título, descrição, CTA e progresso', style: headlineS),
         const SizedBox(height: AppSpacings.m),
         ListItem(

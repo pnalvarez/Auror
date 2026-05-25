@@ -316,6 +316,117 @@ class StepTitleSubtitleInput extends ListItemInput {
   }
 }
 
+/// Module card: title, completed count, progress bar, and nested [StepTitleSubtitleInput] rows.
+class TitleProgressStepsInput extends ListItemInput {
+  TitleProgressStepsInput({
+    required this.title,
+    required this.progress,
+    required this.total,
+    required this.steps,
+    this.onStepTap,
+  }) : assert(progress >= 0),
+       assert(total >= 0);
+
+  final String title;
+  final int progress;
+  final int total;
+  final List<StepTitleSubtitleInput> steps;
+  final ValueChanged<int>? onStepTap;
+
+  @override
+  Widget buildContent(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final brandStyle = ListItemBrandScope.of(context);
+    final stepShellStyle = ListItemBrandStyle.resolve(ListItemBrand.neutral, scheme);
+
+    final titleStyle = headingH5.copyWith(
+      color: brandStyle.titleTextColor,
+      height: 1.2,
+    );
+    final progressStyle = body4Light.copyWith(
+      color: brandStyle.bodyTextColor,
+      height: 1.25,
+    );
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(title, style: titleStyle),
+        const SizedBox(height: AppSpacings.xs),
+        Text('$progress/$total concluídos', style: progressStyle),
+        const SizedBox(height: AppSpacings.m),
+        StepProgressBar(
+          currentValue: progress,
+          totalValue: total,
+          showLabel: false,
+        ),
+        if (steps.isNotEmpty) ...[
+          const SizedBox(height: AppSpacings.l),
+          for (var i = 0; i < steps.length; i++) ...[
+            if (i > 0) const SizedBox(height: AppSpacings.m),
+            _StepRowShell(
+              step: steps[i],
+              shellStyle: stepShellStyle,
+              onTap: steps[i].isListItemEnabled && onStepTap != null
+                  ? () => onStepTap!(i)
+                  : null,
+            ),
+          ],
+        ],
+      ],
+    );
+  }
+}
+
+class _StepRowShell extends StatelessWidget {
+  const _StepRowShell({
+    required this.step,
+    required this.shellStyle,
+    this.onTap,
+  });
+
+  final StepTitleSubtitleInput step;
+  final ListItemBrandStyle shellStyle;
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+
+    Widget content = Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacings.l,
+        vertical: AppSpacings.m,
+      ),
+      child: step.buildContent(context),
+    );
+
+    if (!step.isListItemEnabled) {
+      content = Opacity(opacity: _kListItemDisabledOpacity, child: content);
+    }
+
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: scheme.surfaceContainerLowest,
+        borderRadius: BorderRadius.circular(AppRadius.m),
+        border: Border.all(
+          color: shellStyle.borderColor,
+          width: shellStyle.borderWidth,
+        ),
+      ),
+      child: Material(
+        type: MaterialType.transparency,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(AppRadius.m),
+          child: content,
+        ),
+      ),
+    );
+  }
+}
+
 /// Vertical stack: optional leading icon before the title, then a paragraph
 /// ([body2Light]). No chevron — for informational cards (e.g. expected answer).
 class IconTitleParagraphInput extends ListItemInput {

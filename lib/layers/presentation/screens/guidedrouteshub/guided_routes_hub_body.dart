@@ -21,7 +21,7 @@ class GuidedRoutesHubBody extends StatelessWidget {
   final List<GuidedRouteIntroUI> routes;
   final String? errorMessage;
   final bool isUserPremium;
-  final VoidCallback onRouteTap;
+  final ValueChanged<GuidedRouteIntroUI> onRouteTap;
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +74,7 @@ class GuidedRoutesHubBody extends StatelessWidget {
             return _GuidedRouteCard(
               route: route,
               isUserPremium: isUserPremium,
-              onTap: onRouteTap,
+              onTap: () => onRouteTap(route),
             );
           },
         ),
@@ -91,8 +91,8 @@ class _GuidedRouteCard extends StatelessWidget {
   });
 
   final GuidedRouteIntroUI route;
-  final VoidCallback onTap;
   final bool isUserPremium;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
