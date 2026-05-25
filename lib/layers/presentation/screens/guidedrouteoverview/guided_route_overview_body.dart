@@ -1,10 +1,10 @@
 import 'package:auror/common/strings/guided_route_overview_strings.dart';
 import 'package:auror/layers/presentation/screens/guidedrouteoverview/guided_route_overview_state.dart';
-import 'package:auror_design_system/molecules/buttons/action_buttons.dart';
-import 'package:auror_design_system/molecules/buttons/button_brand.dart';
 import 'package:auror_design_system/atoms/spacing/radius.dart';
 import 'package:auror_design_system/atoms/spacing/spacings.dart';
 import 'package:auror_design_system/atoms/typography/typography.dart';
+import 'package:auror_design_system/molecules/buttons/action_buttons.dart';
+import 'package:auror_design_system/molecules/buttons/button_brand.dart';
 import 'package:auror_design_system/organisms/feedback/shimmer_rectangle.dart';
 import 'package:auror_design_system/organisms/list_item/list_item.dart';
 import 'package:auror_design_system/organisms/navigation_bar/ds_navigation_bar.dart';
@@ -22,15 +22,15 @@ class GuidedRouteOverviewBody extends StatelessWidget {
   final GuidedRouteOverviewState state;
   final VoidCallback onRetry;
 
-  static const int _loadingModuleSkeletonCount = 3;
+  static const int loadingModuleSkeletonCount = 3;
 
-  /// Narrower than [_loadingSubtitleShimmerWidth] — reads as a loading title line.
-  static const double _loadingTitleShimmerWidth = 140;
+  /// Narrower than [loadingSubtitleShimmerWidth] — reads as a loading title line.
+  static const double loadingTitleShimmerWidth = 140;
 
   /// Wider than the title shimmer — reads as a loading subtitle line.
-  static const double _loadingSubtitleShimmerWidth = 240;
+  static const double loadingSubtitleShimmerWidth = 240;
 
-  static const BorderRadius _loadingHeaderShimmerRadius = BorderRadius.all(
+  static const BorderRadius loadingHeaderShimmerRadius = BorderRadius.all(
     Radius.circular(AppRadius.s),
   );
 
@@ -46,36 +46,63 @@ class GuidedRouteOverviewBody extends StatelessWidget {
         title: isLoading ? '' : (overview?.title ?? ''),
         titleWidget: isLoading
             ? const ShimmerRectangle(
-                width: _loadingTitleShimmerWidth,
+                width: loadingTitleShimmerWidth,
                 height: 22,
-                borderRadius: _loadingHeaderShimmerRadius,
+                borderRadius: loadingHeaderShimmerRadius,
               )
             : null,
         description: isLoading ? null : overview?.subtitle,
         descriptionWidget: isLoading
             ? const ShimmerRectangle(
-                width: _loadingSubtitleShimmerWidth,
+                width: loadingSubtitleShimmerWidth,
                 height: 14,
-                borderRadius: _loadingHeaderShimmerRadius,
+                borderRadius: loadingHeaderShimmerRadius,
               )
             : null,
       ),
-      body: SafeArea(child: _buildBody(context)),
+      body: SafeArea(
+        child: _GuidedRouteOverviewBodyContent(
+          state: state,
+          onRetry: onRetry,
+        ),
+      ),
     );
   }
+}
 
-  Widget _buildBody(BuildContext context) {
+class _GuidedRouteOverviewBodyContent extends StatelessWidget {
+  const _GuidedRouteOverviewBodyContent({
+    required this.state,
+    required this.onRetry,
+  });
+
+  final GuidedRouteOverviewState state;
+  final VoidCallback onRetry;
+
+  @override
+  Widget build(BuildContext context) {
     if (state.errorMessage != null) {
-      return _buildErrorBody(context);
+      return _GuidedRouteOverviewErrorBody(onRetry: onRetry);
     }
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: AppSpacings.l),
-      child: state.isLoading ? _buildLoadingList() : _buildModuleList(),
+      child: state.isLoading
+          ? const _GuidedRouteOverviewLoadingList()
+          : _GuidedRouteOverviewModuleList(
+              inputs: state.overview?.moduleListItemInputs ?? const [],
+            ),
     );
   }
+}
 
-  Widget _buildErrorBody(BuildContext context) {
+class _GuidedRouteOverviewErrorBody extends StatelessWidget {
+  const _GuidedRouteOverviewErrorBody({required this.onRetry});
+
+  final VoidCallback onRetry;
+
+  @override
+  Widget build(BuildContext context) {
     final onSurfaceVariant = Theme.of(context).colorScheme.onSurfaceVariant;
 
     return Center(
@@ -101,23 +128,32 @@ class GuidedRouteOverviewBody extends StatelessWidget {
       ),
     );
   }
+}
 
-  Widget _buildLoadingList() {
+class _GuidedRouteOverviewLoadingList extends StatelessWidget {
+  const _GuidedRouteOverviewLoadingList();
+
+  @override
+  Widget build(BuildContext context) {
     return ListView.separated(
-      itemCount: _loadingModuleSkeletonCount,
+      itemCount: GuidedRouteOverviewBody.loadingModuleSkeletonCount,
       separatorBuilder: (context, index) => const SizedBox(height: AppSpacings.l),
       itemBuilder: (context, index) => const _GuidedRouteOverviewModuleShimmer(),
     );
   }
+}
 
-  Widget _buildModuleList() {
-    final inputs = state.overview?.moduleListItemInputs ?? const [];
+class _GuidedRouteOverviewModuleList extends StatelessWidget {
+  const _GuidedRouteOverviewModuleList({required this.inputs});
+
+  final List<TitleProgressStepsInput> inputs;
+
+  @override
+  Widget build(BuildContext context) {
     return ListView.separated(
       itemCount: inputs.length,
       separatorBuilder: (context, index) => const SizedBox(height: AppSpacings.l),
-      itemBuilder: (context, index) => ListItem(
-        input: inputs[index],
-      ),
+      itemBuilder: (context, index) => ListItem(input: inputs[index]),
     );
   }
 }
