@@ -22,7 +22,14 @@ class GuidedRouteOverviewPage extends StatelessWidget {
             ..add(const GuidedRouteOverviewEvent.loadRequested()),
       child: BlocBuilder<GuidedRouteOverviewViewModel, GuidedRouteOverviewState>(
         builder: (context, state) {
-          return AppThemedPage(child: GuidedRouteOverviewBody(state: state));
+          return AppThemedPage(
+            child: GuidedRouteOverviewBody(
+              state: state,
+              onRetry: () => context.read<GuidedRouteOverviewViewModel>().add(
+                const GuidedRouteOverviewEvent.loadRequested(),
+              ),
+            ),
+          );
         },
       ),
     );

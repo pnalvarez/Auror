@@ -1,3 +1,7 @@
+const guidedRouteOverviewLoadErrorMessage = 'Something went wrong';
+
+const guidedRouteOverviewRetryLabel = 'Tentar de novo';
+
 const guidedRouteOverviewCompletePreviousSubmodule =
     'Complete o submódulo anterior';
 

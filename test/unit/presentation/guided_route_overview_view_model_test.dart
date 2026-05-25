@@ -52,4 +52,28 @@ void main() {
       expect(bloc.state.errorMessage, contains('fail'));
     },
   );
+
+  blocTest<GuidedRouteOverviewViewModel, GuidedRouteOverviewState>(
+    'retry load requested fetches overview again',
+    build: () {
+      when(
+        getOverviewDetails(guidedRouteId: anyNamed('guidedRouteId')),
+      ).thenThrow(Exception('fail'));
+      return GuidedRouteOverviewViewModel(guidedRouteId, getOverviewDetails);
+    },
+    act: (bloc) async {
+      bloc.add(const GuidedRouteOverviewLoadRequested());
+      await Future<void>.delayed(Duration.zero);
+      when(
+        getOverviewDetails(guidedRouteId: anyNamed('guidedRouteId')),
+      ).thenAnswer((_) async => kMockGuidedRouteOverviewDomain);
+      bloc.add(const GuidedRouteOverviewLoadRequested());
+    },
+    verify: (bloc) {
+      expect(bloc.state.isLoading, isFalse);
+      expect(bloc.state.errorMessage, isNull);
+      expect(bloc.state.overview, isNotNull);
+      verify(getOverviewDetails(guidedRouteId: guidedRouteId)).called(2);
+    },
+  );
 }
