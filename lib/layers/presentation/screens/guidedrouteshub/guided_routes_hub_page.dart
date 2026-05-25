@@ -1,3 +1,4 @@
+import 'package:auror/common/utils/app_themed_page.dart';
 import 'package:auror/core/di/di.dart';
 import 'package:auror/layers/presentation/routes/app_router.gr.dart';
 import 'package:auror/layers/presentation/screens/guidedrouteshub/guided_routes_hub_body.dart';
@@ -56,19 +57,24 @@ class _GuidedRoutesHubScaffoldState extends State<_GuidedRoutesHubScaffold>
   Widget build(BuildContext context) {
     return BlocBuilder<GuidedRoutesHubViewModel, GuidedRoutesHubState>(
       builder: (context, state) {
-        return SafeArea(
+        return AppThemedPage(
+          child: SafeArea(
           child: GuidedRoutesHubBody(
             isLoading: state.isLoading && state.routes.isEmpty,
             routes: state.routes,
             errorMessage: state.errorMessage,
             isUserPremium: state.isUserPremium,
-            onRouteTap: () {
-              if (!state.isUserPremium) {
+            onRouteTap: (route) {
+              if (route.isPremium && !state.isUserPremium) {
                 context.router.push(SubscriptionUpgradeRoute());
+                return;
               }
+              context.router.push(
+                GuidedRouteOverviewRoute(guidedRouteId: route.id),
+              );
             },
           ),
-        );
+          ));
       },
     );
   }

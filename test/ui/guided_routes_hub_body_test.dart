@@ -17,7 +17,7 @@ void main() {
             isLoading: true,
             routes: const [],
             isUserPremium: false,
-            onRouteTap: () {},
+            onRouteTap: (_) {},
           ),
         ),
       ),
@@ -36,7 +36,7 @@ void main() {
             routes: const [],
             errorMessage: 'x',
             isUserPremium: false,
-            onRouteTap: () {},
+            onRouteTap: (_) {},
           ),
         ),
       ),
@@ -50,6 +50,7 @@ void main() {
   ) async {
     var taps = 0;
     const route = GuidedRouteIntroUI(
+      id: 'route-1',
       topic: 'Tópico',
       title: 'Título',
       description: 'Descrição',
@@ -64,7 +65,7 @@ void main() {
             isLoading: false,
             routes: const [route],
             isUserPremium: false,
-            onRouteTap: () => taps++,
+            onRouteTap: (_) => taps++,
           ),
         ),
       ),

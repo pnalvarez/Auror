@@ -12,9 +12,11 @@ class DsMenuSampleBody extends StatelessWidget {
   static const List<(String label, String demoId)> _demos = [
     ('Action buttons', 'action_buttons'),
     ('App colors', 'app_colors'),
+    ('Icons', 'app_icons'),
     ('Text styles', 'text_styles'),
     ('Badge', 'badge'),
     ('Circular loader', 'circular_loader'),
+    ('Shimmer rectangle', 'shimmer_rectangle'),
     ('Chip picker', 'chip_picker'),
     ('Disclaimer card', 'disclaimer_card'),
     ('Dropdown', 'dropdown'),

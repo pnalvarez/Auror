@@ -1,10 +1,12 @@
 import 'package:auror_design_system/sample/demos/badge_demo.dart';
 import 'package:auror_design_system/sample/demos/chip_picker_demo.dart';
 import 'package:auror_design_system/sample/demos/circular_loader_demo.dart';
+import 'package:auror_design_system/sample/demos/shimmer_rectangle_demo.dart';
 import 'package:auror_design_system/sample/demos/colors_catalog_demo.dart';
 import 'package:auror_design_system/sample/demos/disclaimer_card_demo.dart';
 import 'package:auror_design_system/sample/demos/dropdown_demo.dart';
 import 'package:auror_design_system/sample/demos/feedback_tile_demo.dart';
+import 'package:auror_design_system/sample/demos/icons_catalog_demo.dart';
 import 'package:auror_design_system/sample/demos/ds_action_buttons_demo.dart';
 import 'package:auror_design_system/sample/demos/ds_snackbar_demo.dart';
 import 'package:auror_design_system/sample/demos/input_field_demo.dart';
@@ -45,6 +47,10 @@ abstract final class DsDemoCatalog {
         title: 'App colors',
         demo: ColorsCatalogDemo(),
       ),
+      'app_icons' => const DsDemoEntry(
+        title: 'Icons',
+        demo: IconsCatalogDemo(),
+      ),
       'badge' => const DsDemoEntry(
         title: 'Badge',
         demo: BadgeDemo(),
@@ -52,6 +58,10 @@ abstract final class DsDemoCatalog {
       'circular_loader' => const DsDemoEntry(
         title: 'Circular loader',
         demo: CircularLoaderDemo(),
+      ),
+      'shimmer_rectangle' => const DsDemoEntry(
+        title: 'Shimmer rectangle',
+        demo: ShimmerRectangleDemo(),
       ),
       'chip_picker' => const DsDemoEntry(
         title: 'Chip picker',

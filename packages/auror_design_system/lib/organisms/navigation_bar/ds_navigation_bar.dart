@@ -14,7 +14,9 @@ class DsNavigationBar extends StatelessWidget implements PreferredSizeWidget {
     super.key,
     this.leadingIcon,
     required this.title,
+    this.titleWidget,
     this.description,
+    this.descriptionWidget,
     this.trailingIcon,
     this.trailingWidget,
     this.leadingIconColor,
@@ -28,8 +30,14 @@ class DsNavigationBar extends StatelessWidget implements PreferredSizeWidget {
   final IconData? leadingIcon;
   final String title;
 
+  /// When set, shown instead of [title] text (e.g. loading shimmer).
+  final Widget? titleWidget;
+
   /// When null or empty, only the title line is shown under the leading icon.
   final String? description;
+
+  /// When set, shown instead of [description] text (e.g. loading shimmer).
+  final Widget? descriptionWidget;
   final IconData? trailingIcon;
   final Widget? trailingWidget;
 
@@ -52,16 +60,16 @@ class DsNavigationBar extends StatelessWidget implements PreferredSizeWidget {
   Size get preferredSize => Size.fromHeight(_preferredHeight);
 
   double get _preferredHeight {
-    final hasDescription =
-        description != null && description!.trim().isNotEmpty;
+    final hasDescription = descriptionWidget != null ||
+        (description != null && description!.trim().isNotEmpty);
     const verticalPadding = AppSpacings.m * 2;
     final iconAndGap = leadingIconSize + AppSpacings.s;
-    // [headingH1] with height 1.2, max 2 lines (see [build]).
-    const titleBlockHeight = defaultXL2 * 1.2 * 2;
+    final titleLineCount = titleWidget != null ? 1 : 2;
+    final titleBlockHeight = defaultXL2 * 1.2 * titleLineCount;
     var height = verticalPadding + iconAndGap + titleBlockHeight;
     if (hasDescription) {
-      // [body4Light] with height 1.25, max 3 lines (see [build]).
-      height += AppSpacings.xs + defaultBody * 1.25 * 3;
+      final descriptionLineCount = descriptionWidget != null ? 1 : 3;
+      height += AppSpacings.xs + defaultBody * 1.25 * descriptionLineCount;
     }
     if (onTap != null) {
       height += AppSpacings.xs * 2;
@@ -81,8 +89,8 @@ class DsNavigationBar extends StatelessWidget implements PreferredSizeWidget {
       height: 1.25,
     );
 
-    final hasDescription =
-        description != null && description!.trim().isNotEmpty;
+    final hasDescription = descriptionWidget != null ||
+        (description != null && description!.trim().isNotEmpty);
 
     final headerRow = Row(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -118,20 +126,26 @@ class DsNavigationBar extends StatelessWidget implements PreferredSizeWidget {
                         ),
                   const SizedBox(height: AppSpacings.s),
                 ],
-                Text(
-                  title,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: titleStyle,
-                ),
+                if (titleWidget != null)
+                  titleWidget!
+                else
+                  Text(
+                    title,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: titleStyle,
+                  ),
                 if (hasDescription) ...[
                   const SizedBox(height: AppSpacings.xs),
-                  Text(
-                    (description ?? '').trim(),
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
-                    style: descriptionStyle,
-                  ),
+                  if (descriptionWidget != null)
+                    descriptionWidget!
+                  else
+                    Text(
+                      (description ?? '').trim(),
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                      style: descriptionStyle,
+                    ),
                 ],
               ],
             ),

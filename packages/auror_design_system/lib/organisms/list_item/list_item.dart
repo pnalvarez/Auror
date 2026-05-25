@@ -1,7 +1,10 @@
 import 'package:auror_design_system/atoms/colors/colors.dart';
+import 'package:auror_design_system/atoms/icons/app_icons.dart';
 import 'package:auror_design_system/atoms/spacing/radius.dart';
+import 'package:auror_design_system/atoms/spacing/sizes.dart';
 import 'package:auror_design_system/atoms/spacing/spacings.dart';
 import 'package:auror_design_system/atoms/typography/typography.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:auror_design_system/molecules/badges/badge.dart';
 import 'package:auror_design_system/molecules/buttons/action_buttons.dart';
 import 'package:auror_design_system/molecules/buttons/button_brand.dart';
@@ -190,6 +193,236 @@ class IconDescriptionInput extends ListItemInput {
           ),
         ],
       ],
+    );
+  }
+}
+
+/// Step row state for [StepTitleSubtitleInput].
+enum StepTitleSubtitleState {
+  /// Green check icon; subtitle uses [AppColors.Success.success].
+  checked,
+
+  /// Numbered circle on a yellow container; subtitle uses [AppColors.Tertiary.tertiary].
+  standard,
+
+  /// Locked icon; subtitle uses [AppColors.Text.Body.secondary]; row is disabled.
+  locked,
+}
+
+/// Horizontal row: step indicator (check, number, or lock), title + subtitle.
+class StepTitleSubtitleInput extends ListItemInput {
+  StepTitleSubtitleInput({
+    required this.state,
+    required this.title,
+    required this.subtitle,
+    this.stepNumber,
+  }) : assert(
+         state != StepTitleSubtitleState.standard || stepNumber != null,
+         'stepNumber is required when state is standard',
+       );
+
+  final StepTitleSubtitleState state;
+  final String title;
+  final String subtitle;
+
+  /// Shown inside the step circle when [state] is [StepTitleSubtitleState.standard].
+  final int? stepNumber;
+
+  /// When false, wrap the row in [ListItem] with [ListItem.isEnabled]: false.
+  bool get isListItemEnabled => state != StepTitleSubtitleState.locked;
+
+  static const double _indicatorSize = AppSizes.iconM;
+
+  Color _subtitleColor() => switch (state) {
+    StepTitleSubtitleState.checked => AppColors.Success.success,
+    StepTitleSubtitleState.standard => AppColors.Tertiary.tertiary,
+    StepTitleSubtitleState.locked => AppColors.Text.Body.secondary,
+  };
+
+  Widget _buildIndicator() => switch (state) {
+    StepTitleSubtitleState.checked => SvgPicture.asset(
+      AppIcons.successCheckCircle,
+      package: AppIcons.package,
+      width: _indicatorSize,
+      height: _indicatorSize,
+    ),
+    StepTitleSubtitleState.standard => SizedBox(
+      width: _indicatorSize,
+      height: _indicatorSize,
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: AppColors.Tertiary.tertiaryContainer,
+          shape: BoxShape.circle,
+        ),
+        child: Center(
+          child: Text(
+            '${stepNumber!}',
+            style: body4Semibold.copyWith(
+              color: AppColors.Tertiary.onTertiaryContainer,
+              height: 1,
+            ),
+          ),
+        ),
+      ),
+    ),
+    StepTitleSubtitleState.locked => SvgPicture.asset(
+      AppIcons.lockedCircle,
+      package: AppIcons.package,
+      width: _indicatorSize,
+      height: _indicatorSize,
+    ),
+  };
+
+  @override
+  Widget buildContent(BuildContext context) {
+    final brandStyle = ListItemBrandScope.of(context);
+    final titleStyle = headingH6.copyWith(
+      color: brandStyle.titleTextColor,
+      height: 1.2,
+    );
+    final subtitleStyle = body4Light.copyWith(
+      color: _subtitleColor(),
+      height: 1.25,
+    );
+
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        _buildIndicator(),
+        const SizedBox(width: AppSpacings.m),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                title,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: titleStyle,
+              ),
+              const SizedBox(height: AppSpacings.xs),
+              Text(
+                subtitle,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: subtitleStyle,
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+/// Module card: title, completed count, progress bar, and nested [StepTitleSubtitleInput] rows.
+class TitleProgressStepsInput extends ListItemInput {
+  TitleProgressStepsInput({
+    required this.title,
+    required this.progress,
+    required this.total,
+    required this.steps,
+    this.onStepTap,
+  }) : assert(progress >= 0),
+       assert(total >= 0);
+
+  final String title;
+  final int progress;
+  final int total;
+  final List<StepTitleSubtitleInput> steps;
+  final ValueChanged<int>? onStepTap;
+
+  @override
+  Widget buildContent(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final brandStyle = ListItemBrandScope.of(context);
+    final stepShellStyle = ListItemBrandStyle.resolve(ListItemBrand.neutral, scheme);
+
+    final titleStyle = headingH5.copyWith(
+      color: brandStyle.titleTextColor,
+      height: 1.2,
+    );
+    final progressStyle = body4Light.copyWith(
+      color: brandStyle.bodyTextColor,
+      height: 1.25,
+    );
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(title, style: titleStyle),
+        const SizedBox(height: AppSpacings.xs),
+        Text('$progress/$total concluídos', style: progressStyle),
+        const SizedBox(height: AppSpacings.m),
+        StepProgressBar(
+          currentValue: progress,
+          totalValue: total,
+          showLabel: false,
+        ),
+        if (steps.isNotEmpty) ...[
+          const SizedBox(height: AppSpacings.l),
+          for (var i = 0; i < steps.length; i++) ...[
+            if (i > 0) const SizedBox(height: AppSpacings.m),
+            _StepRowShell(
+              step: steps[i],
+              shellStyle: stepShellStyle,
+              onTap: steps[i].isListItemEnabled && onStepTap != null
+                  ? () => onStepTap!(i)
+                  : null,
+            ),
+          ],
+        ],
+      ],
+    );
+  }
+}
+
+class _StepRowShell extends StatelessWidget {
+  const _StepRowShell({
+    required this.step,
+    required this.shellStyle,
+    this.onTap,
+  });
+
+  final StepTitleSubtitleInput step;
+  final ListItemBrandStyle shellStyle;
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+
+    Widget content = Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacings.l,
+        vertical: AppSpacings.m,
+      ),
+      child: step.buildContent(context),
+    );
+
+    if (!step.isListItemEnabled) {
+      content = Opacity(opacity: _kListItemDisabledOpacity, child: content);
+    }
+
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: scheme.surfaceContainerLowest,
+        borderRadius: BorderRadius.circular(AppRadius.m),
+        border: Border.all(
+          color: shellStyle.borderColor,
+          width: shellStyle.borderWidth,
+        ),
+      ),
+      child: Material(
+        type: MaterialType.transparency,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(AppRadius.m),
+          child: content,
+        ),
+      ),
     );
   }
 }

@@ -18,6 +18,7 @@ void main() {
     when(repository.getGuidedRoutes()).thenAnswer(
       (_) async => const [
         GuidedRouteIntroDomain(
+          id: 'route-uuid-1',
           topic: 'Produtividade',
           isPremiumMode: false,
           title: 'Foco profundo',
