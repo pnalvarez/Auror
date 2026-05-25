@@ -4,7 +4,7 @@ import 'package:auror/layers/domain/models/guided_route_overview_domain.dart';
 const GuidedRouteOverviewDomain kMockGuidedRouteOverviewDomain =
     GuidedRouteOverviewDomain(
       title: 'História do Brasil',
-      numberOfSubmodules: 1,
+      numberOfConcludedSubmodules: 1,
       modules: [
         GuidedRouteModuleDomain(
           title: 'História do Brasil',

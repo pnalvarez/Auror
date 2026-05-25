@@ -69,7 +69,9 @@ class _GuidedRoutesHubScaffoldState extends State<_GuidedRoutesHubScaffold>
                 context.router.push(SubscriptionUpgradeRoute());
                 return;
               }
-              context.router.push(const GuidedRouteOverviewRoute());
+              context.router.push(
+                GuidedRouteOverviewRoute(guidedRouteId: route.id),
+              );
             },
           ),
           ));

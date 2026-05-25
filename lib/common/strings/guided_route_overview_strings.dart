@@ -5,5 +5,5 @@ const guidedRouteOverviewSubmoduleAvailable = 'Disponível';
 
 const guidedRouteOverviewSubmoduleConcluded = 'Concluído';
 
-String guidedRouteOverviewModulesCompletedSubtitle(int submoduleTotal) =>
-    '$submoduleTotal módulos concluídos';
+String guidedRouteOverviewModulesCompletedSubtitle(int concludedSubmodules) =>
+    '$concludedSubmodules submódulos concluídos';

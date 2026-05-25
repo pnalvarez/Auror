@@ -138,7 +138,7 @@ void main() {
     test('maps title, subtitle and module list item inputs', () {
       const domain = GuidedRouteOverviewDomain(
         title: 'História do Brasil',
-        numberOfSubmodules: 2,
+        numberOfConcludedSubmodules: 1,
         modules: [
           GuidedRouteModuleDomain(
             title: 'Módulo 1',
@@ -177,7 +177,9 @@ void main() {
       expect(ui.title, domain.title);
       expect(
         ui.subtitle,
-        guidedRouteOverviewModulesCompletedSubtitle(domain.numberOfSubmodules),
+        guidedRouteOverviewModulesCompletedSubtitle(
+          domain.numberOfConcludedSubmodules,
+        ),
       );
       expect(ui.moduleListItemInputs, hasLength(2));
 
@@ -201,14 +203,14 @@ void main() {
     test('maps empty modules list', () {
       const domain = GuidedRouteOverviewDomain(
         title: 'Empty route',
-        numberOfSubmodules: 0,
+        numberOfConcludedSubmodules: 0,
         modules: [],
       );
 
       final ui = GuidedRouteOverviewUI.fromDomain(domain);
 
       expect(ui.title, domain.title);
-      expect(ui.subtitle, '0 módulos concluídos');
+      expect(ui.subtitle, '0 submódulos concluídos');
       expect(ui.moduleListItemInputs, isEmpty);
     });
   });

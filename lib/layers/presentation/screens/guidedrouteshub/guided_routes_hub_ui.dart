@@ -9,6 +9,7 @@ sealed class GuidedRouteIntroUI with _$GuidedRouteIntroUI {
   const GuidedRouteIntroUI._();
 
   const factory GuidedRouteIntroUI({
+    required String id,
     required String topic,
     required String title,
     required String description,
@@ -17,6 +18,7 @@ sealed class GuidedRouteIntroUI with _$GuidedRouteIntroUI {
 
   factory GuidedRouteIntroUI.fromDomain(GuidedRouteIntroDomain domain) {
     return GuidedRouteIntroUI(
+      id: domain.id,
       topic: domain.topic,
       title: domain.title,
       description: domain.description,

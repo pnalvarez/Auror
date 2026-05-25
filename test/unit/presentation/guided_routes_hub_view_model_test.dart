@@ -24,6 +24,7 @@ void main() {
       when(getIntros()).thenAnswer(
         (_) async => const [
           GuidedRouteIntroDomain(
+            id: 'route-1',
             topic: 'T',
             isPremiumMode: false,
             title: 'Title',

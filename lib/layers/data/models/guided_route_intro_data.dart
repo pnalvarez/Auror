@@ -41,6 +41,7 @@ class GuidedRouteIntroData {
 
   GuidedRouteIntroDomain toDomain() =>
       GuidedRouteIntroDomain(
+        id: id,
         topic: categories?.name ?? '',
         isPremiumMode: isPremium,
         title: name,

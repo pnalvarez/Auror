@@ -2,12 +2,12 @@
 class GuidedRouteOverviewDomain {
   const GuidedRouteOverviewDomain({
     required this.title,
-    required this.numberOfSubmodules,
+    required this.numberOfConcludedSubmodules,
     required this.modules,
   });
 
   final String title;
-  final int numberOfSubmodules;
+  final int numberOfConcludedSubmodules;
   final List<GuidedRouteModuleDomain> modules;
 }
 

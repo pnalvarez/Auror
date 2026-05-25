@@ -148,7 +148,6 @@ class GuidedRouteOverviewData {
   const GuidedRouteOverviewData({
     required this.id,
     required this.title,
-    required this.numberOfSubmodules,
     required this.modules,
   });
 
@@ -159,35 +158,27 @@ class GuidedRouteOverviewData {
   @JsonKey(readValue: _readRouteTitle)
   final String title;
 
-  @JsonKey(readValue: _readNumberOfSubmodules)
-  final int numberOfSubmodules;
-
   @JsonKey(readValue: _readModules)
   final List<GuidedRouteModuleData> modules;
 
   factory GuidedRouteOverviewData.fromJson(Map<String, dynamic> json) =>
       _$GuidedRouteOverviewDataFromJson(json);
 
-  GuidedRouteOverviewDomain toDomain() => GuidedRouteOverviewDomain(
-    title: title,
-    numberOfSubmodules: numberOfSubmodules,
-    modules: modules.map((m) => m.toDomain()).toList(),
-  );
+  GuidedRouteOverviewDomain toDomain() {
+    final domainModules = modules.map((m) => m.toDomain()).toList();
+    final concludedSubmodules = domainModules
+        .expand((module) => module.submodules)
+        .where((submodule) => submodule.isConcluded)
+        .length;
+    return GuidedRouteOverviewDomain(
+      title: title,
+      numberOfConcludedSubmodules: concludedSubmodules,
+      modules: domainModules,
+    );
+  }
 
   static Object? _readRouteTitle(Map json, String key) =>
       json['name'] as String? ?? json['title'] as String? ?? '';
-
-  static Object? _readNumberOfSubmodules(Map json, String key) {
-    final value = json['number_of_submodules'];
-    if (value is int) return value;
-    if (value is num) return value.toInt();
-    final mods = _readModules(json, 'modules');
-    if (mods is List<GuidedRouteModuleData>) {
-      return mods.where((m) => m.progress >= m.totalSubmodules && m.totalSubmodules > 0).length;
-    }
-    if (mods is List) return mods.length;
-    return 0;
-  }
 
   static Object? _readModules(Map json, String key) {
     final raw = json['modules'] ?? json['module'];

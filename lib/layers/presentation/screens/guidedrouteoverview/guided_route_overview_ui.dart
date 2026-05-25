@@ -83,7 +83,7 @@ class GuidedRouteOverviewUI {
     return GuidedRouteOverviewUI(
       title: domain.title,
       subtitle: guidedRouteOverviewModulesCompletedSubtitle(
-        domain.numberOfSubmodules,
+        domain.numberOfConcludedSubmodules,
       ),
       moduleListItemInputs: [
         for (final module in domain.modules)

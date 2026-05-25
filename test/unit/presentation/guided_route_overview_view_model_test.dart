@@ -11,6 +11,8 @@ import '../../helpers/mocks.mocks.dart';
 void main() {
   late MockIGetGuidedRouteOverviewDetails getOverviewDetails;
 
+  const guidedRouteId = '6ce95aac-c099-45f8-b3ad-2600ddf79356';
+
   setUp(() {
     getOverviewDetails = MockIGetGuidedRouteOverviewDetails();
   });
@@ -18,10 +20,12 @@ void main() {
   blocTest<GuidedRouteOverviewViewModel, GuidedRouteOverviewState>(
     'load requested maps overview from use case',
     build: () {
-      when(getOverviewDetails()).thenAnswer(
+      when(
+        getOverviewDetails(guidedRouteId: anyNamed('guidedRouteId')),
+      ).thenAnswer(
         (_) async => kMockGuidedRouteOverviewDomain,
       );
-      return GuidedRouteOverviewViewModel(getOverviewDetails);
+      return GuidedRouteOverviewViewModel(guidedRouteId, getOverviewDetails);
     },
     act: (bloc) => bloc.add(const GuidedRouteOverviewLoadRequested()),
     verify: (bloc) {
@@ -30,15 +34,17 @@ void main() {
       expect(bloc.state.overview, isNotNull);
       expect(bloc.state.overview!.title, kMockGuidedRouteOverviewDomain.title);
       expect(bloc.state.overview!.moduleListItemInputs, hasLength(1));
-      verify(getOverviewDetails()).called(1);
+      verify(getOverviewDetails(guidedRouteId: guidedRouteId)).called(1);
     },
   );
 
   blocTest<GuidedRouteOverviewViewModel, GuidedRouteOverviewState>(
     'load failure clears overview and sets error',
     build: () {
-      when(getOverviewDetails()).thenThrow(Exception('fail'));
-      return GuidedRouteOverviewViewModel(getOverviewDetails);
+      when(
+        getOverviewDetails(guidedRouteId: anyNamed('guidedRouteId')),
+      ).thenThrow(Exception('fail'));
+      return GuidedRouteOverviewViewModel(guidedRouteId, getOverviewDetails);
     },
     act: (bloc) => bloc.add(const GuidedRouteOverviewLoadRequested()),
     verify: (bloc) {

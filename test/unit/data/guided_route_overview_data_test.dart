@@ -61,18 +61,22 @@ void main() {
       final data = GuidedRouteOverviewData.fromJson({
         'id': '6ce95aac-c099-45f8-b3ad-2600ddf79356',
         'name': 'História',
-        'number_of_submodules': 1,
         'modules': [
           {
             'id': '1796994e-306a-4055-9f09-cc9a8d6c822d',
             'name': 'História do mundo',
             'progress': 0,
-            'total_submodules': 1,
+            'total_submodules': 2,
             'submodules': [
               {
                 'name': 'Civilizações fundadoras',
-                'has_finished': false,
+                'has_finished': true,
                 'is_available': true,
+              },
+              {
+                'name': 'A Idade Média sem clichê',
+                'has_finished': false,
+                'is_available': false,
               },
             ],
           },
@@ -81,11 +85,11 @@ void main() {
 
       expect(data.id, '6ce95aac-c099-45f8-b3ad-2600ddf79356');
       expect(data.title, 'História');
-      expect(data.numberOfSubmodules, 1);
       expect(data.modules, hasLength(1));
 
       final domain = data.toDomain();
       expect(domain.title, 'História');
+      expect(domain.numberOfConcludedSubmodules, 1);
       expect(domain.modules.first.submodules.first.isAvailable, isTrue);
     });
   });

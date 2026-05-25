@@ -10,13 +10,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 @RoutePage()
 class GuidedRouteOverviewPage extends StatelessWidget {
-  const GuidedRouteOverviewPage({super.key});
+  const GuidedRouteOverviewPage({super.key, required this.guidedRouteId});
+
+  final String guidedRouteId;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) =>
-          getIt<GuidedRouteOverviewViewModel>()
+          getIt<GuidedRouteOverviewViewModel>(param1: guidedRouteId)
             ..add(const GuidedRouteOverviewEvent.loadRequested()),
       child: BlocBuilder<GuidedRouteOverviewViewModel, GuidedRouteOverviewState>(
         builder: (context, state) {
