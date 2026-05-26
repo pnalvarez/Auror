@@ -5,26 +5,30 @@ import 'package:injectable/injectable.dart';
 
 @injectable
 class KnowledgeCardViewModel extends Bloc<KnowledgeCardEvent, KnowledgeCardState> {
-  KnowledgeCardViewModel() : super(const KnowledgeCardState()) {
+  KnowledgeCardViewModel() : super(KnowledgeCardState.initial) {
     on<KnowledgeCardLoadRequested>(_onLoadRequested);
     on<KnowledgeCardDidClickCuriosity>(_onDidClickCuriosity);
     on<KnowledgeCardDidClickCommonError>(_onDidClickCommonError);
     on<KnowledgeCardDidClickNext>(_onDidClickNext);
   }
 
+  bool _didExpandCuriosity = false;
+  bool _didExpandCommonError = false;
+
+  bool get _isNextCtaEnabled => _didExpandCuriosity && _didExpandCommonError;
+
   Future<void> _onLoadRequested(
     KnowledgeCardLoadRequested event,
     Emitter<KnowledgeCardState> emit,
   ) async {
-    emit(state.copyWith(isLoading: true, errorMessage: null));
+    emit(KnowledgeCardState.loading(state));
     try {
-      // TODO: load data via use cases.
-      emit(state.copyWith(isLoading: false, errorMessage: null));
+      emit(KnowledgeCardState.loaded(state));
     } catch (e) {
       emit(
-        state.copyWith(
-          isLoading: false,
-          errorMessage: e.toString(),
+        KnowledgeCardState.failure(
+          state,
+          message: e.toString(),
         ),
       );
     }
@@ -33,16 +37,38 @@ class KnowledgeCardViewModel extends Bloc<KnowledgeCardEvent, KnowledgeCardState
   void _onDidClickCuriosity(
     KnowledgeCardDidClickCuriosity event,
     Emitter<KnowledgeCardState> emit,
-  ) {}
+  ) {
+    _didExpandCuriosity = true;
+    emit(
+      KnowledgeCardState.curiosityExpanded(
+        base: state,
+        showCommonErrorTooltip: !_didExpandCommonError,
+        isNextCtaEnabled: _isNextCtaEnabled,
+      ),
+    );
+  }
 
   void _onDidClickCommonError(
     KnowledgeCardDidClickCommonError event,
     Emitter<KnowledgeCardState> emit,
-  ) {}
+  ) {
+    _didExpandCommonError = true;
+    emit(
+      KnowledgeCardState.commonErrorExpanded(
+        base: state,
+        isNextCtaEnabled: _isNextCtaEnabled,
+      ),
+    );
+  }
 
   void _onDidClickNext(
     KnowledgeCardDidClickNext event,
     Emitter<KnowledgeCardState> emit,
-  ) {}
+  ) {
+    final nextState = KnowledgeCardState.advancedToNextCard(state);
+    if (nextState != null) {
+      emit(nextState);
+    }
+  }
 }
 
