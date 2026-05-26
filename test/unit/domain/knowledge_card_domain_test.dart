@@ -1,46 +1,31 @@
 import 'package:auror/layers/domain/models/knowledge_card_domain.dart';
+import 'package:auror/layers/domain/models/quiz_domain.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import '../../helpers/fixtures.dart';
-
 void main() {
-  test('equality compares content fields not id', () {
-    const a = KnowledgeCardDomain(
-      id: '1',
-      category: 'Cat',
-      title: 'T',
-      quote: 'Q',
-      description: 'D',
-      videoUrl: 'v',
-      practicalExample: 'P',
-      commonError: 'E',
-    );
-    const b = KnowledgeCardDomain(
-      id: '2',
-      category: 'Cat',
-      title: 'T',
-      quote: 'Q',
-      description: 'D',
-      videoUrl: 'v',
-      practicalExample: 'P',
-      commonError: 'E',
-    );
+  const quiz = QuizDomain(
+    question: 'Pergunta?',
+    option1: 'A',
+    option2: 'B',
+    option3: 'C',
+    option4: 'D',
+    correctAnswer: 1,
+  );
 
-    expect(a, equals(b));
-    expect(a.hashCode, b.hashCode);
-  });
+  const card = KnowledgeCardDomain(
+    id: 'card-1',
+    title: 'Mesopotâmia',
+    description: 'Descrição.',
+    curiosity: 'Curiosidade.',
+    commonError: 'Erro comum.',
+    quiz: quiz,
+  );
 
-  test('inequality when a field differs', () {
-    const other = KnowledgeCardDomain(
-      id: 'card-1',
-      category: 'Cat',
-      title: 'Other title',
-      quote: 'Quote',
-      description: 'Desc',
-      videoUrl: 'https://example.com/video.mp4',
-      practicalExample: 'Example',
-      commonError: 'Error',
-    );
-    expect(kFixtureKnowledgeCard, isNot(equals(other)));
+  test('exposes card and quiz fields', () {
+    expect(card.id, 'card-1');
+    expect(card.title, 'Mesopotâmia');
+    expect(card.quiz.question, 'Pergunta?');
+    expect(card.quiz.option1, 'A');
+    expect(card.quiz.correctAnswer, 1);
   });
 }

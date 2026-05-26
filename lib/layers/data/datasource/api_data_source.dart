@@ -2,6 +2,7 @@ import 'package:auror/common/environment/auror_supabase_constants.dart';
 import 'package:auror/layers/data/api/api_client.dart';
 import 'package:auror/layers/data/models/guided_route_intro_data.dart';
 import 'package:auror/layers/data/models/guided_route_overview_data.dart';
+import 'package:auror/layers/data/models/knowledge_card_data.dart';
 import 'package:auror/layers/data/models/profile_data.dart';
 import 'package:auror/layers/data/models/subscription_data.dart';
 import 'package:injectable/injectable.dart';
@@ -64,6 +65,14 @@ abstract class IApiDataSource {
   Future<GuidedRouteOverviewData> fetchGuidedRouteOverview({
     required String guidedRouteId,
     String rpcName = 'get_guided_route_overview',
+  });
+
+  /// POST `/rest/v1/rpc/{rpcName}` com `{ "p_submodule_id": "<uuid>" }`.
+  ///
+  /// Retorna cards do submódulo com quiz embutido (`KnowledgeCardData.quiz`).
+  Future<List<KnowledgeCardData>> fetchKnowledgeCardsForSubmodule({
+    required String submoduleId,
+    String rpcName = 'get_knowledge_cards_with_quizzes',
   });
 }
 
@@ -231,6 +240,30 @@ class ApiDataSource implements IApiDataSource {
   }
 
   @override
+  Future<List<KnowledgeCardData>> fetchKnowledgeCardsForSubmodule({
+    required String submoduleId,
+    String rpcName = 'get_knowledge_cards_with_quizzes',
+  }) async {
+    final session = _currentSession();
+    if (session == null) {
+      throw StateError('Sessão ausente para carregar os cards do submódulo.');
+    }
+
+    final headers = <String, String>{
+      'apikey': AurorSupabaseConstants.anonKey,
+      'Authorization': 'Bearer ${session.accessToken}',
+    };
+
+    final data = await _apiClient.post(
+      endpoint: 'rpc/$rpcName',
+      body: <String, dynamic>{'p_submodule_id': submoduleId},
+      headers: headers,
+    );
+
+    return _rowsAsKnowledgeCardData(data);
+  }
+
+  @override
   Future<void> cancelSubscription({
     String rpcName = 'cancel_user_subscription',
   }) async {
@@ -266,6 +299,35 @@ class ApiDataSource implements IApiDataSource {
     }
     throw FormatException(
       'Esperado objeto JSON do RPC get_guided_route_overview. '
+      'Recebido: ${data.runtimeType}.',
+    );
+  }
+
+  List<KnowledgeCardData> _rowsAsKnowledgeCardData(dynamic data) {
+    if (data is List<dynamic>) {
+      return data.map((row) {
+        if (row is Map<String, dynamic>) {
+          return KnowledgeCardData.fromJson(row);
+        }
+        if (row is Map) {
+          return KnowledgeCardData.fromJson(Map<String, dynamic>.from(row));
+        }
+        throw FormatException('Linha inesperada: $row');
+      }).toList();
+    }
+
+    if (data is Map) {
+      final map = Map<String, dynamic>.from(data);
+      if (map.containsKey('code') && map.containsKey('message')) {
+        throw FormatException(
+          'PostgREST: ${map['code']} — ${map['message']} '
+          '(hint: ${map['hint']}, details: ${map['details']})',
+        );
+      }
+    }
+
+    throw FormatException(
+      'Esperado lista JSON do RPC get_knowledge_cards_with_quizzes. '
       'Recebido: ${data.runtimeType}.',
     );
   }

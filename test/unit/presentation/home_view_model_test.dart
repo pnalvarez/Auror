@@ -1,5 +1,5 @@
 import 'package:auror/layers/domain/models/idea_domain.dart';
-import 'package:auror/layers/domain/models/knowledge_card_domain.dart';
+import 'package:auror/layers/domain/models/legacy_knowledge_card_domain.dart';
 import 'package:auror/layers/domain/models/revision_domain.dart';
 import 'package:auror/layers/domain/models/revision_section_domain.dart';
 import 'package:auror/layers/domain/models/user_domain.dart';
@@ -36,10 +36,8 @@ void main() {
         ),
       );
       when(getRevisions()).thenAnswer(
-        (_) async => RevisionSectionDomain(
-          tomorrowCount: 0,
-          revisions: const [],
-        ),
+        (_) async =>
+            RevisionSectionDomain(tomorrowCount: 0, revisions: const []),
       );
       when(getDailyIdea()).thenAnswer(
         (_) async => const IdeaDomain(
@@ -97,7 +95,7 @@ void main() {
           completedCards: const [kFixtureKnowledgeCard],
           incompleteCards: const [
             kFixtureKnowledgeCard,
-            KnowledgeCardDomain(
+            LegacyKnowledgeCardDomain(
               id: 'c2',
               category: 'Cat',
               title: 'T2',
@@ -107,7 +105,7 @@ void main() {
               practicalExample: 'P',
               commonError: 'E',
             ),
-            KnowledgeCardDomain(
+            LegacyKnowledgeCardDomain(
               id: 'c3',
               category: 'Cat',
               title: 'T3',
@@ -117,7 +115,7 @@ void main() {
               practicalExample: 'P',
               commonError: 'E',
             ),
-            KnowledgeCardDomain(
+            LegacyKnowledgeCardDomain(
               id: 'c4',
               category: 'Cat',
               title: 'T4',

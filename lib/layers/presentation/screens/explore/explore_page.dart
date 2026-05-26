@@ -9,7 +9,7 @@ import 'package:auror_design_system/molecules/chips/chip_picker.dart';
 import 'package:auror_design_system/organisms/feedback/circular_loader.dart';
 import 'package:auror/common/strings/explore_strings.dart';
 import 'package:auror/core/di/di.dart';
-import 'package:auror/layers/domain/models/knowledge_card_domain.dart';
+import 'package:auror/layers/domain/models/legacy_knowledge_card_domain.dart';
 import 'package:auror/layers/presentation/screens/explore/explore_event.dart';
 import 'package:auror/layers/presentation/screens/explore/explore_state.dart';
 import 'package:auror/layers/presentation/screens/explore/explore_empty_states_body.dart';
@@ -102,8 +102,8 @@ class _ExploreFeedState extends State<_ExploreFeed> {
           _pageController.jumpToPage(0);
         }
         context.read<ExploreViewModel>().add(
-              const ExploreEvent.pageBecameVisible(0),
-            );
+          const ExploreEvent.pageBecameVisible(0),
+        );
       });
     }
   }
@@ -151,12 +151,13 @@ class _ExploreFeedState extends State<_ExploreFeed> {
           onPageChanged: (i) {
             setState(() => _visiblePage = i);
             context.read<ExploreViewModel>().add(
-                  ExploreEvent.pageBecameVisible(i),
-                );
+              ExploreEvent.pageBecameVisible(i),
+            );
           },
           itemBuilder: (context, index) {
             final card = slots[index];
-            final showPageSpinner = widget.state.isLoadingCard &&
+            final showPageSpinner =
+                widget.state.isLoadingCard &&
                 card == null &&
                 index == _visiblePage;
 
@@ -199,8 +200,8 @@ class _ExploreFeedState extends State<_ExploreFeed> {
                 items: widget.state.chipLabels,
                 selectedIndex: widget.state.selectedChipIndex,
                 onSelected: (i) => context.read<ExploreViewModel>().add(
-                      ExploreEvent.chipSelected(i),
-                    ),
+                  ExploreEvent.chipSelected(i),
+                ),
               ),
             ),
           ),
@@ -220,7 +221,7 @@ class _ExplorePagePanel extends StatelessWidget {
     required this.onNext,
   });
 
-  final KnowledgeCardDomain? card;
+  final LegacyKnowledgeCardDomain? card;
   final int pageIndex;
   final ColorScheme scheme;
   final bool canGoNext;
@@ -313,8 +314,8 @@ class _ExplorePagePanel extends StatelessWidget {
                         action: content == null
                             ? () {}
                             : () => context.router.root.push(
-                                  RecallCardRoute(card: content),
-                                ),
+                                RecallCardRoute(card: content),
+                              ),
                       ),
                     ),
                     const SizedBox(width: AppSpacings.m),

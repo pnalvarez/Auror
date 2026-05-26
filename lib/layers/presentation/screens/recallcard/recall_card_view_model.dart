@@ -1,4 +1,4 @@
-import 'package:auror/layers/domain/models/knowledge_card_domain.dart';
+import 'package:auror/layers/domain/models/legacy_knowledge_card_domain.dart';
 import 'package:auror/layers/domain/usecases/save_recall_card.dart';
 import 'package:auror/layers/presentation/screens/recallcard/recall_card_event.dart';
 import 'package:auror/layers/presentation/screens/recallcard/recall_card_state.dart';
@@ -8,11 +8,7 @@ import 'package:injectable/injectable.dart';
 @injectable
 class RecallCardViewModel extends Bloc<RecallCardEvent, RecallCardState> {
   RecallCardViewModel(@factoryParam this.card, this._saveRecallCard)
-    : super(
-        const RecallCardState(
-          shouldFloatingButtonAppear: false,
-        ),
-      ) {
+    : super(const RecallCardState(shouldFloatingButtonAppear: false)) {
     on<PracticalExampleExpansionChanged>(_onPracticalExampleExpansionChanged);
     on<CommonErrorExpansionChanged>(_onCommonErrorExpansionChanged);
     on<ProceedCtaViewportVisibilityChanged>(
@@ -21,7 +17,7 @@ class RecallCardViewModel extends Bloc<RecallCardEvent, RecallCardState> {
     on<DidTapProceedCTA>(_onDidTapProceedCTA);
   }
 
-  final KnowledgeCardDomain card;
+  final LegacyKnowledgeCardDomain card;
   final ISaveRecallCard _saveRecallCard;
 
   /// Drives tooltip sequencing (set true after any open/close on practical example).

@@ -1,53 +1,20 @@
-/// Knowledge card content for learning flows (domain layer).
+import 'package:auror/layers/domain/models/quiz_domain.dart';
+
+/// Knowledge card with embedded quiz (guided routes / submodule flow).
 class KnowledgeCardDomain {
   const KnowledgeCardDomain({
     required this.id,
-    required this.category,
     required this.title,
-    required this.quote,
     required this.description,
-    required this.videoUrl,
-    required this.practicalExample,
+    required this.curiosity,
     required this.commonError,
+    required this.quiz,
   });
 
   final String id;
-
-  final String category;
-
   final String title;
-
-  final String quote;
-
   final String description;
-
-  final String videoUrl;
-
-  final String practicalExample;
-
+  final String curiosity;
   final String commonError;
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        other is KnowledgeCardDomain &&
-            category == other.category &&
-            title == other.title &&
-            quote == other.quote &&
-            description == other.description &&
-            videoUrl == other.videoUrl &&
-            practicalExample == other.practicalExample &&
-            commonError == other.commonError;
-  }
-
-  @override
-  int get hashCode => Object.hash(
-    category,
-    title,
-    quote,
-    description,
-    videoUrl,
-    practicalExample,
-    commonError,
-  );
+  final QuizDomain quiz;
 }

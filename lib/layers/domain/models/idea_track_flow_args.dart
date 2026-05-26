@@ -1,4 +1,4 @@
-import 'package:auror/layers/domain/models/knowledge_card_domain.dart';
+import 'package:auror/layers/domain/models/legacy_knowledge_card_domain.dart';
 
 /// Context for the home “ideia do dia” flow: several recall cards, each followed
 /// by its revision quiz, with a shared progress indicator.
@@ -6,7 +6,7 @@ class IdeaTrackFlowArgs {
   const IdeaTrackFlowArgs({required this.cards, required this.currentIndex})
     : assert(currentIndex >= 0, 'currentIndex must be non-negative');
 
-  final List<KnowledgeCardDomain> cards;
+  final List<LegacyKnowledgeCardDomain> cards;
   final int currentIndex;
 
   int get totalCards => cards.length;
@@ -33,8 +33,8 @@ class IdeaTrackFlowArgs {
   int get hashCode => Object.hash(currentIndex, Object.hashAll(cards));
 
   static bool _listEquals(
-    List<KnowledgeCardDomain> a,
-    List<KnowledgeCardDomain> b,
+    List<LegacyKnowledgeCardDomain> a,
+    List<LegacyKnowledgeCardDomain> b,
   ) {
     if (a.length != b.length) return false;
     for (var i = 0; i < a.length; i++) {

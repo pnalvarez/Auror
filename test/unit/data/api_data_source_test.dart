@@ -1,6 +1,7 @@
 import 'package:auror/layers/data/datasource/api_data_source.dart';
 import 'package:auror/layers/data/models/guided_route_intro_data.dart';
 import 'package:auror/layers/data/models/guided_route_overview_data.dart';
+import 'package:auror/layers/data/models/knowledge_card_data.dart';
 import 'package:auror/layers/data/models/profile_data.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
@@ -364,6 +365,114 @@ void main() {
 
       await expectLater(
         sut.fetchGuidedRouteOverview(guidedRouteId: routeId),
+        throwsA(isA<FormatException>()),
+      );
+    });
+  });
+
+  group('fetchKnowledgeCardsForSubmodule', () {
+    const submoduleId = '7c31fd5d-750b-48a8-844a-8e67a94bb7cd';
+
+    final rpcPayload = [
+      {
+        'id': '7a1b2c3d-4e5f-6789-a012-3456789abc01',
+        'title': 'Mesopotâmia',
+        'description': 'Berço da civilização.',
+        'curiosity': 'Os sumérios inventaram a roda.',
+        'common_error': 'Achar que era um império unificado.',
+        'quiz': {
+          'id': 'quiz-1',
+          'question': 'Qual foi a primeira forma de escrita?',
+          'option_1': 'Escrita cuneiforme',
+          'option_2': 'Hieróglifos',
+          'option_3': 'Alfabeto fenício',
+          'option_4': 'Escrita linear A',
+          'correct_answer': 1,
+        },
+      },
+    ];
+
+    test('throws when session is missing', () async {
+      sut = ApiDataSource.withSession(apiClient, () => null);
+      await expectLater(
+        sut.fetchKnowledgeCardsForSubmodule(submoduleId: submoduleId),
+        throwsA(isA<StateError>()),
+      );
+      verifyNever(
+        apiClient.post(
+          endpoint: anyNamed('endpoint'),
+          body: anyNamed('body'),
+          headers: anyNamed('headers'),
+        ),
+      );
+    });
+
+    test('returns knowledge cards from get_knowledge_cards_with_quizzes RPC', () async {
+      sut = ApiDataSource.withSession(apiClient, _session);
+      when(
+        apiClient.post(
+          endpoint: anyNamed('endpoint'),
+          body: anyNamed('body'),
+          headers: anyNamed('headers'),
+        ),
+      ).thenAnswer((_) async => rpcPayload);
+
+      final cards = await sut.fetchKnowledgeCardsForSubmodule(
+        submoduleId: submoduleId,
+      );
+
+      expect(cards, hasLength(1));
+      expect(cards.first, isA<KnowledgeCardData>());
+      expect(cards.first.title, 'Mesopotâmia');
+      expect(cards.first.quiz?.option1, 'Escrita cuneiforme');
+      verify(
+        apiClient.post(
+          endpoint: 'rpc/get_knowledge_cards_with_quizzes',
+          body: {'p_submodule_id': submoduleId},
+          headers: argThat(
+            containsPair('Authorization', 'Bearer access-token'),
+            named: 'headers',
+          ),
+        ),
+      ).called(1);
+    });
+
+    test('returns empty list when RPC returns empty array', () async {
+      sut = ApiDataSource.withSession(apiClient, _session);
+      when(
+        apiClient.post(
+          endpoint: anyNamed('endpoint'),
+          body: anyNamed('body'),
+          headers: anyNamed('headers'),
+        ),
+      ).thenAnswer((_) async => <dynamic>[]);
+
+      final cards = await sut.fetchKnowledgeCardsForSubmodule(
+        submoduleId: submoduleId,
+      );
+
+      expect(cards, isEmpty);
+    });
+
+    test('throws FormatException on PostgREST error map from RPC', () async {
+      sut = ApiDataSource.withSession(apiClient, _session);
+      when(
+        apiClient.post(
+          endpoint: anyNamed('endpoint'),
+          body: anyNamed('body'),
+          headers: anyNamed('headers'),
+        ),
+      ).thenAnswer(
+        (_) async => {
+          'code': 'PGRST202',
+          'message': 'function not found',
+          'hint': null,
+          'details': null,
+        },
+      );
+
+      await expectLater(
+        sut.fetchKnowledgeCardsForSubmodule(submoduleId: submoduleId),
         throwsA(isA<FormatException>()),
       );
     });

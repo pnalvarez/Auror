@@ -1,5 +1,5 @@
 import 'package:auror/layers/domain/models/idea_domain.dart';
-import 'package:auror/layers/domain/models/knowledge_card_domain.dart';
+import 'package:auror/layers/domain/models/legacy_knowledge_card_domain.dart';
 import 'package:injectable/injectable.dart';
 
 const _vBee =
@@ -21,7 +21,7 @@ class GetDailyIdea implements IGetDailyIdea {
     await Future.delayed(const Duration(seconds: 1));
     return const IdeaDomain(
       completedCards: [
-        KnowledgeCardDomain(
+        LegacyKnowledgeCardDomain(
           id: '1',
           category: 'Inteligência emocional',
           title: 'Regular emoções sob pressão',
@@ -40,7 +40,7 @@ class GetDailyIdea implements IGetDailyIdea {
         ),
       ],
       incompleteCards: [
-        KnowledgeCardDomain(
+        LegacyKnowledgeCardDomain(
           id: '2',
 
           category: 'Investimentos',
@@ -57,7 +57,7 @@ class GetDailyIdea implements IGetDailyIdea {
               'Vender tudo em queda por pânico ou comprar por FOMO sem encaixar no '
               'plano.',
         ),
-        KnowledgeCardDomain(
+        LegacyKnowledgeCardDomain(
           id: '3',
 
           category: 'Comunicação',
@@ -74,11 +74,12 @@ class GetDailyIdea implements IGetDailyIdea {
               'Dar feedback genérico ("precisa melhorar") sem exemplo nem próximo '
               'passo.',
         ),
-        KnowledgeCardDomain(
+        LegacyKnowledgeCardDomain(
           id: '4',
           category: 'Produtividade',
           title: 'Uma prioridade por vez',
-          quote: 'Multitarefa é troca rápida de contexto, não paralelismo real.',
+          quote:
+              'Multitarefa é troca rápida de contexto, não paralelismo real.',
           description:
               'Blocos de foco com interrupções controladas reduzem erro e tempo '
               'de retomada comparado a saltar entre tarefas o dia inteiro.',

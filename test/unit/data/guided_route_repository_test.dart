@@ -1,4 +1,5 @@
 import 'package:auror/layers/data/models/guided_route_overview_data.dart';
+import 'package:auror/layers/data/models/knowledge_card_data.dart';
 import 'package:auror/layers/data/repository/guided_route_repository.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
@@ -61,5 +62,44 @@ void main() {
     expect(result.modules, hasLength(1));
     expect(result.modules.first.submodules.first.isAvailable, isTrue);
     verify(api.fetchGuidedRouteOverview(guidedRouteId: routeId)).called(1);
+  });
+
+  test('fetchKnowledgeCards maps data rows to domain', () async {
+    const submoduleId = '7c31fd5d-750b-48a8-844a-8e67a94bb7cd';
+    when(
+      api.fetchKnowledgeCardsForSubmodule(
+        submoduleId: anyNamed('submoduleId'),
+      ),
+    ).thenAnswer(
+      (_) async => [
+        KnowledgeCardData.fromJson({
+          'id': '7a1b2c3d-4e5f-6789-a012-3456789abc01',
+          'title': 'Mesopotâmia',
+          'description': 'Berço da civilização.',
+          'curiosity': 'Os sumérios inventaram a roda.',
+          'common_error': 'Achar que era um império unificado.',
+          'quiz': {
+            'id': 'quiz-1',
+            'question': 'Qual foi a primeira forma de escrita?',
+            'option_1': 'Escrita cuneiforme',
+            'option_2': 'Hieróglifos',
+            'option_3': 'Alfabeto fenício',
+            'option_4': 'Escrita linear A',
+            'correct_answer': 1,
+          },
+        }),
+      ],
+    );
+
+    final result = await sut.fetchKnowledgeCards(submoduleId: submoduleId);
+
+    expect(result, hasLength(1));
+    expect(result.first.id, '7a1b2c3d-4e5f-6789-a012-3456789abc01');
+    expect(result.first.title, 'Mesopotâmia');
+    expect(result.first.quiz.option1, 'Escrita cuneiforme');
+    expect(result.first.quiz.correctAnswer, 1);
+    verify(
+      api.fetchKnowledgeCardsForSubmodule(submoduleId: submoduleId),
+    ).called(1);
   });
 }
