@@ -1,5 +1,5 @@
 import 'package:auror/layers/domain/models/idea_track_flow_args.dart';
-import 'package:auror/layers/domain/models/knowledge_card_domain.dart';
+import 'package:auror/layers/domain/models/legacy_knowledge_card_domain.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../helpers/fixtures.dart';
@@ -7,7 +7,7 @@ import '../../helpers/fixtures.dart';
 void main() {
   final cards = [
     kFixtureKnowledgeCard,
-    const KnowledgeCardDomain(
+    const LegacyKnowledgeCardDomain(
       id: 'card-2',
       category: 'Cat',
       title: 'Second',

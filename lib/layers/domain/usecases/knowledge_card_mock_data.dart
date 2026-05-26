@@ -1,4 +1,4 @@
-import 'package:auror/layers/domain/models/knowledge_card_domain.dart';
+import 'package:auror/layers/domain/models/legacy_knowledge_card_domain.dart';
 
 // HTTPS samples that work with AVPlayer / ExoPlayer in dev (aligned with revision mocks).
 const _vBee =
@@ -9,8 +9,8 @@ const _vExoBunnySmall =
     'https://storage.googleapis.com/exoplayer-test-media-0/BigBuckBunny_320x180.mp4';
 
 /// Mock knowledge cards for development and previews.
-const List<KnowledgeCardDomain> kMockKnowledgeCardDomains = [
-  KnowledgeCardDomain(
+const List<LegacyKnowledgeCardDomain> kMockKnowledgeCardDomains = [
+  LegacyKnowledgeCardDomain(
     id: '1',
     category: 'Inteligência emocional',
     title: 'Regular emoções sob pressão',
@@ -26,7 +26,7 @@ const List<KnowledgeCardDomain> kMockKnowledgeCardDomains = [
         'Confundir transparência emocional com desabafo descontrolado em '
         'reuniões.',
   ),
-  KnowledgeCardDomain(
+  LegacyKnowledgeCardDomain(
     id: '2',
 
     category: 'Investimentos',
@@ -43,7 +43,7 @@ const List<KnowledgeCardDomain> kMockKnowledgeCardDomains = [
         'Vender tudo em queda por pânico ou comprar por FOMO sem encaixar no '
         'plano.',
   ),
-  KnowledgeCardDomain(
+  LegacyKnowledgeCardDomain(
     id: '3',
 
     category: 'Comunicação',

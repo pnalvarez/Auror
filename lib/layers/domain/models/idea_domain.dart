@@ -1,4 +1,4 @@
-import 'package:auror/layers/domain/models/knowledge_card_domain.dart';
+import 'package:auror/layers/domain/models/legacy_knowledge_card_domain.dart';
 
 class IdeaDomain {
   const IdeaDomain({
@@ -7,7 +7,7 @@ class IdeaDomain {
     required this.totalTime,
   });
 
-  final List<KnowledgeCardDomain> completedCards;
-  final List<KnowledgeCardDomain> incompleteCards;
+  final List<LegacyKnowledgeCardDomain> completedCards;
+  final List<LegacyKnowledgeCardDomain> incompleteCards;
   final int totalTime;
 }

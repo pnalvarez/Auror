@@ -15,6 +15,7 @@ import 'package:auror/layers/domain/usecases/get_current_subscription.dart';
 import 'package:auror/layers/domain/usecases/get_daily_idea.dart';
 import 'package:auror/layers/domain/usecases/get_guided_route_intros.dart';
 import 'package:auror/layers/domain/usecases/get_guided_route_overview_details.dart';
+import 'package:auror/layers/domain/usecases/get_knowledge_cards.dart';
 import 'package:auror/layers/domain/usecases/get_next_card.dart';
 import 'package:auror/layers/domain/usecases/get_profile.dart';
 import 'package:auror/layers/domain/usecases/get_revisions.dart';
@@ -58,6 +59,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
   IGetNextCard,
   IGetGuidedRouteIntros,
   IGetGuidedRouteOverviewDetails,
+  IGetKnowledgeCards,
   ISaveRecallCard,
   ISendAnswer,
   IGetCardRevision,

@@ -1,6 +1,6 @@
 import 'package:auror/common/strings/explore_strings.dart';
 import 'package:auror/layers/domain/models/category_domain.dart';
-import 'package:auror/layers/domain/models/knowledge_card_domain.dart';
+import 'package:auror/layers/domain/models/legacy_knowledge_card_domain.dart';
 import 'package:auror/layers/domain/usecases/get_categories.dart';
 import 'package:auror/layers/domain/usecases/get_next_card.dart';
 import 'package:auror/layers/presentation/screens/explore/explore_event.dart';
@@ -39,9 +39,7 @@ class ExploreViewModel extends Bloc<ExploreEvent, ExploreState> {
     }
   }
 
-  Future<void> _onStarted(
-    Emitter<ExploreState> emit,
-  ) async {
+  Future<void> _onStarted(Emitter<ExploreState> emit) async {
     emit(state.copyWith(isLoadingInitial: true, errorMessage: null));
     try {
       _categories = await _getCategories();
@@ -68,10 +66,7 @@ class ExploreViewModel extends Bloc<ExploreEvent, ExploreState> {
     }
   }
 
-  Future<void> _onChipSelected(
-    int index,
-    Emitter<ExploreState> emit,
-  ) async {
+  Future<void> _onChipSelected(int index, Emitter<ExploreState> emit) async {
     if (index < 0 || index >= state.chipLabels.length) {
       return;
     }
@@ -86,7 +81,7 @@ class ExploreViewModel extends Bloc<ExploreEvent, ExploreState> {
       ),
     );
     try {
-      final KnowledgeCardDomain card = await _getNextCard();
+      final LegacyKnowledgeCardDomain card = await _getNextCard();
       if (isClosed) {
         return;
       }
@@ -133,8 +128,8 @@ class ExploreViewModel extends Bloc<ExploreEvent, ExploreState> {
     _loadingSlotIndex = index;
     emit(state.copyWith(isLoadingCard: true, errorMessage: null));
     try {
-      final KnowledgeCardDomain card = await _getNextCard();
-      final next = List<KnowledgeCardDomain?>.from(state.cardSlots);
+      final LegacyKnowledgeCardDomain card = await _getNextCard();
+      final next = List<LegacyKnowledgeCardDomain?>.from(state.cardSlots);
       if (index >= next.length || next[index] != null) {
         emit(state.copyWith(isLoadingCard: false));
         return;

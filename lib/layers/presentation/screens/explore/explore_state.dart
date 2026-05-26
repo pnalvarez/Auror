@@ -1,4 +1,4 @@
-import 'package:auror/layers/domain/models/knowledge_card_domain.dart';
+import 'package:auror/layers/domain/models/legacy_knowledge_card_domain.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'explore_state.freezed.dart';
@@ -9,10 +9,13 @@ sealed class ExploreState with _$ExploreState {
     @Default(true) bool isLoadingInitial,
     @Default(<String>[]) List<String> chipLabels,
     @Default(0) int selectedChipIndex,
+
     /// Cards plus a trailing `null` slot for the next page (TikTok-style feed).
-    @Default(<KnowledgeCardDomain?>[]) List<KnowledgeCardDomain?> cardSlots,
+    @Default(<LegacyKnowledgeCardDomain?>[])
+    List<LegacyKnowledgeCardDomain?> cardSlots,
     @Default(false) bool isLoadingCard,
     String? errorMessage,
+
     /// Incremented when the feed is replaced (e.g. category filter) so the UI can reset [PageView].
     @Default(0) int feedRevision,
   }) = _ExploreState;

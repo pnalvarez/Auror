@@ -12,7 +12,7 @@ import 'package:auror/common/strings/explore_strings.dart';
 import 'package:auror/common/strings/recall_card_strings.dart';
 import 'package:auror/core/di/di.dart';
 import 'package:auror/layers/domain/models/idea_track_flow_args.dart';
-import 'package:auror/layers/domain/models/knowledge_card_domain.dart';
+import 'package:auror/layers/domain/models/legacy_knowledge_card_domain.dart';
 import 'package:auror/layers/presentation/routes/app_router.gr.dart';
 import 'package:auror/layers/presentation/screens/explore/explore_video_background.dart';
 import 'package:auror/layers/presentation/screens/recallcard/recall_card_event.dart';
@@ -37,7 +37,7 @@ bool _shouldFloatingButtonAppear(RecallCardState state) {
 class RecallCardPage extends StatelessWidget {
   const RecallCardPage({super.key, required this.card, this.ideaTrackFlow});
 
-  final KnowledgeCardDomain card;
+  final LegacyKnowledgeCardDomain card;
   final IdeaTrackFlowArgs? ideaTrackFlow;
 
   @override
@@ -207,204 +207,168 @@ class _RecallCardScaffoldState extends State<_RecallCardScaffold> {
         child: Scaffold(
           floatingActionButton: _floatingButton(),
           body: SafeArea(
-          bottom: false,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              if (widget.ideaTrackFlow != null)
-                Material(
-                  color: scheme.surface,
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(
-                      AppSpacings.m,
-                      AppSpacings.s,
-                      AppSpacings.m,
-                      AppSpacings.s,
-                    ),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Expanded(
-                          child: StepProgressBar(
-                            currentValue:
-                                widget.ideaTrackFlow!.currentStepOneBased,
-                            totalValue: widget.ideaTrackFlow!.totalCards,
-                            showLabel: false,
+            bottom: false,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                if (widget.ideaTrackFlow != null)
+                  Material(
+                    color: scheme.surface,
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(
+                        AppSpacings.m,
+                        AppSpacings.s,
+                        AppSpacings.m,
+                        AppSpacings.s,
+                      ),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            child: StepProgressBar(
+                              currentValue:
+                                  widget.ideaTrackFlow!.currentStepOneBased,
+                              totalValue: widget.ideaTrackFlow!.totalCards,
+                              showLabel: false,
+                            ),
                           ),
-                        ),
-                        const SizedBox(width: AppSpacings.s),
-                        Text(
-                          '${widget.ideaTrackFlow!.currentStepOneBased}/${widget.ideaTrackFlow!.totalCards}',
-                          style: tagS.copyWith(color: scheme.onSurfaceVariant),
-                        ),
-                      ],
+                          const SizedBox(width: AppSpacings.s),
+                          Text(
+                            '${widget.ideaTrackFlow!.currentStepOneBased}/${widget.ideaTrackFlow!.totalCards}',
+                            style: tagS.copyWith(
+                              color: scheme.onSurfaceVariant,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              Expanded(
-                child: SingleChildScrollView(
-                  controller: _scrollController,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      SizedBox(
-                        height: heroHeight,
-                        child: Stack(
-                          fit: StackFit.expand,
-                          clipBehavior: Clip.hardEdge,
-                          children: [
-                            ExploreVideoBackground(
-                              videoUrl: viewModel.card.videoUrl,
-                              showScrim: false,
-                            ),
-                            Positioned(
-                              top: 0,
-                              left: 0,
-                              right: 0,
-                              child: SafeArea(
-                                bottom: false,
-                                child: Padding(
-                                  padding: const EdgeInsets.only(
-                                    left: AppSpacings.s,
-                                    right: AppSpacings.m,
-                                    top: AppSpacings.xs,
-                                  ),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.stretch,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Align(
-                                        alignment: Alignment.centerLeft,
-                                        child: Material(
-                                          color: Colors.black.withValues(
-                                            alpha: 0.35,
-                                          ),
-                                          shape: const CircleBorder(),
-                                          clipBehavior: Clip.antiAlias,
-                                          child: IconButton(
-                                            icon: const Icon(
-                                              Icons.arrow_back_ios_new_rounded,
-                                            ),
-                                            color: Colors.white,
-                                            onPressed: () =>
-                                                _handleBack(context),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      ColoredBox(
-                        color: scheme.surface,
-                        child: Padding(
-                          padding: const EdgeInsets.fromLTRB(
-                            AppSpacings.xl2,
-                            AppSpacings.xl2,
-                            AppSpacings.xl2,
-                            AppSpacings.xl3,
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                Expanded(
+                  child: SingleChildScrollView(
+                    controller: _scrollController,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        SizedBox(
+                          height: heroHeight,
+                          child: Stack(
+                            fit: StackFit.expand,
+                            clipBehavior: Clip.hardEdge,
                             children: [
-                              Align(
-                                alignment: Alignment.centerLeft,
-                                child: DsBadge(
-                                  label: viewModel.card.category,
-                                  variant: BadgeVariant.tertiary,
-                                ),
+                              ExploreVideoBackground(
+                                videoUrl: viewModel.card.videoUrl,
+                                showScrim: false,
                               ),
-                              const SizedBox(height: AppSpacings.xl2),
-                              Text(
-                                viewModel.card.title,
-                                style: headlineS.copyWith(
-                                  color: scheme.onSurface,
-                                  height: 1.2,
-                                ),
-                              ),
-                              const SizedBox(height: AppSpacings.m),
-                              Text(
-                                '"${viewModel.card.quote}"',
-                                style: body3Medium.copyWith(
-                                  color: AppColors.DarkContent.accent,
-                                  fontStyle: FontStyle.italic,
-                                  height: 1.35,
-                                ),
-                              ),
-                              const SizedBox(height: AppSpacings.xl2),
-                              Text(
-                                viewModel.card.description,
-                                style: body2Light.copyWith(
-                                  color: scheme.onSurface,
-                                  height: 1.5,
-                                ),
-                              ),
-                              const SizedBox(height: AppSpacings.xl3),
-                              BlocBuilder<RecallCardViewModel, RecallCardState>(
-                                builder: (context, state) {
-                                  return DsTooltip(
-                                    text: clickHereToCheck,
-                                    placement: DsTooltipPlacement.startTop,
-                                    visible: state
-                                        .shouldDisplayPracticalExampleTooltip,
-                                    child: DsDropdown(
-                                      label: commonPracticalExampleTitle,
-                                      canCompress: false,
-                                      onExpansionChanged: (expanded) {
-                                        if (expanded) {
-                                          _ensureKeyVisibleAfterDropdownExpand(
-                                            _commonErrorSectionKey,
-                                          );
-                                        }
-                                        viewModel.add(
-                                          RecallCardEvent.practicalExampleExpansionChanged(
-                                            expanded: expanded,
-                                          ),
-                                        );
-                                      },
-                                      child: ListItem(
-                                        input: IconTitleParagraphInput(
-                                          leadingIcon:
-                                              Icons.lightbulb_outline_rounded,
-                                          title: recallPracticalExampleTitle,
-                                          description:
-                                              viewModel.card.practicalExample,
-                                        ),
-                                        brand: ListItemBrand.warning,
-                                        isExpanded: true,
-                                      ),
+                              Positioned(
+                                top: 0,
+                                left: 0,
+                                right: 0,
+                                child: SafeArea(
+                                  bottom: false,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                      left: AppSpacings.s,
+                                      right: AppSpacings.m,
+                                      top: AppSpacings.xs,
                                     ),
-                                  );
-                                },
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.stretch,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Align(
+                                          alignment: Alignment.centerLeft,
+                                          child: Material(
+                                            color: Colors.black.withValues(
+                                              alpha: 0.35,
+                                            ),
+                                            shape: const CircleBorder(),
+                                            clipBehavior: Clip.antiAlias,
+                                            child: IconButton(
+                                              icon: const Icon(
+                                                Icons
+                                                    .arrow_back_ios_new_rounded,
+                                              ),
+                                              color: Colors.white,
+                                              onPressed: () =>
+                                                  _handleBack(context),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
                               ),
-                              const SizedBox(height: AppSpacings.xl3),
-                              BlocBuilder<RecallCardViewModel, RecallCardState>(
-                                builder: (context, state) {
-                                  return KeyedSubtree(
-                                    key: _commonErrorSectionKey,
-                                    child: DsTooltip(
+                            ],
+                          ),
+                        ),
+                        ColoredBox(
+                          color: scheme.surface,
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(
+                              AppSpacings.xl2,
+                              AppSpacings.xl2,
+                              AppSpacings.xl2,
+                              AppSpacings.xl3,
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: DsBadge(
+                                    label: viewModel.card.category,
+                                    variant: BadgeVariant.tertiary,
+                                  ),
+                                ),
+                                const SizedBox(height: AppSpacings.xl2),
+                                Text(
+                                  viewModel.card.title,
+                                  style: headlineS.copyWith(
+                                    color: scheme.onSurface,
+                                    height: 1.2,
+                                  ),
+                                ),
+                                const SizedBox(height: AppSpacings.m),
+                                Text(
+                                  '"${viewModel.card.quote}"',
+                                  style: body3Medium.copyWith(
+                                    color: AppColors.DarkContent.accent,
+                                    fontStyle: FontStyle.italic,
+                                    height: 1.35,
+                                  ),
+                                ),
+                                const SizedBox(height: AppSpacings.xl2),
+                                Text(
+                                  viewModel.card.description,
+                                  style: body2Light.copyWith(
+                                    color: scheme.onSurface,
+                                    height: 1.5,
+                                  ),
+                                ),
+                                const SizedBox(height: AppSpacings.xl3),
+                                BlocBuilder<
+                                  RecallCardViewModel,
+                                  RecallCardState
+                                >(
+                                  builder: (context, state) {
+                                    return DsTooltip(
                                       text: clickHereToCheck,
                                       placement: DsTooltipPlacement.startTop,
-                                      visible:
-                                          state.shouldDisplayCommonErrorTooltip,
+                                      visible: state
+                                          .shouldDisplayPracticalExampleTooltip,
                                       child: DsDropdown(
-                                        label: commonErrorTitle,
+                                        label: commonPracticalExampleTitle,
                                         canCompress: false,
-                                        enabled:
-                                            state.isCommonErrorDropdownEnabled,
                                         onExpansionChanged: (expanded) {
                                           if (expanded) {
                                             _ensureKeyVisibleAfterDropdownExpand(
-                                              _proceedCtaKey,
+                                              _commonErrorSectionKey,
                                             );
                                           }
                                           viewModel.add(
-                                            RecallCardEvent.commonErrorExpansionChanged(
+                                            RecallCardEvent.practicalExampleExpansionChanged(
                                               expanded: expanded,
                                             ),
                                           );
@@ -412,52 +376,101 @@ class _RecallCardScaffoldState extends State<_RecallCardScaffold> {
                                         child: ListItem(
                                           input: IconTitleParagraphInput(
                                             leadingIcon:
-                                                Icons.warning_amber_rounded,
-                                            title: recallCommonErrorTitle,
+                                                Icons.lightbulb_outline_rounded,
+                                            title: recallPracticalExampleTitle,
                                             description:
-                                                viewModel.card.commonError,
+                                                viewModel.card.practicalExample,
                                           ),
-                                          brand: ListItemBrand.error,
+                                          brand: ListItemBrand.warning,
                                           isExpanded: true,
                                         ),
                                       ),
-                                    ),
-                                  );
-                                },
-                              ),
-                              const SizedBox(height: AppSpacings.xl3),
-                              BlocBuilder<RecallCardViewModel, RecallCardState>(
-                                builder: (context, state) {
-                                  return KeyedSubtree(
-                                    key: _proceedCtaKey,
-                                    child: PrimaryButton(
-                                      label: proceed,
-                                      loading: state.isLoading,
-                                      enabled: state.isProceedCTAEnabled,
-                                      action: () {
-                                        context.router.push(
-                                          RevisionQuizRoute(
-                                            revisions: [],
-                                            cardId: viewModel.card.id,
-                                            ideaTrackFlow: widget.ideaTrackFlow,
+                                    );
+                                  },
+                                ),
+                                const SizedBox(height: AppSpacings.xl3),
+                                BlocBuilder<
+                                  RecallCardViewModel,
+                                  RecallCardState
+                                >(
+                                  builder: (context, state) {
+                                    return KeyedSubtree(
+                                      key: _commonErrorSectionKey,
+                                      child: DsTooltip(
+                                        text: clickHereToCheck,
+                                        placement: DsTooltipPlacement.startTop,
+                                        visible: state
+                                            .shouldDisplayCommonErrorTooltip,
+                                        child: DsDropdown(
+                                          label: commonErrorTitle,
+                                          canCompress: false,
+                                          enabled: state
+                                              .isCommonErrorDropdownEnabled,
+                                          onExpansionChanged: (expanded) {
+                                            if (expanded) {
+                                              _ensureKeyVisibleAfterDropdownExpand(
+                                                _proceedCtaKey,
+                                              );
+                                            }
+                                            viewModel.add(
+                                              RecallCardEvent.commonErrorExpansionChanged(
+                                                expanded: expanded,
+                                              ),
+                                            );
+                                          },
+                                          child: ListItem(
+                                            input: IconTitleParagraphInput(
+                                              leadingIcon:
+                                                  Icons.warning_amber_rounded,
+                                              title: recallCommonErrorTitle,
+                                              description:
+                                                  viewModel.card.commonError,
+                                            ),
+                                            brand: ListItemBrand.error,
+                                            isExpanded: true,
                                           ),
-                                        );
-                                      },
-                                    ),
-                                  );
-                                },
-                              ),
-                            ],
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                                const SizedBox(height: AppSpacings.xl3),
+                                BlocBuilder<
+                                  RecallCardViewModel,
+                                  RecallCardState
+                                >(
+                                  builder: (context, state) {
+                                    return KeyedSubtree(
+                                      key: _proceedCtaKey,
+                                      child: PrimaryButton(
+                                        label: proceed,
+                                        loading: state.isLoading,
+                                        enabled: state.isProceedCTAEnabled,
+                                        action: () {
+                                          context.router.push(
+                                            RevisionQuizRoute(
+                                              revisions: [],
+                                              cardId: viewModel.card.id,
+                                              ideaTrackFlow:
+                                                  widget.ideaTrackFlow,
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
         ),
       ),
     );

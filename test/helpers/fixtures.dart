@@ -1,7 +1,7 @@
 import 'package:auror/layers/data/models/guided_route_intro_data.dart';
 import 'package:auror/layers/data/models/profile_data.dart';
 import 'package:auror/layers/data/models/subscription_data.dart';
-import 'package:auror/layers/domain/models/knowledge_card_domain.dart';
+import 'package:auror/layers/domain/models/legacy_knowledge_card_domain.dart';
 import 'package:auror/layers/domain/models/profile_domain.dart';
 import 'package:auror/layers/domain/models/revision_domain.dart';
 import 'package:auror/layers/domain/models/subscription_domain.dart';
@@ -49,11 +49,14 @@ const GuidedRouteIntroData kFixtureGuidedRouteIntroData = GuidedRouteIntroData(
   name: 'Foco profundo',
   categoryId: 'cat-uuid-1',
   description: 'Técnicas para reduzir distrações.',
-  categories: GuidedRouteCategoryData(name: 'Produtividade'), 
+  categories: GuidedRouteCategoryData(name: 'Produtividade'),
   isPremium: true,
 );
 
-SubscriptionData kFixtureSubscriptionData({bool isCurrent = false, int price = 100}) {
+SubscriptionData kFixtureSubscriptionData({
+  bool isCurrent = false,
+  int price = 100,
+}) {
   return SubscriptionData(
     id: 'sub-$price',
     subscriptionName: 'Plan $price',
@@ -66,16 +69,17 @@ SubscriptionData kFixtureSubscriptionData({bool isCurrent = false, int price = 1
   );
 }
 
-const KnowledgeCardDomain kFixtureKnowledgeCard = KnowledgeCardDomain(
-  id: 'card-1',
-  category: 'Cat',
-  title: 'Card title',
-  quote: 'Quote',
-  description: 'Desc',
-  videoUrl: 'https://example.com/video.mp4',
-  practicalExample: 'Example',
-  commonError: 'Error',
-);
+const LegacyKnowledgeCardDomain kFixtureKnowledgeCard =
+    LegacyKnowledgeCardDomain(
+      id: 'card-1',
+      category: 'Cat',
+      title: 'Card title',
+      quote: 'Quote',
+      description: 'Desc',
+      videoUrl: 'https://example.com/video.mp4',
+      practicalExample: 'Example',
+      commonError: 'Error',
+    );
 
 RevisionDomain kFixtureRevision({String id = 'rev-1', String cardId = 'c1'}) {
   return RevisionDomain(
