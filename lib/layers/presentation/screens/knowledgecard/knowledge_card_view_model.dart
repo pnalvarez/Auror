@@ -7,6 +7,9 @@ import 'package:injectable/injectable.dart';
 class KnowledgeCardViewModel extends Bloc<KnowledgeCardEvent, KnowledgeCardState> {
   KnowledgeCardViewModel() : super(const KnowledgeCardState()) {
     on<KnowledgeCardLoadRequested>(_onLoadRequested);
+    on<KnowledgeCardDidClickCuriosity>(_onDidClickCuriosity);
+    on<KnowledgeCardDidClickCommonError>(_onDidClickCommonError);
+    on<KnowledgeCardDidClickNext>(_onDidClickNext);
   }
 
   Future<void> _onLoadRequested(
@@ -26,5 +29,20 @@ class KnowledgeCardViewModel extends Bloc<KnowledgeCardEvent, KnowledgeCardState
       );
     }
   }
+
+  void _onDidClickCuriosity(
+    KnowledgeCardDidClickCuriosity event,
+    Emitter<KnowledgeCardState> emit,
+  ) {}
+
+  void _onDidClickCommonError(
+    KnowledgeCardDidClickCommonError event,
+    Emitter<KnowledgeCardState> emit,
+  ) {}
+
+  void _onDidClickNext(
+    KnowledgeCardDidClickNext event,
+    Emitter<KnowledgeCardState> emit,
+  ) {}
 }
 
