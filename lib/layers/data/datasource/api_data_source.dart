@@ -58,13 +58,12 @@ abstract class IApiDataSource {
     String resourceName = 'guided_routes',
   });
 
-  /// GET visão geral: cabeçalho em [routeResourceName], módulos em [moduleResourceName]
-  /// filtrados por `route_id` (evita embed `guided_routes` → `modules` vazio quando
-  /// o FK não está exposto nessa relação no PostgREST).
+  /// POST `/rest/v1/rpc/{rpcName}` com `{ "p_guided_route_id": "<uuid>" }`.
+  ///
+  /// O usuário vem do JWT (`auth.uid()` na função SQL); progresso já vem filtrado.
   Future<GuidedRouteOverviewData> fetchGuidedRouteOverview({
     required String guidedRouteId,
-    String routeResourceName = 'guided_routes',
-    String moduleResourceName = 'modules',
+    String rpcName = 'get_guided_route_overview',
   });
 }
 
@@ -90,17 +89,6 @@ class ApiDataSource implements IApiDataSource {
   final CurrentSessionProvider _currentSession;
 
   static const String _profilesResource = 'profiles';
-
-  static const String _guidedRouteHeaderSelect = 'id,name';
-
-  /// `module.route_id` + `submodules` + progresso (segunda requisição).
-  /// Ordenação via query params: `order`, `submodules.order` (coluna `order` asc).
-  static const String _routeModulesSelect =
-      'id,name,'
-      'submodules('
-      'id,name,'
-      'user_submodule_progress(user_id,has_finished,is_available)'
-      ')';
 
   @override
   Future<ProfileData> fetchProfile({required String userId}) async {
@@ -219,55 +207,27 @@ class ApiDataSource implements IApiDataSource {
   @override
   Future<GuidedRouteOverviewData> fetchGuidedRouteOverview({
     required String guidedRouteId,
-    String routeResourceName = 'guided_routes',
-    String moduleResourceName = 'modules',
+    String rpcName = 'get_guided_route_overview',
   }) async {
     final session = _currentSession();
     if (session == null) {
       throw StateError('Sessão ausente para carregar a rota guiada.');
     }
 
-    final userId = session.user.id;
     final headers = <String, String>{
       'apikey': AurorSupabaseConstants.anonKey,
       'Authorization': 'Bearer ${session.accessToken}',
     };
 
-    final routeData = await _apiClient.get(
-      endpoint: routeResourceName,
-      queryParameters: <String, dynamic>{
-        'select': _guidedRouteHeaderSelect,
-        'id': 'eq.$guidedRouteId',
-        'limit': '1',
-      },
+    final data = await _apiClient.post(
+      endpoint: 'rpc/$rpcName',
+      body: <String, dynamic>{'p_guided_route_id': guidedRouteId},
       headers: headers,
     );
 
-    final routeRow = _firstRowOrThrow(
-      routeData,
-      emptyMessage: 'Nenhuma rota guiada encontrada.',
+    return GuidedRouteOverviewData.fromJson(
+      _overviewRowFromRpc(data),
     );
-    _throwIfPostgrestErrorMap(routeRow);
-
-    final modulesData = await _apiClient.get(
-      endpoint: moduleResourceName,
-      queryParameters: <String, dynamic>{
-        'select': _routeModulesSelect,
-        'route_id': 'eq.$guidedRouteId',
-        'order': 'order',
-        'submodules.order': 'order',
-      },
-      headers: headers,
-    );
-
-    final modules = _rowsAsMaps(modulesData);
-    final overviewRow = <String, dynamic>{
-      'id': routeRow['id'],
-      'name': routeRow['name'],
-      'modules': modules,
-    };
-    _narrowSubmoduleProgressForUser(overviewRow, userId);
-    return GuidedRouteOverviewData.fromJson(overviewRow);
   }
 
   @override
@@ -291,27 +251,22 @@ class ApiDataSource implements IApiDataSource {
     );
   }
 
-  List<Map<String, dynamic>> _rowsAsMaps(dynamic data) {
-    if (data is List<dynamic>) {
-      return data.map((row) {
-        if (row is Map<String, dynamic>) return row;
-        if (row is Map) return Map<String, dynamic>.from(row);
-        throw FormatException('Linha inesperada: $row');
-      }).toList();
+  Map<String, dynamic> _overviewRowFromRpc(dynamic data) {
+    if (data == null) {
+      throw StateError('Nenhuma rota guiada encontrada.');
     }
-
+    if (data is Map<String, dynamic>) {
+      _throwIfPostgrestErrorMap(data);
+      return data;
+    }
     if (data is Map) {
       final map = Map<String, dynamic>.from(data);
-      if (map.containsKey('code') && map.containsKey('message')) {
-        throw FormatException(
-          'PostgREST: ${map['code']} — ${map['message']} '
-          '(hint: ${map['hint']}, details: ${map['details']})',
-        );
-      }
+      _throwIfPostgrestErrorMap(map);
+      return map;
     }
-
     throw FormatException(
-      'Esperado lista JSON na raiz. Recebido: ${data.runtimeType}.',
+      'Esperado objeto JSON do RPC get_guided_route_overview. '
+      'Recebido: ${data.runtimeType}.',
     );
   }
 
@@ -407,45 +362,5 @@ class ApiDataSource implements IApiDataSource {
         '(hint: ${map['hint']}, details: ${map['details']})',
       );
     }
-  }
-
-  /// PostgREST embedded filters on `user_submodule_progress` act like INNER JOIN
-  /// and drop modules when the user has no progress rows yet.
-  static void _narrowSubmoduleProgressForUser(
-    Map<String, dynamic> routeRow,
-    String userId,
-  ) {
-    final modulesKey = routeRow.containsKey('modules') ? 'modules' : 'module';
-    final modulesRaw = routeRow[modulesKey];
-    if (modulesRaw is! List) return;
-
-    final modules = <dynamic>[];
-    for (final moduleEntry in modulesRaw) {
-      if (moduleEntry is! Map) continue;
-      final moduleMap = Map<String, dynamic>.from(moduleEntry);
-      final submodulesRaw = moduleMap['submodules'];
-      if (submodulesRaw is! List) {
-        modules.add(moduleMap);
-        continue;
-      }
-
-      final submodules = <dynamic>[];
-      for (final submoduleEntry in submodulesRaw) {
-        if (submoduleEntry is! Map) continue;
-        final submoduleMap = Map<String, dynamic>.from(submoduleEntry);
-        final progress = submoduleMap['user_submodule_progress'];
-        if (progress is List) {
-          submoduleMap['user_submodule_progress'] = progress
-              .whereType<Map>()
-              .map(Map<String, dynamic>.from)
-              .where((row) => row['user_id'] == userId)
-              .toList();
-        }
-        submodules.add(submoduleMap);
-      }
-      moduleMap['submodules'] = submodules;
-      modules.add(moduleMap);
-    }
-    routeRow[modulesKey] = modules;
   }
 }

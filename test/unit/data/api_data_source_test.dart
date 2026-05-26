@@ -255,14 +255,24 @@ void main() {
   group('fetchGuidedRouteOverview', () {
     const routeId = '6ce95aac-c099-45f8-b3ad-2600ddf79356';
 
-    const routeHeaderSelect = 'id,name';
-
-    const routeModulesSelect =
-        'id,name,'
-        'submodules('
-        'id,name,'
-        'user_submodule_progress(user_id,has_finished,is_available)'
-        ')';
+    const overviewRpcBody = {
+      'id': routeId,
+      'name': 'História',
+      'modules': [
+        {
+          'id': 'mod-1',
+          'name': 'História do mundo',
+          'submodules': [
+            {
+              'id': 'sub-1',
+              'name': 'Civilizações fundadoras',
+              'has_finished': false,
+              'is_available': true,
+            },
+          ],
+        },
+      ],
+    };
 
     test('throws when session is missing', () async {
       sut = ApiDataSource.withSession(apiClient, () => null);
@@ -271,52 +281,23 @@ void main() {
         throwsA(isA<StateError>()),
       );
       verifyNever(
-        apiClient.get(
+        apiClient.post(
           endpoint: anyNamed('endpoint'),
-          queryParameters: anyNamed('queryParameters'),
+          body: anyNamed('body'),
           headers: anyNamed('headers'),
         ),
       );
     });
 
-    test('returns overview from route header and module list by route_id', () async {
+    test('returns overview from get_guided_route_overview RPC', () async {
       sut = ApiDataSource.withSession(apiClient, _session);
       when(
-        apiClient.get(
+        apiClient.post(
           endpoint: anyNamed('endpoint'),
-          queryParameters: anyNamed('queryParameters'),
+          body: anyNamed('body'),
           headers: anyNamed('headers'),
         ),
-      ).thenAnswer((invocation) async {
-        final endpoint = invocation.namedArguments[#endpoint] as String;
-        if (endpoint == 'guided_routes') {
-          return [
-            {'id': routeId, 'name': 'História'},
-          ];
-        }
-        if (endpoint == 'modules') {
-          return [
-            {
-              'id': 'mod-1',
-              'name': 'História do mundo',
-              'submodules': [
-                {
-                  'id': 'sub-1',
-                  'name': 'Civilizações fundadoras',
-                  'user_submodule_progress': [
-                    {
-                      'user_id': 'user-uuid',
-                      'has_finished': false,
-                      'is_available': true,
-                    },
-                  ],
-                },
-              ],
-            },
-          ];
-        }
-        throw StateError('unexpected endpoint: $endpoint');
-      });
+      ).thenAnswer((_) async => overviewRpcBody);
 
       final overview = await sut.fetchGuidedRouteOverview(
         guidedRouteId: routeId,
@@ -328,139 +309,58 @@ void main() {
       expect(overview.modules, hasLength(1));
       expect(overview.modules.first.title, 'História do mundo');
       expect(overview.modules.first.submodules.first.isAvailable, isTrue);
-      verify(
-        apiClient.get(
-          endpoint: 'guided_routes',
-          queryParameters: {
-            'select': routeHeaderSelect,
-            'id': 'eq.$routeId',
-            'limit': '1',
-          },
-          headers: argThat(
-            containsPair('Authorization', 'Bearer access-token'),
-            named: 'headers',
-          ),
-        ),
-      ).called(1);
-      verify(
-        apiClient.get(
-          endpoint: 'modules',
-          queryParameters: {
-            'select': routeModulesSelect,
-            'route_id': 'eq.$routeId',
-            'order': 'order',
-            'submodules.order': 'order',
-          },
-          headers: argThat(
-            containsPair('Authorization', 'Bearer access-token'),
-            named: 'headers',
-          ),
-        ),
-      ).called(1);
-    });
-
-    test('keeps modules when progress rows exist only for current user', () async {
-      sut = ApiDataSource.withSession(apiClient, _session);
-      when(
-        apiClient.get(
-          endpoint: anyNamed('endpoint'),
-          queryParameters: anyNamed('queryParameters'),
-          headers: anyNamed('headers'),
-        ),
-      ).thenAnswer((invocation) async {
-        final endpoint = invocation.namedArguments[#endpoint] as String;
-        if (endpoint == 'guided_routes') {
-          return [
-            {'id': routeId, 'name': 'História'},
-          ];
-        }
-        return [
-          {
-            'id': 'mod-1',
-            'name': 'História do mundo',
-            'submodules': [
-              {
-                'id': 'sub-1',
-                'name': 'Civilizações fundadoras',
-                'user_submodule_progress': [
-                  {
-                    'user_id': 'other-user',
-                    'has_finished': true,
-                    'is_available': true,
-                  },
-                  {
-                    'user_id': 'user-uuid',
-                    'has_finished': false,
-                    'is_available': true,
-                  },
-                ],
-              },
-            ],
-          },
-        ];
-      });
-
-      final overview = await sut.fetchGuidedRouteOverview(
-        guidedRouteId: routeId,
-      );
-
-      expect(overview.modules, hasLength(1));
-      expect(overview.modules.first.submodules.first.isAvailable, isTrue);
       expect(overview.modules.first.submodules.first.isConcluded, isFalse);
-    });
-
-    test('throws when route list is empty', () async {
-      sut = ApiDataSource.withSession(apiClient, _session);
-      when(
+      verify(
+        apiClient.post(
+          endpoint: 'rpc/get_guided_route_overview',
+          body: {'p_guided_route_id': routeId},
+          headers: argThat(
+            containsPair('Authorization', 'Bearer access-token'),
+            named: 'headers',
+          ),
+        ),
+      ).called(1);
+      verifyNever(
         apiClient.get(
           endpoint: anyNamed('endpoint'),
           queryParameters: anyNamed('queryParameters'),
           headers: anyNamed('headers'),
         ),
-      ).thenAnswer((_) async => <dynamic>[]);
+      );
+    });
+
+    test('throws StateError when RPC returns null', () async {
+      sut = ApiDataSource.withSession(apiClient, _session);
+      when(
+        apiClient.post(
+          endpoint: anyNamed('endpoint'),
+          body: anyNamed('body'),
+          headers: anyNamed('headers'),
+        ),
+      ).thenAnswer((_) async => null);
 
       await expectLater(
         sut.fetchGuidedRouteOverview(guidedRouteId: routeId),
         throwsA(isA<StateError>()),
       );
-      verify(
-        apiClient.get(
-          endpoint: 'guided_routes',
-          queryParameters: anyNamed('queryParameters'),
-          headers: anyNamed('headers'),
-        ),
-      ).called(1);
-      verifyNever(
-        apiClient.get(
-          endpoint: 'modules',
-          queryParameters: anyNamed('queryParameters'),
-          headers: anyNamed('headers'),
-        ),
-      );
     });
 
-    test('throws FormatException on PostgREST error map from modules fetch', () async {
+    test('throws FormatException on PostgREST error map from RPC', () async {
       sut = ApiDataSource.withSession(apiClient, _session);
       when(
-        apiClient.get(
+        apiClient.post(
           endpoint: anyNamed('endpoint'),
-          queryParameters: anyNamed('queryParameters'),
+          body: anyNamed('body'),
           headers: anyNamed('headers'),
         ),
-      ).thenAnswer((invocation) async {
-        final endpoint = invocation.namedArguments[#endpoint] as String;
-        if (endpoint == 'guided_routes') {
-          return [
-            {'id': routeId, 'name': 'História'},
-          ];
-        }
-        return {
-          'code': 'PGRST200',
-          'message': 'relationship not found',
+      ).thenAnswer(
+        (_) async => {
+          'code': 'PGRST202',
+          'message': 'function not found',
           'hint': null,
           'details': null,
-        };
-      });
+        },
+      );
 
       await expectLater(
         sut.fetchGuidedRouteOverview(guidedRouteId: routeId),
